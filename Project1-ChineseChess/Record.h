@@ -1,11 +1,27 @@
 #pragma once
+#include <vector>
+
+using namespace std;
+
+struct position
+{
+	int x;
+	int y;
+};
+
 class Record
 {
 public:
 	Record();
 	~Record();
 
+	// 用來儲存資料的
+	static vector<int> chessType;
+	static vector<struct position> fromPos;
+	static vector<struct position> toPos;
+	
 
-	friend void printRecord();
+	static void printRecord();
+	static void saveThisStep(int chessType, int fromX, int fromY, int toX, int toY);
 };
 

@@ -9,11 +9,14 @@ using namespace std;
 int main()
 {
 	ChessBoard chessBoard;
-	UI nowUI;
+	UI thisGameUI;
+
 	chessBoard.readTheBoard("file.txt");
 	while (1)
 	{
-		nowUI.printUI();
-
+		thisGameUI.printUI(); // 印出整個畫面框架
+		Record::printRecord();	// 印出紀錄部分
+		chessBoard.printThePlane();		// 印出棋盤
+		system("CLS");	// 清除整個頁面
 	}
 }
