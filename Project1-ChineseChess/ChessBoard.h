@@ -9,7 +9,8 @@ class ChessBoard
 {
 private:
 	// 整個棋盤的現在的位置上的內容
-	Chess wholePosition[9][10];
+	// 用指標存取，NULL就是當前位置沒有棋子的狀態
+	Chess* wholePosition[9][10];
 	// Black:0 Red:1
 	int turns;
 
