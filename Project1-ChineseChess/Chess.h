@@ -4,30 +4,35 @@ using std::vector;
 
 struct position
 {
-	int x;
-	int y;
+	int x, y;
 };
 
 class Chess
 {
-private:
-	struct position currentPosition;		// 這個棋的當前位置
-	// Black:1~7 Red:8~14 
-	int chessType;
-	vector<struct position> legalMove;
-
 public:
 	Chess();
+	Chess(int chessTypeInput, int xInput, int yInput); //在讀棋盤文件的時候可以用
 	~Chess();
-	// 在讀棋盤文件的時候可以用
-	Chess(int type, int posX, int posY);
-	
-	
-	void changePosition(int x, int y);
-	
 
-	// 當棋子被選到的時候，由chessboard來改變這個值
-	// 選到的時候使所有legalmove變色也是由他做
-	bool chosen;
+	//chessType 操作
+	int getChessType();
+
+	//currentPosition 操作
+	void setCurrentPosition(int xInput, int yInput);
+	position getCurrentPosition();
+
+	//chosen 操作
+	void setChosen(bool chosenInput);
+	bool getChosen();
+
+	//legalMove 操作
+	void pushBackLegalMove(position legalMoveInput);
+	void clearLegalMove();
+	vector <position> getLegalMove();
+
+private:
+	int chessType; //黑: 1 ~ 7; 紅: 8 ~ 14
+	position currentPosition; //這個 Chess 的當前位置
+	bool chosen; //當 Chess 被選到的時候，由 ChessBoard 來改變這個值，選到的時候使所有 legalMove 變色也是由它做
+	vector <position> legalMove; //存放能走的路
 };
-
