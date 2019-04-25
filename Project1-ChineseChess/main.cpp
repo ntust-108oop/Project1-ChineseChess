@@ -14,9 +14,15 @@ int main()
 	chessBoard.readTheBoard("file.txt");
 	while (1)
 	{
+        
+
+
 		thisGameUI.printUI(); // 印出整個畫面框架
 		Record::printRecord();	// 印出紀錄部分
 		chessBoard.printThePlane();		// 印出棋盤
+
+        // UI讀取鍵盤
+
 		system("CLS");	// 清除整個頁面
 	}
 }
