@@ -1,6 +1,7 @@
 #ifndef CHESS_H
 #define CHESS_H
 #include <vector>
+
 using std::vector;
 
 struct position
@@ -27,7 +28,7 @@ public:
     bool getChosen();
 
     //legalMove 操作
-    void pushBackLegalMove(position legalMoveInput);
+    void setLegalMove();
     void clearLegalMove();
     vector <position> getLegalMove();
 
@@ -38,5 +39,4 @@ private:
     vector <position> legalMove; //存放能走的路
 };
 
-#endif // !CHESS_H
-
+#endif //!CHESS_H
