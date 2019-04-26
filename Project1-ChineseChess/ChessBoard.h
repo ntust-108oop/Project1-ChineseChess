@@ -22,8 +22,14 @@ public:
     ~ChessBoard();
     ChessBoard(string fileTxt);
 
+	// 印出普通棋盤
     void printThePlane();
-	void printThePlaneInCout();
+	// 印出含有選中棋的可動步數的棋盤
+	void printChosenPlane();
+
+
+	// 移動棋盤，偵測到選棋時會呼叫
+	void moveThechess(int fromX, int fromY, int toX, int toY);
 
     // 應該在讀入棋盤時創建好所有chess物件
     void readTheBoard(string fileTxt);

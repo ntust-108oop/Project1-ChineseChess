@@ -12,6 +12,8 @@ class UI
 {
 public:
 
+	ChessBoard chessBoard;
+
 	static void printUI();
 	static void showMenu();
 
