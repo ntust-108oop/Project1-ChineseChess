@@ -1,6 +1,8 @@
 #include "Record.h"
 
-
+vector<int> Record::chessTypeData;
+vector<struct position> Record::fromPos;
+vector<struct position> Record::toPos;
 
 Record::Record()
 {
