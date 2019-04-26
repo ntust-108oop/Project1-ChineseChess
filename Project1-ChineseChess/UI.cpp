@@ -3,9 +3,11 @@
 int UI::color = 7;
 position UI::cursorPosition = { 0,0 };
 
+static short TOP_BOUND = 1, BOTTOM_BOUND = 40, LEFT_BOUND = 1, RIGHT_BOUND = 148, ROW_ONE = 39, ROW_TWO = 107;
+
 void UI::readKeyBoard()
 {
-    SetPosition({ 10,10 });
+    SetPosition({ ROW_ONE+11,TOP_BOUND+4 });
     char input;
     while (1)
     {
@@ -15,20 +17,32 @@ void UI::readKeyBoard()
         case 0X1B:          // ESC
             return;
         case 0x48:          //上
-            cursorPosition.y--;
-            SetPosition(cursorPosition);
+            if (cursorPosition.y - 4 > TOP_BOUND + 2)
+            {
+                cursorPosition.y -= 4;
+                SetPosition(cursorPosition);
+            }
             break;
         case 0x50:          //下
-            cursorPosition.y++;
-            SetPosition(cursorPosition);
+            if (cursorPosition.y + 4 < BOTTOM_BOUND - 2)
+            {
+                cursorPosition.y += 4;
+                SetPosition(cursorPosition);
+            }
             break;
         case  0x4B:         //左
-            cursorPosition.x--;
-            SetPosition(cursorPosition);
+            if (cursorPosition.x - 5 > ROW_ONE + 10)
+            {
+                cursorPosition.x -= 5;
+                SetPosition(cursorPosition);
+            }
             break;
         case  0x4D:         //右
-            cursorPosition.x++;
-            SetPosition(cursorPosition);
+            if (cursorPosition.x + 5 < ROW_TWO - 10)
+            {
+                cursorPosition.x += 5;
+                SetPosition(cursorPosition);
+            }
             break;
         }
     }
@@ -44,7 +58,7 @@ void UI::printUI()
     keybd_event(VK_MENU, 0xb8, KEYEVENTF_KEYUP, 0);
     keybd_event(VK_RETURN, 0x9c, KEYEVENTF_KEYUP, 0);
 
-    short TOP_BOUND = 1, BOTTOM_BOUND = 40, LEFT_BOUND = 1, RIGHT_BOUND = 148, ROW_ONE = 39, ROW_TWO = 107;
+
 
     for (short i = LEFT_BOUND; i <= RIGHT_BOUND; i++)   // 畫橫線
     {
