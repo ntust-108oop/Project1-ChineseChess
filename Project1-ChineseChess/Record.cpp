@@ -10,3 +10,7 @@ Record::Record()
 Record::~Record()
 {
 }
+
+void Record::printRecord()
+{
+}

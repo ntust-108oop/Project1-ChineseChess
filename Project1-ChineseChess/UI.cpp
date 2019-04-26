@@ -12,6 +12,14 @@ UI::~UI()
 {
 }
 
+void UI::printUI()
+{
+}
+
+void UI::showMenu()
+{
+}
+
 
 cursorPos UI::getCursorPos()
 {

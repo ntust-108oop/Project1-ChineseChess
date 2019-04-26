@@ -1,14 +1,8 @@
 #ifndef RECORD_H
 #define RECORD_H
-
+#include "Chess.h"
 #include <vector>
 using namespace std;
-
-struct position
-{
-    int x;
-    int y;
-};
 
 class Record
 {
