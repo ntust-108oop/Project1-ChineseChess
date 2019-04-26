@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include <conio.h>
+#include "ChessBoard.h"
 
 typedef struct cursorPos 
 {
@@ -15,6 +16,8 @@ class UI
 public:
 	UI();
 	~UI();
+
+	ChessBoard chessBoard;
 
 	static void printUI();
 	static void showMenu();

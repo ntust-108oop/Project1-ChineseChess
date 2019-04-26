@@ -55,11 +55,8 @@ ChessBoard::ChessBoard(string fileTxt)
 	readTheBoard(fileTxt);
 }
 
-void ChessBoard::printThePlane()
-{
-}
 
-void ChessBoard::printThePlaneInCout()
+void ChessBoard::printThePlane()
 {
 	for (int i = 0; i < 10; i++)
 	{

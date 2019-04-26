@@ -11,7 +11,7 @@ public:
     ~Record();
 
     // 用來儲存資料的
-    static vector<int> chessType;
+    static vector<int> chessTypeData;
     static vector<struct position> fromPos;
     static vector<struct position> toPos;
 
