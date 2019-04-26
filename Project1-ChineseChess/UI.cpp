@@ -7,7 +7,7 @@ static short TOP_BOUND = 1, BOTTOM_BOUND = 40, LEFT_BOUND = 1, RIGHT_BOUND = 148
 
 void UI::readKeyBoard()
 {
-    SetPosition({ ROW_ONE+11,TOP_BOUND+4 });
+    SetPosition({ ROW_ONE + 11,TOP_BOUND + 4 });
     char input;
     while (1)
     {
@@ -43,6 +43,16 @@ void UI::readKeyBoard()
                 cursorPosition.x += 5;
                 SetPosition(cursorPosition);
             }
+            break;
+        case 'u':
+        case 'U':
+            // 悔棋
+            // showAlert("要悔棋嗎？");
+            break;
+        case 'r':
+        case 'R':
+            // 還原
+            // showAlert("要還原嗎？");
             break;
         }
     }
@@ -118,12 +128,41 @@ void UI::printUI()
     SetPosition({ ROW_TWO + 13,TOP_BOUND + 36 });
     cout << "ＥＳＣ：離開遊戲";
 
+    
 }
 
 void UI::showMenu()
 {
+
 }
 
+void showAlert(string message)
+{
+    for (short i = LEFT_BOUND + 44; i <= RIGHT_BOUND - 46; i++)   // 畫橫線
+    {
+        UI::SetPosition({ i,TOP_BOUND + 10 });
+        cout << "-";
+        for (short j = TOP_BOUND+11; j <= BOTTOM_BOUND-11; j++)
+        {
+            UI::SetPosition({ i,j });
+            cout << " ";
+        }
+        UI::SetPosition({ i,BOTTOM_BOUND - 10 });
+        cout << "-";
+    }
+    for (short i = TOP_BOUND + 10; i <= BOTTOM_BOUND - 10; i++)   // 畫直線
+    {
+
+        UI::SetPosition({ ROW_ONE + 5,i });
+        cout << "|";
+        UI::SetPosition({ ROW_TWO - 5,i });
+        cout << "|";
+    }
+    UI::SetPosition({ LEFT_BOUND + 70,TOP_BOUND + 20 });
+    cout << message;
+    
+    // 只寫到跳出視窗 沒寫關閉視窗
+}
 
 position UI::getCursorPos()
 {

@@ -31,7 +31,10 @@ private:
     static int color;
     // 當前游標位置
     static position cursorPosition;
+    
 };
+
+void showAlert(string);
 
 #endif // !UI_H
 
