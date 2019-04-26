@@ -67,26 +67,41 @@ void UI::printUI()
 
     // 畫標題
     SetColor(100);
-    SetPosition({ ROW_TWO + 11,TOP_BOUND + 8 });
+    SetPosition({ ROW_TWO + 11,TOP_BOUND + 4 });
     cout << " ＿＿＿＿＿＿＿＿＿＿ ";
-    SetPosition({ ROW_TWO + 11,TOP_BOUND + 9 });
+    SetPosition({ ROW_TWO + 11,TOP_BOUND + 5 });
     cout << "｜　　Chinese　　 　｜";
-    SetPosition({ ROW_TWO + 11,TOP_BOUND + 10 });
+    SetPosition({ ROW_TWO + 11,TOP_BOUND + 6 });
     cout << "｜　　　　Chess　　 ｜";
-    SetPosition({ ROW_TWO + 11,TOP_BOUND + 11 });
+    SetPosition({ ROW_TWO + 11,TOP_BOUND + 7 });
     cout << " ￣￣￣￣￣￣￣￣￣￣ ";
     SetColor(7);
 
+    // 指示
+    SetPosition({ ROW_TWO + 13,TOP_BOUND + 15 });
+    cout << "目前輪到";
+    SetColor(252);
+    cout << "紅方";
+    SetColor(7);
+    cout << "下棋";
+    SetPosition({ ROW_TWO + 13,TOP_BOUND + 16 });
+    cout << "不然就是";
+    SetColor(240);
+    cout << "黑方";
+    SetColor(7);
+    cout << "下棋";
+
+
     // 畫選單
-    SetPosition({ ROW_TWO + 13,TOP_BOUND + 23 });
+    SetPosition({ ROW_TWO + 13,TOP_BOUND + 24 });
     cout << "方向鍵：移動游標";
-    SetPosition({ ROW_TWO + 13,TOP_BOUND + 26 });
+    SetPosition({ ROW_TWO + 13,TOP_BOUND + 27 });
     cout << " Enter：選棋/確定";
-    SetPosition({ ROW_TWO + 13,TOP_BOUND + 29 });
-    cout << "　U　：  悔 棋";
-    SetPosition({ ROW_TWO + 13,TOP_BOUND + 32 });
-    cout << "　U　：  還 原";
-    SetPosition({ ROW_TWO + 13,TOP_BOUND + 35 });
+    SetPosition({ ROW_TWO + 13,TOP_BOUND + 30 });
+    cout << "　Ｕ　：  悔 棋";
+    SetPosition({ ROW_TWO + 13,TOP_BOUND + 33 });
+    cout << "　Ｒ　：  還 原";
+    SetPosition({ ROW_TWO + 13,TOP_BOUND + 36 });
     cout << "ＥＳＣ：離開遊戲";
 
 }
