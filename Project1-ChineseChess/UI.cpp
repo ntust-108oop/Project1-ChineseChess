@@ -26,5 +26,5 @@ void UI::SetColor(int newColor)
 void UI::SetPosition(cursorPos newPosition)
 {
     UI::cursorPosition = newPosition;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { cursorPosition.x,cursorPosition.y });
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(cursorPosition.x),static_cast<short>(cursorPosition.y) });
 }

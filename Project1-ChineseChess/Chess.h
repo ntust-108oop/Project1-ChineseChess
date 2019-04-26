@@ -1,38 +1,42 @@
-#pragma once
+#ifndef CHESS_H
+#define CHESS_H
 #include <vector>
 using std::vector;
 
 struct position
 {
-	int x, y;
+    int x, y;
 };
 
 class Chess
 {
 public:
-	Chess();
-	Chess(int chessTypeInput, int xInput, int yInput); //在讀棋盤文件的時候可以用
-	~Chess();
+    Chess();
+    Chess(int chessTypeInput, int xInput, int yInput); //在讀棋盤文件的時候可以用
+    ~Chess();
 
-	//chessType 操作
-	int getChessType();
+    //chessType 操作
+    int getChessType();
 
-	//currentPosition 操作
-	void setCurrentPosition(int xInput, int yInput);
-	position getCurrentPosition();
+    //currentPosition 操作
+    void setCurrentPosition(int xInput, int yInput);
+    position getCurrentPosition();
 
-	//chosen 操作
-	void setChosen(bool chosenInput);
-	bool getChosen();
+    //chosen 操作
+    void setChosen(bool chosenInput);
+    bool getChosen();
 
-	//legalMove 操作
-	void pushBackLegalMove(position legalMoveInput);
-	void clearLegalMove();
-	vector <position> getLegalMove();
+    //legalMove 操作
+    void pushBackLegalMove(position legalMoveInput);
+    void clearLegalMove();
+    vector <position> getLegalMove();
 
 private:
-	int chessType; //黑: 1 ~ 7; 紅: 8 ~ 14
-	position currentPosition; //這個 Chess 的當前位置
-	bool chosen; //當 Chess 被選到的時候，由 ChessBoard 來改變這個值，選到的時候使所有 legalMove 變色也是由它做
-	vector <position> legalMove; //存放能走的路
+    int chessType; //黑: 1 ~ 7; 紅: 8 ~ 14
+    position currentPosition; //這個 Chess 的當前位置
+    bool chosen; //當 Chess 被選到的時候，由 ChessBoard 來改變這個值，選到的時候使所有 legalMove 變色也是由它做
+    vector <position> legalMove; //存放能走的路
 };
+
+#endif // !CHESS_H
+

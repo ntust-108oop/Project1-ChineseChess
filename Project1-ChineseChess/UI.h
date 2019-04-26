@@ -1,3 +1,6 @@
+#ifndef UI_H
+#define UI_H
+
 #include <windows.h>
 #include <conio.h>
 
@@ -30,4 +33,6 @@ private:
     // 當前游標位置
     static cursorPos cursorPosition;
 };
+
+#endif // !UI_H
 
