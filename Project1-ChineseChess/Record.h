@@ -18,6 +18,7 @@ public:
 
     static void printRecord();
     static void saveThisStep(int chessType, int fromX, int fromY, int toX, int toY);
+	static void clearRecord();
 };
 
 #endif // !RECORD_H

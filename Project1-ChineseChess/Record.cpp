@@ -31,3 +31,10 @@ void Record::saveThisStep(int chessType, int fromX, int fromY, int toX, int toY)
 	
 }
 
+void Record::clearRecord()
+{
+	chessTypeData.clear();
+	fromPos.clear();
+	toPos.clear();
+}
+
