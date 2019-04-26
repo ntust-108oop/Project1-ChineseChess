@@ -10,31 +10,33 @@ using namespace std;
 class UI
 {
 public:
-
 	ChessBoard chessBoard;
 
+    // 印出遊戲畫面
 	static void printUI();
-	static void showMenu();
 
 	// 取得當前游標位置
 	static position getCursorPos();
 
     // 設定當前輸出底色
     static void SetColor(int = 7);
+
     // 設定游標位置
     static void SetPosition(position);
 
-    static void readKeyBoard();
+    // 設定是否顯示游標
+    static void SetCursorVisible(bool, DWORD=1);
+
+    // 讀取鍵盤
+    void readKeyBoard();
 
 private:
-    // 當前輸出底色
-    static int color;
     // 當前游標位置
     static position cursorPosition;
     
 };
 
-void showAlert(string);
+bool showAlert(string);
 
 #endif // !UI_H
 
