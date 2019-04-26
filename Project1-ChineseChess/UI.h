@@ -3,35 +3,33 @@
 
 #include <windows.h>
 #include <conio.h>
-
-typedef struct cursorPos 
-{
-	int x;
-	int y;
-} cursorPos;
+#include <iostream>
+#include "ChessBoard.h"
+#include "Record.h"
+using namespace std;
 
 class UI
 {
 public:
-	UI();
-	~UI();
 
 	static void printUI();
 	static void showMenu();
 
 	// 取得當前游標位置
-	static cursorPos getCursorPos();
+	static position getCursorPos();
 
     // 設定當前輸出底色
     static void SetColor(int = 7);
     // 設定游標位置
-    static void SetPosition(cursorPos);
+    static void SetPosition(position);
+
+    static void readKeyBoard();
 
 private:
     // 當前輸出底色
     static int color;
     // 當前游標位置
-    static cursorPos cursorPosition;
+    static position cursorPosition;
 };
 
 #endif // !UI_H
