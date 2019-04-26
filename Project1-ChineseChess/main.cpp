@@ -1,8 +1,5 @@
-#include <iostream>
-#include "Chess.h"
-#include "ChessBoard.h"
-#include "Record.h"
 #include "UI.h"
+#include "Record.h"
 
 using namespace std;
 
@@ -15,6 +12,6 @@ int main()
 	thisGameUI.chessBoard.printThePlane();
 	Record::printRecord();
 
-	// UIÅª¨úÁä½Lfunction
+    thisGameUI.readKeyBoard();
 
 }

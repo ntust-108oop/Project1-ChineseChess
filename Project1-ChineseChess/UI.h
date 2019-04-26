@@ -5,7 +5,6 @@
 #include <conio.h>
 #include <iostream>
 #include "ChessBoard.h"
-#include "Record.h"
 using namespace std;
 
 class UI

@@ -1,5 +1,5 @@
 #include "ChessBoard.h"
-
+#include <Windows.h>
 
 
 ChessBoard::ChessBoard()
@@ -58,16 +58,23 @@ ChessBoard::ChessBoard(string fileTxt)
 
 void ChessBoard::printThePlane()
 {
+    
 	for (int i = 0; i < 10; i++)
 	{
 		for (int j = 0; j < 9; j++)
 		{
+            // 測試排版
+            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50+i*5),static_cast<short>(5+j*4) });
+
 			if(wholePosition[j][i]!=NULL)cout << wholePosition[j][i]->getChessType() << "\t";
 			else cout << "0\t";
 		}
-		cout << "\n";
+		 cout << "\n";
 	}
-	cout << turns << "\n";
+    // 因為畫框框會被影響所以稍微寫一下
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(0),static_cast<short>(42) });
+	 
+    cout << turns << "\n";
 }
 
 void ChessBoard::readTheBoard(string fileTxt)
