@@ -57,20 +57,20 @@ void Chess::setLegalMove()
 		{
 			temp.x--;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x < 5) //쪿쩵
 		{
 			temp.x++;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.y > 0) //쪿쨁
 		{
 			temp.y--;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.y < 2) //쪿짾
 		{
 			temp.y++;
@@ -84,22 +84,22 @@ void Chess::setLegalMove()
 			temp.x--;
 			temp.y--;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x < 5 && temp.y > 0) //쪿쩵쨁
 		{
 			temp.x++;
 			temp.y--;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x > 3 && temp.y < 2) //쪿ⅹ짾
 		{
 			temp.x--;
 			temp.y++;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x < 5 && temp.y < 2) //쪿쩵짾
 		{
 			temp.x++;
@@ -114,22 +114,22 @@ void Chess::setLegalMove()
 			temp.x = temp.x - 2;
 			temp.y = temp.y - 2;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x + 2 <= 8 && temp.y - 2 >= 0) //쪿쩵쨁
 		{
 			temp.x = temp.x + 2;
 			temp.y = temp.y - 2;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x - 2 >= 0 && temp.y + 2 <= 4) //쪿ⅹ짾
 		{
 			temp.x = temp.x - 2;
 			temp.y = temp.y + 2;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x + 2 <= 8 && temp.y + 2 <= 4) //쪿쩵짾
 		{
 			temp.x = temp.x + 2;
@@ -172,50 +172,50 @@ void Chess::setLegalMove()
 			temp.x = temp.x - 2;
 			temp.y--;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x - 1 >= 0 && temp.y - 2 >= 0) //쪿 11 헕컨ㅸ쪿
 		{
 			temp.x--;
 			temp.y = temp.y - 2;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x + 1 <= 8 && temp.y - 2 >= 0) //쪿 1 헕컨ㅸ쪿
 		{
 			temp.x++;
 			temp.y = temp.y - 2;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x + 2 <= 8 && temp.y - 1 >= 0) //쪿 2 헕컨ㅸ쪿
 		{
 			temp.x = temp.x + 2;
 			temp.y--;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x + 2 <= 8 && temp.y + 1 <= 9) //쪿 4 헕컨ㅸ쪿
 		{
 			temp.x = temp.x + 2;
 			temp.y++;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x + 1 <= 8 && temp.y + 2 <= 9) //쪿 5 헕컨ㅸ쪿
 		{
 			temp.x++;
 			temp.y = temp.y + 2;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x - 1 >= 0 && temp.y + 2 <= 9) //쪿 7 헕컨ㅸ쪿
 		{
 			temp.x--;
 			temp.y = temp.y + 2;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x - 2 >= 0 && temp.y + 1 <= 9) //쪿 8 헕컨ㅸ쪿
 		{
 			temp.x = temp.x - 2;
@@ -263,14 +263,14 @@ void Chess::setLegalMove()
 			{
 				temp.x--;
 				legalMove.push_back(temp);
+				temp = currentPosition;
 			}
-			temp = currentPosition;
 			if (temp.x < 8) //쪿쩵
 			{
 				temp.x++;
 				legalMove.push_back(temp);
+				temp = currentPosition;
 			}
-			temp = currentPosition;
 			if (temp.y < 9) //쪿짾
 			{
 				temp.y++;
@@ -284,20 +284,20 @@ void Chess::setLegalMove()
 		{
 			temp.x--;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x < 5) //쪿쩵
 		{
 			temp.x++;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.y > 7) //쪿쨁
 		{
 			temp.y--;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.y < 9) //쪿짾
 		{
 			temp.y++;
@@ -311,22 +311,22 @@ void Chess::setLegalMove()
 			temp.x--;
 			temp.y--;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x < 5 && temp.y > 7) //쪿쩵쨁
 		{
 			temp.x++;
 			temp.y--;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x > 3 && temp.y < 9) //쪿ⅹ짾
 		{
 			temp.x--;
 			temp.y++;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x < 5 && temp.y < 9) //쪿쩵짾
 		{
 			temp.x++;
@@ -341,22 +341,22 @@ void Chess::setLegalMove()
 			temp.x = temp.x - 2;
 			temp.y = temp.y - 2;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x + 2 <= 8 && temp.y - 2 >= 5) //쪿쩵쨁
 		{
 			temp.x = temp.x + 2;
 			temp.y = temp.y - 2;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x - 2 >= 0 && temp.y + 2 <= 9) //쪿ⅹ짾
 		{
 			temp.x = temp.x - 2;
 			temp.y = temp.y + 2;
 			legalMove.push_back(temp);
+			temp = currentPosition;
 		}
-		temp = currentPosition;
 		if (temp.x + 2 <= 8 && temp.y + 2 <= 9) //쪿쩵짾
 		{
 			temp.x = temp.x + 2;
@@ -377,14 +377,14 @@ void Chess::setLegalMove()
 			{
 				temp.x--;
 				legalMove.push_back(temp);
+				temp = currentPosition;
 			}
-			temp = currentPosition;
 			if (temp.x < 8) //쪿쩵
 			{
 				temp.x++;
 				legalMove.push_back(temp);
+				temp = currentPosition;
 			}
-			temp = currentPosition;
 			if (temp.y > 0) //쪿쨁
 			{
 				temp.y--;
