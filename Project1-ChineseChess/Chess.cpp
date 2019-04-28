@@ -139,6 +139,7 @@ void Chess::setLegalMove()
 		break;
 
 	case 4: //黑車
+	case 11: //紅車
 		while (temp.x > 0) //向左
 		{
 			temp.x--;
@@ -165,12 +166,117 @@ void Chess::setLegalMove()
 		break;
 
 	case 5: //黑馬
+	case 12: //紅傌
+		if (temp.x - 2 >= 0 && temp.y - 1 >= 0) //向 10 點鐘方向
+		{
+			temp.x = temp.x - 2;
+			temp.y--;
+			legalMove.push_back(temp);
+		}
+		temp = currentPosition;
+		if (temp.x - 1 >= 0 && temp.y - 2 >= 0) //向 11 點鐘方向
+		{
+			temp.x--;
+			temp.y = temp.y - 2;
+			legalMove.push_back(temp);
+		}
+		temp = currentPosition;
+		if (temp.x + 1 <= 8 && temp.y - 2 >= 0) //向 1 點鐘方向
+		{
+			temp.x++;
+			temp.y = temp.y - 2;
+			legalMove.push_back(temp);
+		}
+		temp = currentPosition;
+		if (temp.x + 2 <= 8 && temp.y - 1 >= 0) //向 2 點鐘方向
+		{
+			temp.x = temp.x + 2;
+			temp.y--;
+			legalMove.push_back(temp);
+		}
+		temp = currentPosition;
+		if (temp.x + 2 <= 8 && temp.y + 1 <= 9) //向 4 點鐘方向
+		{
+			temp.x = temp.x + 2;
+			temp.y++;
+			legalMove.push_back(temp);
+		}
+		temp = currentPosition;
+		if (temp.x + 1 <= 8 && temp.y + 2 <= 9) //向 5 點鐘方向
+		{
+			temp.x++;
+			temp.y = temp.y + 2;
+			legalMove.push_back(temp);
+		}
+		temp = currentPosition;
+		if (temp.x - 1 >= 0 && temp.y + 2 <= 9) //向 7 點鐘方向
+		{
+			temp.x--;
+			temp.y = temp.y + 2;
+			legalMove.push_back(temp);
+		}
+		temp = currentPosition;
+		if (temp.x - 2 >= 0 && temp.y + 1 <= 9) //向 8 點鐘方向
+		{
+			temp.x = temp.x - 2;
+			temp.y++;
+			legalMove.push_back(temp);
+		}
 		break;
 
 	case 6: //黑包
+	case 13: //紅炮
+		while (temp.x > 0) //向左
+		{
+			temp.x--;
+			legalMove.push_back(temp);
+		}
+		temp = currentPosition;
+		while (temp.x < 8) //向右
+		{
+			temp.x++;
+			legalMove.push_back(temp);
+		}
+		temp = currentPosition;
+		while (temp.y > 0) //向上
+		{
+			temp.y--;
+			legalMove.push_back(temp);
+		}
+		temp = currentPosition;
+		while (temp.y < 9) //向下
+		{
+			temp.y++;
+			legalMove.push_back(temp);
+		}
 		break;
 
 	case 7: //黑卒
+		if (temp.y <= 4) //在己方範圍，只能向下
+		{
+			temp.y++;
+			legalMove.push_back(temp);
+		}
+		else //在敵方範圍
+		{
+			if (temp.x > 0) //向左
+			{
+				temp.x--;
+				legalMove.push_back(temp);
+			}
+			temp = currentPosition;
+			if (temp.x < 8) //向右
+			{
+				temp.x++;
+				legalMove.push_back(temp);
+			}
+			temp = currentPosition;
+			if (temp.y < 9) //向下
+			{
+				temp.y++;
+				legalMove.push_back(temp);
+			}
+		}
 		break;
 
 	case 8: //紅帥
@@ -259,39 +365,32 @@ void Chess::setLegalMove()
 		}
 		break;
 
-	case 11: //紅車
-		while (temp.x > 0) //向左
-		{
-			temp.x--;
-			legalMove.push_back(temp);
-		}
-		temp = currentPosition;
-		while (temp.x < 8) //向右
-		{
-			temp.x++;
-			legalMove.push_back(temp);
-		}
-		temp = currentPosition;
-		while (temp.y > 0) //向上
+	case 14: //紅兵
+		if (temp.y >= 5) //在己方範圍，只能向上
 		{
 			temp.y--;
 			legalMove.push_back(temp);
 		}
-		temp = currentPosition;
-		while (temp.y < 9) //向下
+		else //在敵方範圍
 		{
-			temp.y++;
-			legalMove.push_back(temp);
+			if (temp.x > 0) //向左
+			{
+				temp.x--;
+				legalMove.push_back(temp);
+			}
+			temp = currentPosition;
+			if (temp.x < 8) //向右
+			{
+				temp.x++;
+				legalMove.push_back(temp);
+			}
+			temp = currentPosition;
+			if (temp.y > 0) //向上
+			{
+				temp.y--;
+				legalMove.push_back(temp);
+			}
 		}
-		break;
-
-	case 12: //紅傌
-		break;
-
-	case 13: //紅炮
-		break;
-
-	case 14: //紅兵
 		break;
 	}
 }
