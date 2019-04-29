@@ -402,5 +402,6 @@ void Chess::clearLegalMove()
 
 vector <position> Chess::getLegalMove()
 {
+	Chess::setLegalMove();
 	return legalMove;
 }

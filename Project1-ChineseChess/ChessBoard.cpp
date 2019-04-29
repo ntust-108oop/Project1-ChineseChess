@@ -72,7 +72,7 @@ void ChessBoard::printThePlane()
 		for (int j = 0; j < 9; j++)
 		{
             // 測試排版
-            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50+i*5),static_cast<short>(5+j*4) });
+            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50+j*5),static_cast<short>(2+i*4) });
 
 			if(wholePosition[j][i]!=NULL)cout << wholePosition[j][i]->getChessType() << "\t";
 			else cout << "0\t";
@@ -80,9 +80,31 @@ void ChessBoard::printThePlane()
 		 cout << "\n";
 	}
     // 因為畫框框會被影響所以稍微寫一下
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(0),static_cast<short>(42) });
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50),static_cast<short>(42) });
 	 
     cout << turns << "\n";
+}
+
+void ChessBoard::printChosenPlane()
+{
+
+}
+
+void ChessBoard::moveThechess(int fromX, int fromY, int toX, int toY)
+{
+	//確認位置是否為合法移動
+	bool tmp = false;
+	for (position i : wholePosition[fromX][fromY]->getLegalMove())
+	{
+		if (toX == i.x&&toY == i.y)tmp = true;
+	}
+
+	if (wholePosition[toX][toY] == NULL && tmp)
+	{
+		wholePosition[toX][toY] = wholePosition[fromX][fromY];
+		wholePosition[fromX][fromY] = NULL;
+	}
+	
 }
 
 void ChessBoard::readTheBoard(string fileTxt)
@@ -97,7 +119,10 @@ void ChessBoard::readTheBoard(string fileTxt)
 		{
 			for (int j = 0; j < 9; j++)
 				if (wholePosition[j][i] != NULL)
+				{
 					delete wholePosition[j][i];
+					wholePosition[j][i] = NULL;
+				}
 		}
 
 		int tmp;
