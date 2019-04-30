@@ -27,16 +27,11 @@ public:
     void setChosen(bool chosenInput);
     bool getChosen();
 
-    //legalMove 操作
-    void setLegalMove();
-    void clearLegalMove();
-    vector <position> getLegalMove();
-
 private:
     int chessType; //黑: 1 ~ 7; 紅: 8 ~ 14
     position currentPosition; //這個 Chess 的當前位置
     bool chosen; //當 Chess 被選到的時候，由 ChessBoard 來改變這個值，選到的時候使所有 legalMove 變色也是由它做
-    vector <position> legalMove; //存放能走的路
+    vector <position> legalMove; //存放無視其他人能走的路
 };
 
 #endif //!CHESS_H

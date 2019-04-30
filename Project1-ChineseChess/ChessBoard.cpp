@@ -90,21 +90,19 @@ void ChessBoard::printChosenPlane()
 
 }
 
-void ChessBoard::moveThechess(int fromX, int fromY, int toX, int toY)
+void ChessBoard::moveTheChess(int fromX, int fromY, int toX, int toY)
 {
-	//確認位置是否為合法移動
-	bool tmp = false;
-	for (position i : wholePosition[fromX][fromY]->getLegalMove())
+	if (wholePosition[toX][toY] != NULL)
 	{
-		if (toX == i.x&&toY == i.y)tmp = true;
+		delete wholePosition[toX][toY];
+		wholePosition[toX][toY] = wholePosition[fromX][fromY];
+		wholePosition[fromX][fromY] = NULL;
 	}
-
-	if (wholePosition[toX][toY] == NULL && tmp)
+	else
 	{
 		wholePosition[toX][toY] = wholePosition[fromX][fromY];
 		wholePosition[fromX][fromY] = NULL;
 	}
-	
 }
 
 void ChessBoard::readTheBoard(string fileTxt)
@@ -180,4 +178,456 @@ void ChessBoard::saveTheBoard()
 	}
 	file.close();
 	file.clear();
+}
+
+
+void ChessBoard::manageLegalMove(int x, int y)
+{
+	switch (wholePosition[x][y]->getChessType())
+		{
+		position temp = wholePosition[x][y]->getCurrentPosition();
+		case 1: //黑將
+			if (temp.x > 3) //向左
+			{
+				temp.x--;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x < 5) //向右
+			{
+				temp.x++;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.y > 7) //向上
+			{
+				temp.y--;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.y < 9) //向下
+			{
+				temp.y++;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			// 王不見王
+			while (temp.y > 0)
+			{
+				temp.y--;
+				if (wholePosition[temp.x][temp.y] != NULL)
+				{
+					// 若是中間被擋住就沒事
+					if (wholePosition[temp.x][temp.y]->getChessType() != 8)
+					{
+						break;
+					}
+					else
+					{
+						legalMove.push_back(temp);
+						break;
+					}
+				}
+			}
+			break;
+
+		case 2: //黑士
+			if (temp.x > 3 && temp.y > 7) //向左上
+			{
+				temp.x--;
+				temp.y--;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x < 5 && temp.y > 7) //向右上
+			{
+				temp.x++;
+				temp.y--;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x > 3 && temp.y < 9) //向左下
+			{
+				temp.x--;
+				temp.y++;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x < 5 && temp.y < 9) //向右下
+			{
+				temp.x++;
+				temp.y++;
+				legalMove.push_back(temp);
+			}
+			break;
+
+		case 3: //黑象
+			if (temp.x - 2 >= 0 && temp.y - 2 >= 5 && (wholePosition[x - 1][y - 1] == NULL)) //向左上
+			{
+				temp.x -= 2;
+				temp.y -= 2;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x + 2 <= 8 && temp.y - 2 >= 5 && (wholePosition[x + 1][y - 1] == NULL)) //向右上
+			{
+				temp.x += 2;
+				temp.y -= 2;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x - 2 >= 0 && temp.y + 2 <= 9 && (wholePosition[x - 1][y + 1] == NULL)) //向左下
+			{
+				temp.x -= 2;
+				temp.y += 2;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x + 2 <= 8 && temp.y + 2 <= 9 && (wholePosition[x + 1][y + 1] == NULL)) //向右下
+			{
+				temp.x += 2;
+				temp.y += 2;
+				legalMove.push_back(temp);
+			}
+			break;
+
+
+		case 4:  //黑車
+		case 11: //紅車
+			while (temp.x > 0) //向左
+			{
+				temp.x--;
+				legalMove.push_back(temp);
+			}
+			temp = wholePosition[x][y]->getCurrentPosition();
+			while (temp.x < 8) //向右
+			{
+				temp.x++;
+				legalMove.push_back(temp);
+			}
+			temp = wholePosition[x][y]->getCurrentPosition();
+			while (temp.y > 0) //向上
+			{
+				temp.y--;
+				legalMove.push_back(temp);
+			}
+			temp = wholePosition[x][y]->getCurrentPosition();
+			while (temp.y < 9) //向下
+			{
+				temp.y++;
+				legalMove.push_back(temp);
+			}
+			break;
+
+		case 5: //黑馬
+		case 12: //紅傌
+			if (temp.x - 2 >= 0 && temp.y - 1 >= 0 && wholePosition[temp.x - 1][temp.y] == NULL) //向 10 點鐘方向
+			{
+				temp.x = temp.x - 2;
+				temp.y--;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x - 1 >= 0 && temp.y - 2 >= 0 && wholePosition[temp.x][temp.y - 1] == NULL) //向 11 點鐘方向
+			{
+				temp.x--;
+				temp.y = temp.y - 2;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x + 1 <= 8 && temp.y - 2 >= 0 && wholePosition[temp.x][temp.y - 1] == NULL) //向 1 點鐘方向
+			{
+				temp.x++;
+				temp.y = temp.y - 2;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x + 2 <= 8 && temp.y - 1 >= 0 && wholePosition[temp.x + 1][temp.y] == NULL) //向 2 點鐘方向
+			{
+				temp.x = temp.x + 2;
+				temp.y--;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x + 2 <= 8 && temp.y + 1 <= 9 && wholePosition[temp.x + 1][temp.y] == NULL) //向 4 點鐘方向
+			{
+				temp.x = temp.x + 2;
+				temp.y++;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x + 1 <= 8 && temp.y + 2 <= 9 && wholePosition[temp.x][temp.y + 1] == NULL) //向 5 點鐘方向
+			{
+				temp.x++;
+				temp.y = temp.y + 2;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x - 1 >= 0 && temp.y + 2 <= 9 && wholePosition[temp.x][temp.y + 1] == NULL) //向 7 點鐘方向
+			{
+				temp.x--;
+				temp.y = temp.y + 2;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x - 2 >= 0 && temp.y + 1 <= 9 && wholePosition[temp.x - 1][temp.y] == NULL) //向 8 點鐘方向
+			{
+				temp.x = temp.x - 2;
+				temp.y++;
+				legalMove.push_back(temp);
+			}
+			break;
+
+		case 6: //黑包
+		case 13: //紅炮
+			while (temp.x > 0) //向左
+			{
+				temp.x--;
+				legalMove.push_back(temp);
+				if (wholePosition[temp.x][temp.y] != NULL)
+				{
+					break;
+				}
+			}
+			while (temp.x > 0)  // 取得可以吃的那一個
+			{
+				temp.x--;
+				if (wholePosition[temp.x][temp.y] != NULL)
+				{
+					legalMove.push_back(temp);
+					break;
+				}
+			}
+			temp = wholePosition[x][y]->getCurrentPosition();
+
+			while (temp.x < 8) //向右
+			{
+				temp.x++;
+				legalMove.push_back(temp);
+				if (wholePosition[temp.x][temp.y] != NULL)
+				{
+					break;
+				}
+			}
+			while (temp.x < 8)
+			{
+				temp.x++;
+				if (wholePosition[temp.x][temp.y] != NULL)
+				{
+					legalMove.push_back(temp);
+					break;
+				}
+			}
+			temp = wholePosition[x][y]->getCurrentPosition();
+
+			while (temp.y > 0) //向上
+			{
+				temp.y--;
+				legalMove.push_back(temp);
+				if (wholePosition[temp.x][temp.y] != NULL)
+				{
+					break;
+				}
+			}
+			while (temp.y > 0)
+			{
+				temp.y--;
+				if (wholePosition[temp.x][temp.y] != NULL)
+				{
+					legalMove.push_back(temp);
+					break;
+				}
+			}
+			temp = wholePosition[x][y]->getCurrentPosition();
+			
+			while (temp.y < 9) //向下
+			{
+				temp.y++;
+				legalMove.push_back(temp);
+				if (wholePosition[temp.x][temp.y] != NULL)
+				{
+					break;
+				}
+			}
+			while (temp.y < 9)
+			{
+				temp.y++;
+				if (wholePosition[temp.x][temp.y] != NULL)
+				{
+					legalMove.push_back(temp);
+					break;
+				}
+			}
+			break;
+
+		case 7: //黑卒
+			if (temp.y >= 5) //在己方範圍，只能向下
+			{
+				temp.y--;
+				legalMove.push_back(temp);
+			}
+			else //在敵方範圍
+			{
+				if (temp.x > 0) //向左
+				{
+					temp.x--;
+					legalMove.push_back(temp);
+					temp = wholePosition[x][y]->getCurrentPosition();
+				}
+				if (temp.x < 8) //向右
+				{
+					temp.x++;
+					legalMove.push_back(temp);
+					temp = wholePosition[x][y]->getCurrentPosition();
+				}
+				if (temp.y > 0) //向下
+				{
+					temp.y--;
+					legalMove.push_back(temp);
+				}
+			}
+			break;
+
+		case 8: //紅帥
+			if (temp.x > 3) //向左
+			{
+				temp.x--;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x < 5) //向右
+			{
+				temp.x++;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.y > 0) //向下
+			{
+				temp.y--;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.y < 2) //向上
+			{
+				temp.y++;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			// 王不見王
+			while (temp.y < 9)
+			{
+				temp.y++;
+				if (wholePosition[temp.x][temp.y] != NULL)
+				{
+					// 若是中間被擋住就沒事
+					if (wholePosition[temp.x][temp.y]->getChessType() != 8)
+					{
+						break;
+					}
+					else
+					{
+						legalMove.push_back(temp);
+						break;
+					}
+				}
+			}
+			break;
+			
+		case 9: //紅仕
+			if (temp.x > 3 && temp.y > 0) //向左上
+			{
+				temp.x--;
+				temp.y--;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x < 5 && temp.y > 0) //向右上
+			{
+				temp.x++;
+				temp.y--;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x > 3 && temp.y < 2) //向左下
+			{
+				temp.x--;
+				temp.y++;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x < 5 && temp.y < 2) //向右下
+			{
+				temp.x++;
+				temp.y++;
+				legalMove.push_back(temp);
+			}
+			break;
+
+		case 10: //紅相
+			if (temp.x - 2 >= 0 && temp.y - 2 >= 0 && (wholePosition[x - 1][y - 1] == NULL)) //向左下
+			{
+				temp.x = temp.x - 2;
+				temp.y = temp.y - 2;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x + 2 <= 8 && temp.y - 2 >= 0 && (wholePosition[x + 1][y - 1] == NULL)) //向右下
+			{
+				temp.x = temp.x + 2;
+				temp.y = temp.y - 2;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x - 2 >= 0 && temp.y + 2 <= 4 && (wholePosition[x - 1][y + 1] == NULL)) //向左上
+			{
+				temp.x = temp.x - 2;
+				temp.y = temp.y + 2;
+				legalMove.push_back(temp);
+				temp = wholePosition[x][y]->getCurrentPosition();
+			}
+			if (temp.x + 2 <= 8 && temp.y + 2 <= 4 && (wholePosition[x + 1][y + 1] == NULL)) //向右上
+			{
+				temp.x = temp.x + 2;
+				temp.y = temp.y + 2;
+				legalMove.push_back(temp);
+			}
+			break;
+
+		case 14: //紅兵
+			if (temp.y <= 4) //在己方範圍，只能向上
+			{
+				temp.y++;
+				legalMove.push_back(temp);
+			}
+			else //在敵方範圍
+			{
+				if (temp.x > 0) //向左
+				{
+					temp.x--;
+					legalMove.push_back(temp);
+					temp = wholePosition[x][y]->getCurrentPosition();
+				}
+				if (temp.x < 8) //向右
+				{
+					temp.x++;
+					legalMove.push_back(temp);
+					temp = wholePosition[x][y]->getCurrentPosition();
+				}
+				if (temp.y < 9) //向上
+				{
+					temp.y++;
+					legalMove.push_back(temp);
+				}
+			}
+			break;
+		}
+
+
+
+
+}
+
+void ChessBoard::clearLegalMove()
+{
+	legalMove.clear();
 }

@@ -29,12 +29,16 @@ public:
 
 
 	// 移動棋盤，偵測到選棋時會呼叫
-	void moveThechess(int fromX, int fromY, int toX, int toY);
+	void moveTheChess(int fromX, int fromY, int toX, int toY);
 
     // 應該在讀入棋盤時創建好所有chess物件
     void readTheBoard(string fileTxt);
     void saveTheBoard(string fileTxt);
 	void saveTheBoard();
+
+	vector <position> legalMove;	//存放能走的路，UI能直接使用到它
+	void manageLegalMove(int x, int y);		// UI在選擇棋子以後呼叫的
+	void clearLegalMove();
 };
 
 

@@ -6,7 +6,6 @@ using namespace std;
 
 class Record
 {
-	
 
 public:
     Record();
