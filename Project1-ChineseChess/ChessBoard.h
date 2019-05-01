@@ -1,9 +1,12 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
 #include <iostream>
+#include <algorithm>
 #include <fstream>
+#include <vector>
 #include <string>
 #include "Chess.h"
+
 
 using namespace std;
 
@@ -24,7 +27,8 @@ public:
 
 	// 印出普通棋盤
     void printThePlane();
-	// 印出含有選中棋的可動步數的棋盤
+	// 印出含有選中棋的可動步數的棋盤，使用前需要先確定legalMove內是否已排除拐馬步
+	// 或其他特殊規則，以及不能吃得棋，以及被其他棋檔到的剩餘位置
 	void printChosenPlane();
 
 
@@ -39,6 +43,7 @@ public:
 	vector <position> legalMove;	//存放能走的路，UI能直接使用到它
 	void manageLegalMove(int x, int y);		// UI在選擇棋子以後呼叫的
 	void clearLegalMove();
+	void SetColor(int = 7);//搬UI的函數過來設定顏色
 };
 
 

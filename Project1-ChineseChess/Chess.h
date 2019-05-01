@@ -7,6 +7,11 @@ using std::vector;
 struct position
 {
     int x, y;
+	bool operator==(position other)
+	{
+		if (x == other.x&&y == other.y)return true;
+		else return false;
+	}
 };
 
 class Chess

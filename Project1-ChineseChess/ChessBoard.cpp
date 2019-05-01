@@ -87,7 +87,38 @@ void ChessBoard::printThePlane()
 
 void ChessBoard::printChosenPlane()
 {
+	for (int i = 5; i < 40; i++) // 測試排版：清一塊空白的區域
+	{
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(42),static_cast<short>(i) });
+		for (int j = 0; j < 65; j++)
+		{
+			cout << " ";
+		}
+	}
 
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			// 測試排版
+			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50 + j * 5),static_cast<short>(2 + i * 4) });
+			
+			position tmp;
+			tmp.x = j;
+			tmp.y = i;
+			//從legalMove中找到可以走的位置，改變顏色配置
+			vector<position>::iterator it = find(legalMove.begin(), legalMove.end(), tmp);
+			if(it!= legalMove.end()) SetColor(112);
+			else SetColor();
+			if (wholePosition[j][i] != NULL)cout << wholePosition[j][i]->getChessType() << "\t";
+			else cout << "0\t";
+		}
+		cout << "\n";
+	}
+	// 因為畫框框會被影響所以稍微寫一下
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50),static_cast<short>(42) });
+
+	cout << turns << "\n";
 }
 
 void ChessBoard::moveTheChess(int fromX, int fromY, int toX, int toY)
@@ -179,7 +210,6 @@ void ChessBoard::saveTheBoard()
 	file.close();
 	file.clear();
 }
-
 
 void ChessBoard::manageLegalMove(int x, int y)
 {
@@ -630,4 +660,9 @@ void ChessBoard::manageLegalMove(int x, int y)
 void ChessBoard::clearLegalMove()
 {
 	legalMove.clear();
+}
+
+void ChessBoard::SetColor(int color)
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
