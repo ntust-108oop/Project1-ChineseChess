@@ -2,7 +2,7 @@
 
 position UI::cursorPosition = { 0,0 };
 
-const short TOP_BOUND = 1, BOTTOM_BOUND = 40, LEFT_BOUND = 1, RIGHT_BOUND = 148, ROW_ONE = 39, ROW_TWO = 107;
+const short TOP_BOUND = 1, BOTTOM_BOUND = 24, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = 28, ROW_TWO = 67;
 
 // Intent: 讀取鍵盤
 // Pre: UI物件
@@ -101,67 +101,90 @@ void UI::readKeyBoard()
 // Post: 印出結果
 void UI::printUI()
 {
-    keybd_event(VK_MENU, 0x38, 0, 0);                   // 設定全螢幕
-    keybd_event(VK_RETURN, 0x1c, 0, 0);
-    keybd_event(VK_MENU, 0xb8, KEYEVENTF_KEYUP, 0);
-    keybd_event(VK_RETURN, 0x9c, KEYEVENTF_KEYUP, 0);
-
-    for (short i = LEFT_BOUND; i <= RIGHT_BOUND; i++)   // 畫橫線
-    {
-        SetPosition({ i,TOP_BOUND });
-        cout << "/";
-        SetPosition({ i,BOTTOM_BOUND });
-        cout << "/";
-    }
-    for (short i = TOP_BOUND; i <= BOTTOM_BOUND; i++)   // 畫直線
-    {
-        SetPosition({ LEFT_BOUND,i });
-        cout << "/";
-        SetPosition({ RIGHT_BOUND,i });
-        cout << "/";
-        SetPosition({ ROW_ONE,i });
-        cout << "/";
-        SetPosition({ ROW_TWO,i });
-        cout << "/";
-    }
     
-    SetColor(100);                                      // 畫標題
-    SetPosition({ ROW_TWO + 11,TOP_BOUND + 4 });
-    cout << " ＿＿＿＿＿＿＿＿＿＿ ";
-    SetPosition({ ROW_TWO + 11,TOP_BOUND + 5 });
-    cout << "｜　　Chinese　　 　｜";
-    SetPosition({ ROW_TWO + 11,TOP_BOUND + 6 });
-    cout << "｜　　　　Chess　　 ｜";
-    SetPosition({ ROW_TWO + 11,TOP_BOUND + 7 });
-    cout << " ￣￣￣￣￣￣￣￣￣￣ ";
-    SetColor(7);
+    for (short i = 0; i < BOTTOM_BOUND - 1; i++)            // 印直線
+    {
+        SetPosition({ LEFT_BOUND, TOP_BOUND + i });             // 最左兩條
+        cout << "║ ║";
+        SetPosition({ ROW_ONE, TOP_BOUND + i });                // 棋盤左邊
+        cout << "║";
+        SetPosition({ ROW_TWO, TOP_BOUND + i });                // 棋盤右邊
+        cout << "║";
+        SetPosition({ RIGHT_BOUND - 2, TOP_BOUND + i });        // 最右兩條
+        cout << "║ ║";
+    }
 
-    SetPosition({ ROW_TWO + 13,TOP_BOUND + 15 });       // 顯示輪到誰
-    cout << "目前輪到";
-    //if (chessBoard.getTurn() == 0)        // static function 無法使用 非static 的chessBoard
-    //                                      // 這段可能給ChessBoard 來印比較好
-    //{
-    //    SetColor(240);
-    //    cout << "黑方";
-    //}
-    //else
-    //{
-    SetColor(252);
-    cout << "紅方";
-    //}
-    SetColor(7);
-    cout << "下棋";
+    SetPosition({ LEFT_BOUND, TOP_BOUND });                 // 印橫線
+    for (short i = 0; i < RIGHT_BOUND - 1; i++)                 // 最上
+    {
+        cout << "═";
+    }
+    SetPosition({ LEFT_BOUND, BOTTOM_BOUND });                  // 最下
+    for (short i = 0; i < RIGHT_BOUND - 1; i++)
+    {
+        cout << "═";
+    }
+    SetPosition({ LEFT_BOUND + 2, TOP_BOUND + 1 });             // 左欄的上邊
+    for (short i = 0; i < ROW_ONE - 2; i++)
+    {
+        cout << "═";
+    }
+    SetPosition({ LEFT_BOUND+2, BOTTOM_BOUND-1 });              // 左欄的下邊
+    for (short i = 0; i < ROW_ONE-2; i++)
+    {
+        cout << "═";
+    }
+    SetPosition({ ROW_TWO, TOP_BOUND + 1 });             // 右欄的上邊
+    for (short i = 0; i < RIGHT_BOUND-2-ROW_TWO; i++)
+    {
+        cout << "═";
+    }
+    SetPosition({ ROW_TWO + 1, BOTTOM_BOUND - 1 });          // 右欄的下邊
+    for (short i = 0; i < RIGHT_BOUND - 2 - ROW_TWO; i++)
+    {
+        cout << "═";
+    }
+    SetPosition({ ROW_TWO, BOTTOM_BOUND -9 });                  // 右欄的分隔線
+    for (short i = 0; i < RIGHT_BOUND - ROW_TWO-1; i++)
+    {
+        cout << "═";
+    }
 
-    SetPosition({ ROW_TWO + 13,TOP_BOUND + 24 });       // 畫選單
-    cout << "方向鍵：移動游標";
-    SetPosition({ ROW_TWO + 13,TOP_BOUND + 27 });
-    cout << " Enter：選棋/確定";
-    SetPosition({ ROW_TWO + 13,TOP_BOUND + 30 });
-    cout << "　Ｕ　：  悔 棋";
-    SetPosition({ ROW_TWO + 13,TOP_BOUND + 33 });
-    cout << "　Ｒ　：  還 原";
-    SetPosition({ ROW_TWO + 13,TOP_BOUND + 36 });
-    cout << "ＥＳＣ：離開遊戲";
+    SetPosition({ LEFT_BOUND, TOP_BOUND });                 // 印角角
+    cout << "╔";
+    SetPosition({ LEFT_BOUND+2, TOP_BOUND+1 });
+    cout << "╔";
+    SetPosition({ ROW_TWO, TOP_BOUND + 1 });
+    cout << "╔";
+
+    SetPosition({ RIGHT_BOUND, TOP_BOUND });
+    cout << "╗";
+    SetPosition({ RIGHT_BOUND - 2, TOP_BOUND + 1 });
+    cout << "╗";
+    SetPosition({ ROW_ONE, TOP_BOUND + 1 });
+    cout << "╗";
+
+    SetPosition({ LEFT_BOUND, BOTTOM_BOUND });
+    cout << "╚";
+    SetPosition({ LEFT_BOUND + 2, BOTTOM_BOUND - 1 });
+    cout << "╚";
+    SetPosition({ ROW_TWO, BOTTOM_BOUND -1 });
+    cout << "╚";
+
+    SetPosition({ RIGHT_BOUND, BOTTOM_BOUND });
+    cout << "╝";
+    SetPosition({ RIGHT_BOUND - 2, BOTTOM_BOUND - 1 });
+    cout << "╝";
+    SetPosition({ ROW_ONE, BOTTOM_BOUND - 1 });
+    cout << "╝";
+
+    SetPosition({ ROW_TWO, BOTTOM_BOUND - 9 });
+    cout << "╠";
+    SetPosition({ RIGHT_BOUND-2, BOTTOM_BOUND - 9 });
+    cout << "╣";
+
+    SetPosition({ LEFT_BOUND+6, TOP_BOUND + 1 });
+    cout << "  戰  況  顯  示  ";
 }
 
 // Intent: 跳出Y/N視窗

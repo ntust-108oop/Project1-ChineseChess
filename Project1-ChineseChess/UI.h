@@ -15,6 +15,8 @@ public:
     // 印出遊戲畫面
 	static void printUI();
 
+    static void showMenu();
+
 	// 取得當前游標位置
 	static position getCursorPos();
 
