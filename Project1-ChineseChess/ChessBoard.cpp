@@ -213,9 +213,9 @@ void ChessBoard::saveTheBoard()
 
 void ChessBoard::manageLegalMove(int x, int y)
 {
+	position temp = wholePosition[x][y]->getCurrentPosition();
 	switch (wholePosition[x][y]->getChessType())
 		{
-		position temp = wholePosition[x][y]->getCurrentPosition();
 		case 1: //¶Â±N
 			if (temp.x > 3) //¦V¥ª
 			{
