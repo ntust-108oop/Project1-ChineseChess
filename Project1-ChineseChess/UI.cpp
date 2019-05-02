@@ -183,8 +183,18 @@ void UI::printUI()
     SetPosition({ RIGHT_BOUND-2, BOTTOM_BOUND - 9 });
     cout << "╣";
 
-    SetPosition({ LEFT_BOUND+6, TOP_BOUND + 1 });
+    SetPosition({ LEFT_BOUND+6, TOP_BOUND + 1 });           // 印字
     cout << "  戰  況  顯  示  ";
+    SetPosition({ROW_TWO+6,BOTTOM_BOUND-8});
+    cout << "ESC 選單    < 悔棋    > 還原";
+    SetPosition({ ROW_TWO + 9,BOTTOM_BOUND - 6 });
+    cout << "Enter     選取棋子";
+    SetPosition({ ROW_TWO + 11,BOTTOM_BOUND - 4 });
+    cout << "↑";
+    SetPosition({ ROW_TWO + 9,BOTTOM_BOUND - 3 });
+    cout << "←  →  方向鍵控制游標";
+    SetPosition({ ROW_TWO + 11,BOTTOM_BOUND - 2 });
+    cout << "↓";
 }
 
 // Intent: 跳出Y/N視窗

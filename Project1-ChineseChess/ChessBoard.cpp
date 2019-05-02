@@ -58,32 +58,32 @@ ChessBoard::ChessBoard(string fileTxt)
 
 void ChessBoard::printThePlane()
 {
-    for (int i = 5; i < 40; i++) // 測試排版：清一塊空白的區域
-    {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(42),static_cast<short>(i) });
-        for (int j = 0; j < 65; j++)
-        {
-            cout << " ";
-        }
-    }
-    
-	for (int i = 0; i < 10; i++)
-	{
-		for (int j = 0; j < 9; j++)
-		{
-            // 測試排版
-            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50+j*5),static_cast<short>(2+i*4) });
-
-			if(wholePosition[j][i]!=NULL)cout << wholePosition[j][i]->getChessType() << "\t";
-			else cout << "0\t";
-		}
-		 cout << "\n";
-	}
-    // 因為畫框框會被影響所以稍微寫一下
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50),static_cast<short>(42) });
-	 
-    cout << turns << "\n";
-}
+//    for (int i = 5; i < 40; i++) // 測試排版：清一塊空白的區域
+//    {
+//        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(42),static_cast<short>(i) });
+//        for (int j = 0; j < 65; j++)
+//        {
+//            cout << " ";
+//        }
+//    }
+//    
+//	for (int i = 0; i < 10; i++)
+//	{
+//		for (int j = 0; j < 9; j++)
+//		{
+//            // 測試排版
+//            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50+j*5),static_cast<short>(2+i*4) });
+//
+//			if(wholePosition[j][i]!=NULL)cout << wholePosition[j][i]->getChessType() << "\t";
+//			else cout << "0\t";
+//		}
+//		 cout << "\n";
+//	}
+//    // 因為畫框框會被影響所以稍微寫一下
+//    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50),static_cast<short>(42) });
+//	 
+//    cout << turns << "\n";
+//}
 
 void ChessBoard::printChosenPlane()
 {
