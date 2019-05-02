@@ -2,7 +2,7 @@
 
 position UI::cursorPosition = { 0,0 };
 
-const short TOP_BOUND = 1, BOTTOM_BOUND = 24, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = 28, ROW_TWO = 67;
+const short TOP_BOUND = 1, BOTTOM_BOUND = 23, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = 28, ROW_TWO = 66;
 
 // Intent: 讀取鍵盤
 // Pre: UI物件
@@ -10,7 +10,7 @@ const short TOP_BOUND = 1, BOTTOM_BOUND = 24, LEFT_BOUND = 1, RIGHT_BOUND = 106,
 void UI::readKeyBoard()
 {
     const char ESC = 0x1B, UP = 0x48, DOWN = 0x50, LEFT = 0x4B, RIGHT = 0x4D;
-    SetPosition({ ROW_ONE + 11,TOP_BOUND + 4 });
+    SetPosition({ ROW_ONE + 3,TOP_BOUND + 2 });
     char input;
     while (1)
     {
@@ -18,30 +18,30 @@ void UI::readKeyBoard()
         switch (input)
         {
         case UP:                                        //上
-            if (cursorPosition.y - 4 > TOP_BOUND + 2)
+            if (cursorPosition.y - 2 > TOP_BOUND + 1)
             {
-                cursorPosition.y -= 4;
+                cursorPosition.y -= 2;
                 SetPosition(cursorPosition);
             }
             break;
         case DOWN:                                      // 下
-            if (cursorPosition.y + 4 < BOTTOM_BOUND - 2)
+            if (cursorPosition.y + 2 < BOTTOM_BOUND - 1)
             {
-                cursorPosition.y += 4;
+                cursorPosition.y += 2;
                 SetPosition(cursorPosition);
             }
             break;
         case  LEFT:                                     // 左
-            if (cursorPosition.x - 5 > ROW_ONE + 10)
+            if (cursorPosition.x - 4 > ROW_ONE + 2)
             {
-                cursorPosition.x -= 5;
+                cursorPosition.x -= 4;
                 SetPosition(cursorPosition);
             }
             break;
         case  RIGHT:                                     // 右
-            if (cursorPosition.x + 5 < ROW_TWO - 10)
+            if (cursorPosition.x + 4 < ROW_TWO - 2)
             {
-                cursorPosition.x += 5;
+                cursorPosition.x += 4;
                 SetPosition(cursorPosition);
             }
             break;
