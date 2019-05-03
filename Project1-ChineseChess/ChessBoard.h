@@ -5,7 +5,9 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <Windows.h>
 #include "Chess.h"
+using namespace std;
 
 
 using namespace std;
@@ -25,6 +27,7 @@ public:
     ~ChessBoard();
     ChessBoard(string fileTxt);
 
+    
 	// 印出普通棋盤
     void printThePlane();
 	// 印出含有選中棋的可動步數的棋盤，使用前需要先確定legalMove內是否已排除拐馬步
@@ -46,6 +49,6 @@ public:
 	void SetColor(int = 7);//搬UI的函數過來設定顏色
 };
 
-
+void printEmptyPlane();
 
 #endif // !CHESSBOARD_H
