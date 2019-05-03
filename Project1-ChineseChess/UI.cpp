@@ -3,13 +3,14 @@
 position UI::cursorPosition = { 0,0 };
 
 const short TOP_BOUND = 1, BOTTOM_BOUND = 28, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = 28, ROW_TWO = 66;
+const char ESC = 0x1B, UP = 0x48, DOWN = 0x50, LEFT = 0x4B, RIGHT = 0x4D, ENTER = 0x0D;
 
 // Intent: 讀取鍵盤
 // Pre: UI物件
 // Post: 依據鍵盤傳入的值做出反應
 void UI::readKeyBoard()
 {
-    const char ESC = 0x1B, UP = 0x48, DOWN = 0x50, LEFT = 0x4B, RIGHT = 0x4D;
+
     SetPosition({ ROW_ONE + 3,TOP_BOUND + 3 });
     char input;
     while (1)
@@ -25,7 +26,7 @@ void UI::readKeyBoard()
             }
             break;
         case DOWN:                                      // 下
-            if (cursorPosition.y + 2 < BOTTOM_BOUND )
+            if (cursorPosition.y + 2 < BOTTOM_BOUND)
             {
                 cursorPosition.y += 2;
                 SetPosition(cursorPosition);
@@ -45,20 +46,35 @@ void UI::readKeyBoard()
                 SetPosition(cursorPosition);
             }
             break;
-        case ESC:                                      // 離開遊戲
-            if (showAlert("要關閉遊戲嗎？") == true)
+        case ESC:                                      // 選單
+            switch (showMenu())
             {
-                return;
-            }
-            else
-            {
-                // 不結束就直接印原本棋盤把alert蓋掉
+            case 0:                                     // 繼續遊戲
                 chessBoard.printThePlane();
+                break;
+            case 1:                                     // 重新開始
+                // 再看看需不需要做
+                chessBoard.printThePlane();
+                break;
+            case 2:                                     // 回主選單(?
+                // 再看看需不需要做
+                chessBoard.printThePlane();
+                break;
+            case 3:                                     // 結束遊戲
+                if (showAlert("結束遊戲？") == true)
+                {
+                    return;
+                }
+                else
+                {
+                    chessBoard.printThePlane();
+                }
+                break;
             }
             break;
         case 'u':
         case 'U':                                       // 悔棋
-            if (showAlert("　要悔棋嗎？　") == true)
+            if (showAlert("確定悔棋？") == true)
             {
                 /*
 
@@ -76,7 +92,7 @@ void UI::readKeyBoard()
             break;
         case 'r':
         case 'R':                                       // 還原
-            if (showAlert("　要還原嗎？　") == true)
+            if (showAlert("確定還原？") == true)
             {
                 /*
 
@@ -101,7 +117,7 @@ void UI::readKeyBoard()
 // Post: 印出結果
 void UI::printUI()
 {
-    
+
     for (short i = 0; i < BOTTOM_BOUND - 1; i++)            // 印直線
     {
         SetPosition({ LEFT_BOUND, TOP_BOUND + i });             // 最左兩條
@@ -129,13 +145,13 @@ void UI::printUI()
     {
         cout << "═";
     }
-    SetPosition({ LEFT_BOUND+2, BOTTOM_BOUND-1 });              // 左欄的下邊
-    for (short i = 0; i < ROW_ONE-2; i++)
+    SetPosition({ LEFT_BOUND + 2, BOTTOM_BOUND - 1 });              // 左欄的下邊
+    for (short i = 0; i < ROW_ONE - 2; i++)
     {
         cout << "═";
     }
     SetPosition({ ROW_TWO, TOP_BOUND + 1 });             // 右欄的上邊
-    for (short i = 0; i < RIGHT_BOUND-2-ROW_TWO; i++)
+    for (short i = 0; i < RIGHT_BOUND - 2 - ROW_TWO; i++)
     {
         cout << "═";
     }
@@ -144,15 +160,15 @@ void UI::printUI()
     {
         cout << "═";
     }
-    SetPosition({ ROW_TWO, BOTTOM_BOUND -9 });                  // 右欄的分隔線
-    for (short i = 0; i < RIGHT_BOUND - ROW_TWO-1; i++)
+    SetPosition({ ROW_TWO, BOTTOM_BOUND - 9 });                  // 右欄的分隔線
+    for (short i = 0; i < RIGHT_BOUND - ROW_TWO - 1; i++)
     {
         cout << "═";
     }
 
     SetPosition({ LEFT_BOUND, TOP_BOUND });                 // 印角角
     cout << "╔";
-    SetPosition({ LEFT_BOUND+2, TOP_BOUND+1 });
+    SetPosition({ LEFT_BOUND + 2, TOP_BOUND + 1 });
     cout << "╔";
     SetPosition({ ROW_TWO, TOP_BOUND + 1 });
     cout << "╔";
@@ -168,7 +184,7 @@ void UI::printUI()
     cout << "╚";
     SetPosition({ LEFT_BOUND + 2, BOTTOM_BOUND - 1 });
     cout << "╚";
-    SetPosition({ ROW_TWO, BOTTOM_BOUND -1 });
+    SetPosition({ ROW_TWO, BOTTOM_BOUND - 1 });
     cout << "╚";
 
     SetPosition({ RIGHT_BOUND, BOTTOM_BOUND });
@@ -180,13 +196,13 @@ void UI::printUI()
 
     SetPosition({ ROW_TWO, BOTTOM_BOUND - 9 });
     cout << "╠";
-    SetPosition({ RIGHT_BOUND-2, BOTTOM_BOUND - 9 });
+    SetPosition({ RIGHT_BOUND - 2, BOTTOM_BOUND - 9 });
     cout << "╣";
 
-    SetPosition({ LEFT_BOUND+6, TOP_BOUND + 1 });           // 印字
+    SetPosition({ LEFT_BOUND + 6, TOP_BOUND + 1 });           // 印字
     cout << "  戰  況  顯  示  ";
-    SetPosition({ROW_TWO+6,BOTTOM_BOUND-8});
-    cout << "ESC 選單    < 悔棋    > 還原";
+    SetPosition({ ROW_TWO + 6,BOTTOM_BOUND - 8 });
+    cout << "ESC 選單    U 悔棋    R 還原";
     SetPosition({ ROW_TWO + 9,BOTTOM_BOUND - 6 });
     cout << "Enter     選取棋子";
     SetPosition({ ROW_TWO + 11,BOTTOM_BOUND - 4 });
@@ -197,56 +213,205 @@ void UI::printUI()
     cout << "↓";
 }
 
+// Intent: 跳出選單
+// Pre: UI物件
+// Post: 回傳選擇
+int showMenu()
+{
+    vector<string> list = { "繼續遊戲", "重新開始", "回主選單", "結束遊戲" };
+    const short MENU_TOP = 10, MENU_LEFT = 38, MENU_RIGHT = 57;
+    short menuBottem = MENU_TOP + list.size() * 2;
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x01);      // 設定黑底藍字
+
+    for (short i = MENU_TOP; i < menuBottem; i++)              // 印黑底
+    {
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT,i });
+        for (short j = MENU_LEFT; j <= MENU_RIGHT; j++)
+        {
+            cout << " ";
+        }
+    }
+    for (short i = MENU_LEFT; i <= MENU_RIGHT; i++)     // 畫橫線
+    {
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { i,MENU_TOP });
+        cout << "═";
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { i,menuBottem });
+        cout << "═";
+    }
+
+    for (short i = MENU_TOP; i < menuBottem; i++)     // 畫直線
+    {
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT,i });
+        cout << "║";
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_RIGHT - 1,i });
+        cout << "║";
+    }
+
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT,menuBottem });
+    cout << "╙";
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_RIGHT - 1,menuBottem });
+    cout << "╜";
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT,MENU_TOP });
+    cout << "╓";
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_RIGHT - 1,MENU_TOP });
+    cout << "╖";
+
+
+    CONSOLE_CURSOR_INFO temp;                                                   // 隱藏游標
+    temp.dwSize = 100;
+    temp.bVisible = false;
+    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &temp);
+
+    char key, choice = 0;
+    for (short i = 0; i < static_cast<short>(list.size()); i++)
+    {
+        if (i == choice)
+        {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x70);      // 設定白底黑字
+        }
+        else
+        {
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x07);      // 設定黑底白字
+        }
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT + 6,MENU_TOP + 1 + 2 * i });
+        cout << list[i];
+    }
+    while (1)
+    {
+        key = _getch();
+        switch (key)
+        {
+        case UP:
+            if (choice > 0)
+            {
+                choice--;
+            }
+            else
+            {
+                choice = 3;
+            }
+            for (short i = 0; i < static_cast<short>(list.size()); i++)
+            {
+                if (i == choice)
+                {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x70);      // 設定白底黑字
+                }
+                else
+                {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x07);      // 設定黑底白字
+                }
+                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT + 6,MENU_TOP + 1 + 2 * i });
+                cout << list[i];
+            }
+            break;
+        case DOWN:
+            if (choice < 3)
+            {
+                choice++;
+            }
+            else
+            {
+                choice = 0;
+            }
+            for (short i = 0; i < static_cast<short>(list.size()); i++)
+            {
+                if (i == choice)
+                {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x70);      // 設定白底黑字
+                }
+                else
+                {
+                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x07);      // 設定黑底白字
+                }
+                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT + 6,MENU_TOP + 1 + 2 * i });
+                cout << list[i];
+            }
+            break;
+        case ENTER:
+            temp.dwSize = 100;
+            temp.bVisible = true;
+            SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &temp);
+            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { ROW_ONE + 3,TOP_BOUND + 3 });
+
+            return choice;
+            break;
+        }
+    }
+}
+
 // Intent: 跳出Y/N視窗
 // Pre: UI物件
 // Post: 回傳真假值
 bool showAlert(string message)
 {
-    for (short i = LEFT_BOUND + 44; i <= RIGHT_BOUND - 46; i++)     // 畫橫線
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);      // 設定黑底白字
+
+    for (short i = TOP_BOUND + 10; i < BOTTOM_BOUND - 9; i++)              // 印黑底
     {
-        UI::SetPosition({ i,TOP_BOUND + 10 });
-        cout << "-";
-        for (short j = TOP_BOUND + 11; j <= BOTTOM_BOUND - 11; j++)
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(i) });
+        for (unsigned j = ROW_ONE + 8; j < ROW_TWO - 6; j++)
         {
-            UI::SetPosition({ i,j });
             cout << " ";
         }
-        UI::SetPosition({ i,BOTTOM_BOUND - 10 });
-        cout << "-";
     }
-
-    for (short i = TOP_BOUND + 10; i <= BOTTOM_BOUND - 10; i++)     // 畫直線
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(TOP_BOUND + 10) });
+    for (short i = ROW_ONE + 8; i < ROW_TWO - 6; i++)     // 畫橫線
+    {
+        cout << "═";
+    }
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(BOTTOM_BOUND - 9) });
+    for (short i = ROW_ONE + 8; i < ROW_TWO - 6; i++)     // 畫橫線
+    {
+        cout << "═";
+    }
+    for (short i = TOP_BOUND + 10; i <= BOTTOM_BOUND - 9; i++)     // 畫直線
     {
 
-        UI::SetPosition({ ROW_ONE + 5,i });
-        cout << "|";
-        UI::SetPosition({ ROW_TWO - 5,i });
-        cout << "|";
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(i) });
+        cout << "║";
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 8),static_cast<short>(i) });
+        cout << "║";
     }
 
-    UI::SetCursorVisible(false);                                    // 印出內容並隱藏游標
-    UI::SetPosition({ LEFT_BOUND + 65,TOP_BOUND + 18 });
-    cout << message;
-    UI::SetPosition({ LEFT_BOUND + 63,TOP_BOUND + 21 });
-    cout << "[Y]確定   [N]取消";
-    UI::SetPosition({ 200,100 });
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(BOTTOM_BOUND - 9) });
+    cout << "╙";
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 8),static_cast<short>(BOTTOM_BOUND - 9) });
+    cout << "╜";
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(TOP_BOUND + 10) });
+    cout << "╓";
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 8),static_cast<short>(TOP_BOUND + 10) });
+    cout << "╖";
 
-    char decision;                                                  // 選擇確定或取消
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 16),static_cast<short>(TOP_BOUND + 13) });
+    cout << message;
+
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 14),static_cast<short>(TOP_BOUND + 15) });
+    cout << "是        否";
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 24),static_cast<short>(TOP_BOUND + 15) });
+
+    char key;
+    bool choice = false;
     while (1)
     {
-        decision = _getch();
-        switch (decision)
+        key = _getch();
+        switch (key)
         {
-        case 'y':
-        case 'Y':
-            UI::SetCursorVisible(true);
-            UI::SetPosition({ 50,5 });
-            return true;
-        case 'n':
-        case 'N':
-            UI::SetCursorVisible(true);
-            UI::SetPosition({ 50,5 });
-            return false;
+        case LEFT:
+        case RIGHT:
+            if (choice == true)
+            {
+                choice = false;
+                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 24),static_cast<short>(TOP_BOUND + 15) });
+            }
+            else
+            {
+                choice = true;
+                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 14),static_cast<short>(TOP_BOUND + 15) });
+            }
+            break;
+        case ENTER:
+            return choice;
         }
     }
 }
@@ -274,15 +439,4 @@ void UI::SetPosition(position newPosition)
 {
     UI::cursorPosition = newPosition;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(cursorPosition.x),static_cast<short>(cursorPosition.y) });
-}
-
-// Intent: 設定游標是否顯示及大小
-// Pre: UI物件
-// Post: 游標顯示狀態被改變
-void UI::SetCursorVisible(bool visible, DWORD size)
-{
-    CONSOLE_CURSOR_INFO cci;
-    cci.bVisible = visible;
-    cci.dwSize = size;
-    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cci);
 }

@@ -4,6 +4,8 @@
 #include <windows.h>
 #include <conio.h>
 #include <iostream>
+#include <string>
+#include <vector>
 #include "ChessBoard.h"
 using namespace std;
 
@@ -15,7 +17,7 @@ public:
     // 印出遊戲畫面
 	static void printUI();
 
-    static void showMenu();
+
 
 	// 取得當前游標位置
 	static position getCursorPos();
@@ -25,9 +27,6 @@ public:
 
     // 設定游標位置
     static void SetPosition(position);
-
-    // 設定是否顯示游標
-    static void SetCursorVisible(bool, DWORD=1);
 
     // 讀取鍵盤
     void readKeyBoard();
@@ -39,6 +38,8 @@ private:
 };
 
 bool showAlert(string);
+// 跳出選單
+int showMenu();
 
 #endif // !UI_H
 
