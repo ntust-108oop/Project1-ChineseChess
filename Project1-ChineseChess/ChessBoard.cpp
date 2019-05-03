@@ -416,22 +416,22 @@ void ChessBoard::manageLegalMove(int x, int y)
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.y > 7) //向上
-        {
-            temp.y--;
-            legalMove.push_back(temp);
-            temp = wholePosition[x][y]->getCurrentPosition();
-        }
-        if (temp.y < 9) //向下
+        if (temp.y < 2) //向下
         {
             temp.y++;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        // 王不見王
-        while (temp.y > 0)
+        if (temp.y > 0) //向上
         {
             temp.y--;
+            legalMove.push_back(temp);
+            temp = wholePosition[x][y]->getCurrentPosition();
+        }
+        // 王不見王
+        while (temp.y < 9)
+        {
+            temp.y++;
             if (wholePosition[temp.x][temp.y] != NULL)
             {
                 // 若是中間被擋住就沒事
@@ -449,28 +449,28 @@ void ChessBoard::manageLegalMove(int x, int y)
         break;
 
     case 2: //黑士
-        if (temp.x > 3 && temp.y > 7) //向左上
+        if (temp.x > 3 && temp.y > 0) //向左上
         {
             temp.x--;
             temp.y--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x < 5 && temp.y > 7) //向右上
+        if (temp.x < 5 && temp.y > 0) //向右上
         {
             temp.x++;
             temp.y--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x > 3 && temp.y < 9) //向左下
+        if (temp.x > 3 && temp.y < 2) //向左下
         {
             temp.x--;
             temp.y++;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x < 5 && temp.y < 9) //向右下
+        if (temp.x < 5 && temp.y < 2) //向右下
         {
             temp.x++;
             temp.y++;
@@ -479,28 +479,28 @@ void ChessBoard::manageLegalMove(int x, int y)
         break;
 
     case 3: //黑象
-        if (temp.x - 2 >= 0 && temp.y - 2 >= 5 && (wholePosition[x - 1][y - 1] == NULL)) //向左上
+        if (temp.x - 2 >= 0 && temp.y - 2 >= 0 && (wholePosition[x - 1][y - 1] == NULL)) //向左上
         {
             temp.x -= 2;
             temp.y -= 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x + 2 <= 8 && temp.y - 2 >= 5 && (wholePosition[x + 1][y - 1] == NULL)) //向右上
+        if (temp.x + 2 <= 8 && temp.y - 2 >= 0 && (wholePosition[x + 1][y - 1] == NULL)) //向右上
         {
             temp.x += 2;
             temp.y -= 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x - 2 >= 0 && temp.y + 2 <= 9 && (wholePosition[x - 1][y + 1] == NULL)) //向左下
+        if (temp.x - 2 >= 0 && temp.y + 2 <= 4 && (wholePosition[x - 1][y + 1] == NULL)) //向左下
         {
             temp.x -= 2;
             temp.y += 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x + 2 <= 8 && temp.y + 2 <= 9 && (wholePosition[x + 1][y + 1] == NULL)) //向右下
+        if (temp.x + 2 <= 8 && temp.y + 2 <= 4 && (wholePosition[x + 1][y + 1] == NULL)) //向右下
         {
             temp.x += 2;
             temp.y += 2;
@@ -678,9 +678,9 @@ void ChessBoard::manageLegalMove(int x, int y)
         break;
 
     case 7: //黑卒
-        if (temp.y >= 5) //在己方範圍，只能向下
+        if (temp.y < 5) //在己方範圍，只能向下
         {
-            temp.y--;
+            temp.y++;
             legalMove.push_back(temp);
         }
         else //在敵方範圍
@@ -697,9 +697,9 @@ void ChessBoard::manageLegalMove(int x, int y)
                 legalMove.push_back(temp);
                 temp = wholePosition[x][y]->getCurrentPosition();
             }
-            if (temp.y > 0) //向下
+            if (temp.y < 9) //向下
             {
-                temp.y--;
+                temp.y++;
                 legalMove.push_back(temp);
             }
         }
@@ -718,22 +718,22 @@ void ChessBoard::manageLegalMove(int x, int y)
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.y > 0) //向下
+        if (temp.y > 7) //向上
         {
             temp.y--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.y < 2) //向上
+        if (temp.y < 9) //向下
         {
             temp.y++;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         // 王不見王
-        while (temp.y < 9)
+        while (temp.y > 0)
         {
-            temp.y++;
+            temp.y--;
             if (wholePosition[temp.x][temp.y] != NULL)
             {
                 // 若是中間被擋住就沒事
@@ -751,28 +751,28 @@ void ChessBoard::manageLegalMove(int x, int y)
         break;
 
     case 9: //紅仕
-        if (temp.x > 3 && temp.y > 0) //向左上
+        if (temp.x > 3 && temp.y > 7) //向左上
         {
             temp.x--;
             temp.y--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x < 5 && temp.y > 0) //向右上
+        if (temp.x < 5 && temp.y > 7) //向右上
         {
             temp.x++;
             temp.y--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x > 3 && temp.y < 2) //向左下
+        if (temp.x > 3 && temp.y < 9) //向左下
         {
             temp.x--;
             temp.y++;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x < 5 && temp.y < 2) //向右下
+        if (temp.x < 5 && temp.y < 9) //向右下
         {
             temp.x++;
             temp.y++;
@@ -781,28 +781,28 @@ void ChessBoard::manageLegalMove(int x, int y)
         break;
 
     case 10: //紅相
-        if (temp.x - 2 >= 0 && temp.y - 2 >= 0 && (wholePosition[x - 1][y - 1] == NULL)) //向左下
+        if (temp.x - 2 >= 0 && temp.y - 2 >= 5 && (wholePosition[x - 1][y - 1] == NULL)) //向左上
         {
             temp.x = temp.x - 2;
             temp.y = temp.y - 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x + 2 <= 8 && temp.y - 2 >= 0 && (wholePosition[x + 1][y - 1] == NULL)) //向右下
+        if (temp.x + 2 <= 8 && temp.y - 2 >= 5 && (wholePosition[x + 1][y - 1] == NULL)) //向右上
         {
             temp.x = temp.x + 2;
             temp.y = temp.y - 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x - 2 >= 0 && temp.y + 2 <= 4 && (wholePosition[x - 1][y + 1] == NULL)) //向左上
+        if (temp.x - 2 >= 0 && temp.y + 2 <= 9 && (wholePosition[x - 1][y + 1] == NULL)) //向左下
         {
             temp.x = temp.x - 2;
             temp.y = temp.y + 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x + 2 <= 8 && temp.y + 2 <= 4 && (wholePosition[x + 1][y + 1] == NULL)) //向右上
+        if (temp.x + 2 <= 8 && temp.y + 2 <= 9 && (wholePosition[x + 1][y + 1] == NULL)) //向右下
         {
             temp.x = temp.x + 2;
             temp.y = temp.y + 2;
@@ -811,9 +811,9 @@ void ChessBoard::manageLegalMove(int x, int y)
         break;
 
     case 14: //紅兵
-        if (temp.y <= 4) //在己方範圍，只能向上
+        if (temp.y > 4) //在己方範圍，只能向上
         {
-            temp.y++;
+            temp.y--;
             legalMove.push_back(temp);
         }
         else //在敵方範圍
@@ -830,9 +830,9 @@ void ChessBoard::manageLegalMove(int x, int y)
                 legalMove.push_back(temp);
                 temp = wholePosition[x][y]->getCurrentPosition();
             }
-            if (temp.y < 9) //向上
+            if (temp.y > 0) //向上
             {
-                temp.y++;
+                temp.y--;
                 legalMove.push_back(temp);
             }
         }
@@ -844,8 +844,8 @@ void ChessBoard::manageLegalMove(int x, int y)
 Chess* ChessBoard::getChess(position cursorPosition)
 {
     position chessPosition;
-    chessPosition.x = (cursorPosition.x - ROW_ONE - 3) / 4;
-    chessPosition.y = cursorPosition.y - TOP_BOUND - 3;
+    chessPosition.x = cursorPosition.x;
+    chessPosition.y = cursorPosition.y;
     return wholePosition[chessPosition.x][chessPosition.y];
 }
 
