@@ -46,6 +46,41 @@ void UI::readKeyBoard()
                 SetPosition(cursorPosition);
             }
             break;
+        case ENTER:
+            position chessPosition = cursorToChess(cursorPosition);
+            if (lastChosed == NULL)                                         // 若非選棋狀態
+            {
+                if (chessBoard.getChess(chessPosition) != NULL)             // 選的地方又有棋子
+                {
+                    chessBoard.manageLegalMove(chessPosition.x, chessPosition.y);
+                    lastChosed = chessBoard.getChess(cursorPosition);
+                    lastChosed->setChosen(true);
+                }
+            }
+            else                                                           // 若已有選擇的棋
+            {
+                bool legal = false;                                         // 看能否合法移動
+                for (unsigned i = 0; i < chessBoard.legalMove.size(); i++)
+                {
+                    if (chessPosition == chessBoard.legalMove[i])
+                    {
+                        legal = true;
+                        chessBoard.moveTheChess(lastChosed->getCurrentPosition().x,
+                            lastChosed->getCurrentPosition().y,
+                            chessPosition.x,
+                            chessPosition.y);
+                        lastChosed->setChosen(false);
+                        lastChosed = NULL;
+                        break;
+                    }
+                }
+                if (legal == false)                                         // 沒合法就輸了
+                {
+                    // 輸了
+                }
+
+            }
+
         case ESC:                                      // 選單
             switch (showMenu())
             {
@@ -439,4 +474,12 @@ void UI::SetPosition(position newPosition)
 {
     UI::cursorPosition = newPosition;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(cursorPosition.x),static_cast<short>(cursorPosition.y) });
+}
+
+position cursorToChess(position cursorPosition)
+{
+    position chessPosition;
+    chessPosition.x = (cursorPosition.x - ROW_ONE - 3) / 4;
+    chessPosition.y = cursorPosition.y - TOP_BOUND - 3;
+    return chessPosition;
 }

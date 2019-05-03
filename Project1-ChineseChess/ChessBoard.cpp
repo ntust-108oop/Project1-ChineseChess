@@ -714,10 +714,20 @@ void ChessBoard::manageLegalMove(int x, int y)
         }
         break;
     }
+}
 
 
+Chess* ChessBoard::getChess(position cursorPosition)
+{
+    position chessPosition;
+    chessPosition.x = (cursorPosition.x - ROW_ONE - 3) / 4;
+    chessPosition.y = cursorPosition.y - TOP_BOUND - 3;
+    return wholePosition[chessPosition.x][chessPosition.y];
+}
 
-
+int ChessBoard::getTurn()
+{
+    return turns;
 }
 
 void ChessBoard::clearLegalMove()

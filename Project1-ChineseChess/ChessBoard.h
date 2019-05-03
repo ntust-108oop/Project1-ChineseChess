@@ -47,6 +47,9 @@ public:
 	void manageLegalMove(int x, int y);		// UI在選擇棋子以後呼叫的
 	void clearLegalMove();
 	void SetColor(int = 7);//搬UI的函數過來設定顏色
+
+    Chess* getChess(position);
+    int getTurn();
 };
 
 void printEmptyPlane();

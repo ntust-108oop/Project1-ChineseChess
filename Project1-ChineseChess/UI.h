@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 #include "ChessBoard.h"
-using namespace std;
+using std::cout;
 
 class UI
 {
@@ -34,12 +34,15 @@ public:
 private:
     // 當前游標位置
     static position cursorPosition;
+    Chess* lastChosed;
     
 };
 
 bool showAlert(string);
 // 跳出選單
 int showMenu();
+
+position cursorToChess(position);
 
 #endif // !UI_H
 
