@@ -1,15 +1,16 @@
-#include "ChessBoard.h"
-const short TOP_BOUND = 1, BOTTOM_BOUND = 28, ROW_ONE = 28, ROW_TWO = 66;
+Ôªø#include "ChessBoard.h"
+const short TOP_BOUND = 1, BOTTOM_BOUND = 24, ROW_ONE = 28, ROW_TWO = 66;
+const short BOARD_TOP = TOP_BOUND + 2, BOARD_BOTTOM = BOTTOM_BOUND - 1, BOARD_LEFT = ROW_ONE + 3, BOARD_RIGHT = ROW_TWO - 2;
 
 ChessBoard::ChessBoard()
 {
-    //∂}ßΩ™Ï©l§∆
+    //ÈñãÂ±ÄÂàùÂßãÂåñ
     turns = 1;
     for (int i = 0; i < 10; i++)
         for (int j = 0; j < 9; j++)
             wholePosition[j][i] = NULL;
 
-    //´¸º–Ω·≠»
+    //ÊåáÊ®ôË≥¶ÂÄº
     wholePosition[0][0] = new Chess(4, 0, 0);
     wholePosition[1][0] = new Chess(5, 1, 0);
     wholePosition[2][0] = new Chess(3, 2, 0);
@@ -56,89 +57,89 @@ ChessBoard::ChessBoard(string fileTxt)
 
 void printEmptyPlane()
 {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);      // ≥]©w•’©≥∂¬¶r
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);      // Ë®≠ÂÆöÁôΩÂ∫ïÈªëÂ≠ó
 
-    for (short i = 0; i < BOTTOM_BOUND - TOP_BOUND - 2; i++)              // ¶L•’©≥
+    for (short i = BOARD_TOP; i < BOARD_BOTTOM; i++)              // Âç∞ÁôΩÂ∫ï
     {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 3),static_cast<short>(TOP_BOUND + 2 + i) });
-        for (unsigned j = 0; j < ROW_TWO - ROW_ONE - 4; j++)
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { BOARD_LEFT,i });
+        for (unsigned j = BOARD_LEFT; j <= BOARD_RIGHT; j++)
         {
             cout << " ";
         }
     }
-    for (short i = 0; i <= 11; i++)            // ¶LæÓΩu
+    for (short i = BOARD_TOP + 1; i <= BOARD_BOTTOM; i += 2)            // Âç∞Ê©´Á∑ö
     {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 4),static_cast<short>(TOP_BOUND + 3 + i * 2) });
-        for (short j = ROW_ONE + 4; j <= ROW_TWO - 3; j++)
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { BOARD_LEFT + 1,i });
+        for (short j = BOARD_LEFT + 1; j <= BOARD_RIGHT - 1; j++)
         {
-            cout << "¢w";
+            cout << "‚îÄ";
         }
     }
-    for (short i = 0; i < BOTTOM_BOUND - TOP_BOUND - 3; i++)                // ¶L™ΩΩu
+    for (short i = BOARD_TOP; i <= BOARD_BOTTOM; i++)                // Âç∞Áõ¥Á∑ö
     {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 3),static_cast<short>(TOP_BOUND + 2 + i) });
-        cout << "˘¯";
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 3),static_cast<short>(TOP_BOUND + 2 + i) });
-        cout << "˘¯";
-        for (short j = 1; j <= 7; j++)
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { BOARD_LEFT,i });
+        cout << "‚ïë";
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { BOARD_RIGHT - 1,i });
+        cout << "‚ïë";
+        for (short j = BOARD_LEFT + 4; j <= BOARD_RIGHT - 1 - 4; j += 4)
         {
-            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 3 + 4 * j),static_cast<short>(TOP_BOUND + 2 + i) });
-            cout << "¢x";
+            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { j,i });
+            cout << "‚îÇ";
         }
     }
 
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 3),static_cast<short>(BOTTOM_BOUND - 2) });
-    cout << "˘ı";
+    cout << "‚ïô";
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 3),static_cast<short>(BOTTOM_BOUND - 2) });
-    cout << "˘˜";
+    cout << "‚ïú";
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 3),static_cast<short>(TOP_BOUND + 3) });
-    cout << "˘Ô";
+    cout << "‚ïì";
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 3),static_cast<short>(TOP_BOUND + 3) });
-    cout << "˘Ò";
+    cout << "‚ïñ";
 
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 4) });
-    cout << "¢≠";
+    cout << "‚ï≤";
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 6) });
-    cout << "¢≠";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 22) });
-    cout << "¢≠";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 24) });
-    cout << "¢≠";
+    cout << "‚ï≤";
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 18) });
+    cout << "‚ï≤";
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 20) });
+    cout << "‚ï≤";
 
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 4) });
-    cout << "¢¨";
+    cout << "‚ï±";
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 6) });
-    cout << "¢¨";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 22) });
-    cout << "¢¨";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 24) });
-    cout << "¢¨";
+    cout << "‚ï±";
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 18) });
+    cout << "‚ï±";
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 20) });
+    cout << "‚ï±";
 
     for (short i = ROW_ONE + 7; i < ROW_TWO - 3; i += 4)
     {
         for (short j = TOP_BOUND + 5; j < BOTTOM_BOUND - 2; j += 2)
         {
             SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(j) });
-            cout << "¢q";
+            cout << "‚îº";
         }
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(TOP_BOUND + 15) });
-        cout << "¢s";
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(TOP_BOUND + 3) });
-        cout << "¢s";
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(TOP_BOUND + 13) });
-        cout << "¢r";
+        cout << "‚î¨";
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(TOP_BOUND + 3) });
+        cout << "‚î¨";
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(TOP_BOUND + 11) });
+        cout << "‚î¥";
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(BOTTOM_BOUND - 2) });
-        cout << "¢r";
+        cout << "‚î¥";
     }
 
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 4),static_cast<short>(TOP_BOUND + 14) });
-    cout << "     ∑°™e            ∫~¨…      ";
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 4),static_cast<short>(TOP_BOUND + 12) });
+    cout << "     Ê•öÊ≤≥            Êº¢Áïå      ";
 
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 253);      // ≥]©w•’©≥Øª¶r
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 253);      // Ë®≠ÂÆöÁôΩÂ∫ïÁ≤âÂ≠ó
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 3),static_cast<short>(TOP_BOUND + 2) });
-    cout << "¢∞  ¢±  ¢≤  ¢≥  ¢¥  ¢µ  ¢∂  ¢∑  ¢∏";
+    cout << "Ôºë  Ôºí  Ôºì  Ôºî  Ôºï  Ôºñ  Ôºó  Ôºò  Ôºô";
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 3),static_cast<short>(BOTTOM_BOUND - 1) });
-    cout << "§E  §K  §C  §ª  §≠  •|  §T  §G  §@";
+    cout << "‰πù  ÂÖ´  ‰∏É  ÂÖ≠  ‰∫î  Âõõ  ‰∏â  ‰∫å  ‰∏Ä";
 
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
 }
@@ -146,11 +147,76 @@ void printEmptyPlane()
 void ChessBoard::printThePlane()
 {
     printEmptyPlane();
+    for (unsigned i = 0; i < 9; i++)
+    {
+        for (unsigned j = 0; j < 10; j++)
+        {
+            if (wholePosition[i][j] != NULL)
+            {
+                int type = wholePosition[i][j]->getChessType();
+                if (type <= 7)
+                {
+                    SetColor(0x80);                         // ÈªëÊ£ãÔºöÁÅ∞Â∫ïÈªëÂ≠ó
+                }
+                else if (type >= 8)
+                {
+                    SetColor(0x84);                         // Á¥ÖÊ£ãÔºöÁÅ∞Â∫ïÁ¥ÖÂ≠ó
+                }
+                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(BOARD_LEFT + i * 4), static_cast<short>(BOARD_TOP + 1 +2*  j) });
+                switch (type)
+                {
+                case 1:
+                    cout << "Â∞á";
+                    break;
+                case 2:
+                    cout << "Â£´";
+                    break;
+                case 3:
+                    cout << "Ë±°";
+                    break;
+                case 4:
+                    cout << "Ëªä";
+                    break;
+                case 5:
+                    cout << "È¶¨";
+                    break;
+                case 6:
+                    cout << "ÂåÖ";
+                    break;
+                case 7:
+                    cout << "Âçí";
+                    break;
+                case 8:
+                    cout << "Â∏•";
+                    break;
+                case 9:
+                    cout << "‰ªï";
+                    break;
+                case 10:
+                    cout << "Áõ∏";
+                    break;
+                case 11:
+                    cout << "‰ø•";
+                    break;
+                case 12:
+                    cout << "ÂÇå";
+                    break;
+                case 13:
+                    cout << "ÁÇÆ";
+                    break;
+                case 14:
+                    cout << "ÂÖµ";
+                    break;
+                }
+
+            }
+        }
+    }
 }
 
 void ChessBoard::printChosenPlane()
 {
-    for (int i = 5; i < 40; i++) // ¥˙∏’±∆™©°G≤M§@∂Ù™≈•’™∫∞œ∞Ï
+    for (int i = 5; i < 40; i++) // Ê∏¨Ë©¶ÊéíÁâàÔºöÊ∏Ö‰∏ÄÂ°äÁ©∫ÁôΩÁöÑÂçÄÂüü
     {
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(42),static_cast<short>(i) });
         for (int j = 0; j < 65; j++)
@@ -163,13 +229,13 @@ void ChessBoard::printChosenPlane()
     {
         for (int j = 0; j < 9; j++)
         {
-            // ¥˙∏’±∆™©
+            // Ê∏¨Ë©¶ÊéíÁâà
             SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50 + j * 5),static_cast<short>(2 + i * 4) });
 
             position tmp;
             tmp.x = j;
             tmp.y = i;
-            //±qlegalMove§§ß‰®Ï•i•H®´™∫¶Ï∏m°AßÔ≈‹√C¶‚∞t∏m
+            //ÂæûlegalMove‰∏≠ÊâæÂà∞ÂèØ‰ª•Ëµ∞ÁöÑ‰ΩçÁΩÆÔºåÊîπËÆäÈ°èËâ≤ÈÖçÁΩÆ
             vector<position>::iterator it = find(legalMove.begin(), legalMove.end(), tmp);
             if (it != legalMove.end()) SetColor(112);
             else SetColor();
@@ -178,7 +244,7 @@ void ChessBoard::printChosenPlane()
         }
         cout << "\n";
     }
-    // ¶]¨∞µeÆÿÆÿ∑|≥Qºv≈T©“•Hµy∑Lºg§@§U
+    // Âõ†ÁÇ∫Áï´Ê°ÜÊ°ÜÊúÉË¢´ÂΩ±ÈüøÊâÄ‰ª•Á®çÂæÆÂØ´‰∏Ä‰∏ã
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50),static_cast<short>(42) });
 
     cout << turns << "\n";
@@ -201,12 +267,12 @@ void ChessBoard::moveTheChess(int fromX, int fromY, int toX, int toY)
 
 void ChessBoard::readTheBoard(string fileTxt)
 {
-    //∂}¿…≈™®˙®√∑s´ÿ©“ª›™∫¥—§l
+    //ÈñãÊ™îËÆÄÂèñ‰∏¶Êñ∞Âª∫ÊâÄÈúÄÁöÑÊ£ãÂ≠ê
     fstream file(fileTxt);
     if (file.is_open())
     {
-        //•·±º≤{¶s™∫¥—ΩL§∫Æe
-        /*´›∏…record≥°§¿™∫≤M∞£*/
+        //‰∏üÊéâÁèæÂ≠òÁöÑÊ£ãÁõ§ÂÖßÂÆπ
+        /*ÂæÖË£úrecordÈÉ®ÂàÜÁöÑÊ∏ÖÈô§*/
         for (int i = 0; i < 10; i++)
         {
             for (int j = 0; j < 9; j++)
@@ -279,38 +345,38 @@ void ChessBoard::manageLegalMove(int x, int y)
     position temp = wholePosition[x][y]->getCurrentPosition();
     switch (wholePosition[x][y]->getChessType())
     {
-    case 1: //∂¬±N
-        if (temp.x > 3) //¶V•™
+    case 1: //ÈªëÂ∞á
+        if (temp.x > 3) //ÂêëÂ∑¶
         {
             temp.x--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x < 5) //¶V•k
+        if (temp.x < 5) //ÂêëÂè≥
         {
             temp.x++;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.y > 7) //¶V§W
+        if (temp.y > 7) //Âêë‰∏ä
         {
             temp.y--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.y < 9) //¶V§U
+        if (temp.y < 9) //Âêë‰∏ã
         {
             temp.y++;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        // §˝§£®£§˝
+        // Áéã‰∏çË¶ãÁéã
         while (temp.y > 0)
         {
             temp.y--;
             if (wholePosition[temp.x][temp.y] != NULL)
             {
-                // ≠Y¨O§§∂°≥Qæ◊¶Ì¥N®S®∆
+                // Ëã•ÊòØ‰∏≠ÈñìË¢´Êìã‰ΩèÂ∞±Ê≤í‰∫ã
                 if (wholePosition[temp.x][temp.y]->getChessType() != 8)
                 {
                     break;
@@ -324,29 +390,29 @@ void ChessBoard::manageLegalMove(int x, int y)
         }
         break;
 
-    case 2: //∂¬§h
-        if (temp.x > 3 && temp.y > 7) //¶V•™§W
+    case 2: //ÈªëÂ£´
+        if (temp.x > 3 && temp.y > 7) //ÂêëÂ∑¶‰∏ä
         {
             temp.x--;
             temp.y--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x < 5 && temp.y > 7) //¶V•k§W
+        if (temp.x < 5 && temp.y > 7) //ÂêëÂè≥‰∏ä
         {
             temp.x++;
             temp.y--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x > 3 && temp.y < 9) //¶V•™§U
+        if (temp.x > 3 && temp.y < 9) //ÂêëÂ∑¶‰∏ã
         {
             temp.x--;
             temp.y++;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x < 5 && temp.y < 9) //¶V•k§U
+        if (temp.x < 5 && temp.y < 9) //ÂêëÂè≥‰∏ã
         {
             temp.x++;
             temp.y++;
@@ -354,29 +420,29 @@ void ChessBoard::manageLegalMove(int x, int y)
         }
         break;
 
-    case 3: //∂¬∂H
-        if (temp.x - 2 >= 0 && temp.y - 2 >= 5 && (wholePosition[x - 1][y - 1] == NULL)) //¶V•™§W
+    case 3: //ÈªëË±°
+        if (temp.x - 2 >= 0 && temp.y - 2 >= 5 && (wholePosition[x - 1][y - 1] == NULL)) //ÂêëÂ∑¶‰∏ä
         {
             temp.x -= 2;
             temp.y -= 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x + 2 <= 8 && temp.y - 2 >= 5 && (wholePosition[x + 1][y - 1] == NULL)) //¶V•k§W
+        if (temp.x + 2 <= 8 && temp.y - 2 >= 5 && (wholePosition[x + 1][y - 1] == NULL)) //ÂêëÂè≥‰∏ä
         {
             temp.x += 2;
             temp.y -= 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x - 2 >= 0 && temp.y + 2 <= 9 && (wholePosition[x - 1][y + 1] == NULL)) //¶V•™§U
+        if (temp.x - 2 >= 0 && temp.y + 2 <= 9 && (wholePosition[x - 1][y + 1] == NULL)) //ÂêëÂ∑¶‰∏ã
         {
             temp.x -= 2;
             temp.y += 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x + 2 <= 8 && temp.y + 2 <= 9 && (wholePosition[x + 1][y + 1] == NULL)) //¶V•k§U
+        if (temp.x + 2 <= 8 && temp.y + 2 <= 9 && (wholePosition[x + 1][y + 1] == NULL)) //ÂêëÂè≥‰∏ã
         {
             temp.x += 2;
             temp.y += 2;
@@ -385,85 +451,85 @@ void ChessBoard::manageLegalMove(int x, int y)
         break;
 
 
-    case 4:  //∂¬®Æ
-    case 11: //¨ı®Æ
-        while (temp.x > 0) //¶V•™
+    case 4:  //ÈªëËªä
+    case 11: //Á¥ÖËªä
+        while (temp.x > 0) //ÂêëÂ∑¶
         {
             temp.x--;
             legalMove.push_back(temp);
         }
         temp = wholePosition[x][y]->getCurrentPosition();
-        while (temp.x < 8) //¶V•k
+        while (temp.x < 8) //ÂêëÂè≥
         {
             temp.x++;
             legalMove.push_back(temp);
         }
         temp = wholePosition[x][y]->getCurrentPosition();
-        while (temp.y > 0) //¶V§W
+        while (temp.y > 0) //Âêë‰∏ä
         {
             temp.y--;
             legalMove.push_back(temp);
         }
         temp = wholePosition[x][y]->getCurrentPosition();
-        while (temp.y < 9) //¶V§U
+        while (temp.y < 9) //Âêë‰∏ã
         {
             temp.y++;
             legalMove.push_back(temp);
         }
         break;
 
-    case 5: //∂¬∞®
-    case 12: //¨ıÿX
-        if (temp.x - 2 >= 0 && temp.y - 1 >= 0 && wholePosition[temp.x - 1][temp.y] == NULL) //¶V 10 ¬Iƒ¡§Ë¶V
+    case 5: //ÈªëÈ¶¨
+    case 12: //Á¥ÖÂÇå
+        if (temp.x - 2 >= 0 && temp.y - 1 >= 0 && wholePosition[temp.x - 1][temp.y] == NULL) //Âêë 10 ÈªûÈêòÊñπÂêë
         {
             temp.x = temp.x - 2;
             temp.y--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x - 1 >= 0 && temp.y - 2 >= 0 && wholePosition[temp.x][temp.y - 1] == NULL) //¶V 11 ¬Iƒ¡§Ë¶V
+        if (temp.x - 1 >= 0 && temp.y - 2 >= 0 && wholePosition[temp.x][temp.y - 1] == NULL) //Âêë 11 ÈªûÈêòÊñπÂêë
         {
             temp.x--;
             temp.y = temp.y - 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x + 1 <= 8 && temp.y - 2 >= 0 && wholePosition[temp.x][temp.y - 1] == NULL) //¶V 1 ¬Iƒ¡§Ë¶V
+        if (temp.x + 1 <= 8 && temp.y - 2 >= 0 && wholePosition[temp.x][temp.y - 1] == NULL) //Âêë 1 ÈªûÈêòÊñπÂêë
         {
             temp.x++;
             temp.y = temp.y - 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x + 2 <= 8 && temp.y - 1 >= 0 && wholePosition[temp.x + 1][temp.y] == NULL) //¶V 2 ¬Iƒ¡§Ë¶V
+        if (temp.x + 2 <= 8 && temp.y - 1 >= 0 && wholePosition[temp.x + 1][temp.y] == NULL) //Âêë 2 ÈªûÈêòÊñπÂêë
         {
             temp.x = temp.x + 2;
             temp.y--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x + 2 <= 8 && temp.y + 1 <= 9 && wholePosition[temp.x + 1][temp.y] == NULL) //¶V 4 ¬Iƒ¡§Ë¶V
+        if (temp.x + 2 <= 8 && temp.y + 1 <= 9 && wholePosition[temp.x + 1][temp.y] == NULL) //Âêë 4 ÈªûÈêòÊñπÂêë
         {
             temp.x = temp.x + 2;
             temp.y++;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x + 1 <= 8 && temp.y + 2 <= 9 && wholePosition[temp.x][temp.y + 1] == NULL) //¶V 5 ¬Iƒ¡§Ë¶V
+        if (temp.x + 1 <= 8 && temp.y + 2 <= 9 && wholePosition[temp.x][temp.y + 1] == NULL) //Âêë 5 ÈªûÈêòÊñπÂêë
         {
             temp.x++;
             temp.y = temp.y + 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x - 1 >= 0 && temp.y + 2 <= 9 && wholePosition[temp.x][temp.y + 1] == NULL) //¶V 7 ¬Iƒ¡§Ë¶V
+        if (temp.x - 1 >= 0 && temp.y + 2 <= 9 && wholePosition[temp.x][temp.y + 1] == NULL) //Âêë 7 ÈªûÈêòÊñπÂêë
         {
             temp.x--;
             temp.y = temp.y + 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x - 2 >= 0 && temp.y + 1 <= 9 && wholePosition[temp.x - 1][temp.y] == NULL) //¶V 8 ¬Iƒ¡§Ë¶V
+        if (temp.x - 2 >= 0 && temp.y + 1 <= 9 && wholePosition[temp.x - 1][temp.y] == NULL) //Âêë 8 ÈªûÈêòÊñπÂêë
         {
             temp.x = temp.x - 2;
             temp.y++;
@@ -471,9 +537,9 @@ void ChessBoard::manageLegalMove(int x, int y)
         }
         break;
 
-    case 6: //∂¬•]
-    case 13: //¨ı¨∂
-        while (temp.x > 0) //¶V•™
+    case 6: //ÈªëÂåÖ
+    case 13: //Á¥ÖÁÇÆ
+        while (temp.x > 0) //ÂêëÂ∑¶
         {
             temp.x--;
             legalMove.push_back(temp);
@@ -482,7 +548,7 @@ void ChessBoard::manageLegalMove(int x, int y)
                 break;
             }
         }
-        while (temp.x > 0)  // ®˙±o•i•H¶Y™∫®∫§@≠”
+        while (temp.x > 0)  // ÂèñÂæóÂèØ‰ª•ÂêÉÁöÑÈÇ£‰∏ÄÂÄã
         {
             temp.x--;
             if (wholePosition[temp.x][temp.y] != NULL)
@@ -493,7 +559,7 @@ void ChessBoard::manageLegalMove(int x, int y)
         }
         temp = wholePosition[x][y]->getCurrentPosition();
 
-        while (temp.x < 8) //¶V•k
+        while (temp.x < 8) //ÂêëÂè≥
         {
             temp.x++;
             legalMove.push_back(temp);
@@ -513,7 +579,7 @@ void ChessBoard::manageLegalMove(int x, int y)
         }
         temp = wholePosition[x][y]->getCurrentPosition();
 
-        while (temp.y > 0) //¶V§W
+        while (temp.y > 0) //Âêë‰∏ä
         {
             temp.y--;
             legalMove.push_back(temp);
@@ -533,7 +599,7 @@ void ChessBoard::manageLegalMove(int x, int y)
         }
         temp = wholePosition[x][y]->getCurrentPosition();
 
-        while (temp.y < 9) //¶V§U
+        while (temp.y < 9) //Âêë‰∏ã
         {
             temp.y++;
             legalMove.push_back(temp);
@@ -553,27 +619,27 @@ void ChessBoard::manageLegalMove(int x, int y)
         }
         break;
 
-    case 7: //∂¬®Ú
-        if (temp.y >= 5) //¶b§v§ËΩd≥Ú°A•uØ‡¶V§U
+    case 7: //ÈªëÂçí
+        if (temp.y >= 5) //Âú®Â∑±ÊñπÁØÑÂúçÔºåÂè™ËÉΩÂêë‰∏ã
         {
             temp.y--;
             legalMove.push_back(temp);
         }
-        else //¶bºƒ§ËΩd≥Ú
+        else //Âú®ÊïµÊñπÁØÑÂúç
         {
-            if (temp.x > 0) //¶V•™
+            if (temp.x > 0) //ÂêëÂ∑¶
             {
                 temp.x--;
                 legalMove.push_back(temp);
                 temp = wholePosition[x][y]->getCurrentPosition();
             }
-            if (temp.x < 8) //¶V•k
+            if (temp.x < 8) //ÂêëÂè≥
             {
                 temp.x++;
                 legalMove.push_back(temp);
                 temp = wholePosition[x][y]->getCurrentPosition();
             }
-            if (temp.y > 0) //¶V§U
+            if (temp.y > 0) //Âêë‰∏ã
             {
                 temp.y--;
                 legalMove.push_back(temp);
@@ -581,38 +647,38 @@ void ChessBoard::manageLegalMove(int x, int y)
         }
         break;
 
-    case 8: //¨ı´”
-        if (temp.x > 3) //¶V•™
+    case 8: //Á¥ÖÂ∏•
+        if (temp.x > 3) //ÂêëÂ∑¶
         {
             temp.x--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x < 5) //¶V•k
+        if (temp.x < 5) //ÂêëÂè≥
         {
             temp.x++;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.y > 0) //¶V§U
+        if (temp.y > 0) //Âêë‰∏ã
         {
             temp.y--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.y < 2) //¶V§W
+        if (temp.y < 2) //Âêë‰∏ä
         {
             temp.y++;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        // §˝§£®£§˝
+        // Áéã‰∏çË¶ãÁéã
         while (temp.y < 9)
         {
             temp.y++;
             if (wholePosition[temp.x][temp.y] != NULL)
             {
-                // ≠Y¨O§§∂°≥Qæ◊¶Ì¥N®S®∆
+                // Ëã•ÊòØ‰∏≠ÈñìË¢´Êìã‰ΩèÂ∞±Ê≤í‰∫ã
                 if (wholePosition[temp.x][temp.y]->getChessType() != 8)
                 {
                     break;
@@ -626,29 +692,29 @@ void ChessBoard::manageLegalMove(int x, int y)
         }
         break;
 
-    case 9: //¨ı•K
-        if (temp.x > 3 && temp.y > 0) //¶V•™§W
+    case 9: //Á¥Ö‰ªï
+        if (temp.x > 3 && temp.y > 0) //ÂêëÂ∑¶‰∏ä
         {
             temp.x--;
             temp.y--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x < 5 && temp.y > 0) //¶V•k§W
+        if (temp.x < 5 && temp.y > 0) //ÂêëÂè≥‰∏ä
         {
             temp.x++;
             temp.y--;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x > 3 && temp.y < 2) //¶V•™§U
+        if (temp.x > 3 && temp.y < 2) //ÂêëÂ∑¶‰∏ã
         {
             temp.x--;
             temp.y++;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x < 5 && temp.y < 2) //¶V•k§U
+        if (temp.x < 5 && temp.y < 2) //ÂêëÂè≥‰∏ã
         {
             temp.x++;
             temp.y++;
@@ -656,29 +722,29 @@ void ChessBoard::manageLegalMove(int x, int y)
         }
         break;
 
-    case 10: //¨ı¨€
-        if (temp.x - 2 >= 0 && temp.y - 2 >= 0 && (wholePosition[x - 1][y - 1] == NULL)) //¶V•™§U
+    case 10: //Á¥ÖÁõ∏
+        if (temp.x - 2 >= 0 && temp.y - 2 >= 0 && (wholePosition[x - 1][y - 1] == NULL)) //ÂêëÂ∑¶‰∏ã
         {
             temp.x = temp.x - 2;
             temp.y = temp.y - 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x + 2 <= 8 && temp.y - 2 >= 0 && (wholePosition[x + 1][y - 1] == NULL)) //¶V•k§U
+        if (temp.x + 2 <= 8 && temp.y - 2 >= 0 && (wholePosition[x + 1][y - 1] == NULL)) //ÂêëÂè≥‰∏ã
         {
             temp.x = temp.x + 2;
             temp.y = temp.y - 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x - 2 >= 0 && temp.y + 2 <= 4 && (wholePosition[x - 1][y + 1] == NULL)) //¶V•™§W
+        if (temp.x - 2 >= 0 && temp.y + 2 <= 4 && (wholePosition[x - 1][y + 1] == NULL)) //ÂêëÂ∑¶‰∏ä
         {
             temp.x = temp.x - 2;
             temp.y = temp.y + 2;
             legalMove.push_back(temp);
             temp = wholePosition[x][y]->getCurrentPosition();
         }
-        if (temp.x + 2 <= 8 && temp.y + 2 <= 4 && (wholePosition[x + 1][y + 1] == NULL)) //¶V•k§W
+        if (temp.x + 2 <= 8 && temp.y + 2 <= 4 && (wholePosition[x + 1][y + 1] == NULL)) //ÂêëÂè≥‰∏ä
         {
             temp.x = temp.x + 2;
             temp.y = temp.y + 2;
@@ -686,27 +752,27 @@ void ChessBoard::manageLegalMove(int x, int y)
         }
         break;
 
-    case 14: //¨ıßL
-        if (temp.y <= 4) //¶b§v§ËΩd≥Ú°A•uØ‡¶V§W
+    case 14: //Á¥ÖÂÖµ
+        if (temp.y <= 4) //Âú®Â∑±ÊñπÁØÑÂúçÔºåÂè™ËÉΩÂêë‰∏ä
         {
             temp.y++;
             legalMove.push_back(temp);
         }
-        else //¶bºƒ§ËΩd≥Ú
+        else //Âú®ÊïµÊñπÁØÑÂúç
         {
-            if (temp.x > 0) //¶V•™
+            if (temp.x > 0) //ÂêëÂ∑¶
             {
                 temp.x--;
                 legalMove.push_back(temp);
                 temp = wholePosition[x][y]->getCurrentPosition();
             }
-            if (temp.x < 8) //¶V•k
+            if (temp.x < 8) //ÂêëÂè≥
             {
                 temp.x++;
                 legalMove.push_back(temp);
                 temp = wholePosition[x][y]->getCurrentPosition();
             }
-            if (temp.y < 9) //¶V§W
+            if (temp.y < 9) //Âêë‰∏ä
             {
                 temp.y++;
                 legalMove.push_back(temp);

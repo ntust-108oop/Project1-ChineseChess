@@ -7,11 +7,11 @@
 #include <string>
 #include <Windows.h>
 #include "Chess.h"
-using namespace std;
-
-
-using namespace std;
-
+using std::cout;
+using std::string;
+using std::vector;
+using std::fstream;
+using std::ios;
 class ChessBoard
 {
 private:
@@ -48,7 +48,9 @@ public:
 	void clearLegalMove();
 	void SetColor(int = 7);//搬UI的函數過來設定顏色
 
+    // 以位置取得棋子指標
     Chess* getChess(position);
+    // 取得當下的turn
     int getTurn();
 };
 

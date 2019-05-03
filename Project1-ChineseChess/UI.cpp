@@ -2,7 +2,7 @@
 
 position UI::cursorPosition = { 0,0 };
 
-const short TOP_BOUND = 1, BOTTOM_BOUND = 28, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = 28, ROW_TWO = 66;
+const short TOP_BOUND = 1, BOTTOM_BOUND = 24, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = 28, ROW_TWO = 66;
 const char ESC = 0x1B, UP = 0x48, DOWN = 0x50, LEFT = 0x4B, RIGHT = 0x4D, ENTER = 0x0D;
 
 // Intent: Åª¨úÁä½L
@@ -80,7 +80,7 @@ void UI::readKeyBoard()
                 }
 
             }
-
+            break;
         case ESC:                                      // ¿ï³æ
             switch (showMenu())
             {
