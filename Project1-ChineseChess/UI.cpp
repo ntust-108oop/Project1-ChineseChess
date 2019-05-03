@@ -5,6 +5,11 @@ position UI::cursorPosition = { 0,0 };
 const short TOP_BOUND = 1, BOTTOM_BOUND = 24, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = 28, ROW_TWO = 66;
 const char ESC = 0x1B, UP = 0x48, DOWN = 0x50, LEFT = 0x4B, RIGHT = 0x4D, ENTER = 0x0D;
 
+UI::UI()
+{
+    lastChosed = NULL;
+}
+
 // Intent: 讀取鍵盤
 // Pre: UI物件
 // Post: 依據鍵盤傳入的值做出反應
@@ -66,9 +71,9 @@ void UI::readKeyBoard()
                     {
                         legal = true;
                         chessBoard.moveTheChess(lastChosed->getCurrentPosition().x,
-                            lastChosed->getCurrentPosition().y,
-                            chessPosition.x,
-                            chessPosition.y);
+                                                lastChosed->getCurrentPosition().y,
+                                                chessPosition.x,
+                                                chessPosition.y);
                         lastChosed->setChosen(false);
                         lastChosed = NULL;
                         break;
@@ -381,7 +386,7 @@ bool showAlert(string message)
 {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);      // 設定黑底白字
 
-    for (short i = TOP_BOUND + 10; i < BOTTOM_BOUND - 9; i++)              // 印黑底
+    for (short i = TOP_BOUND + 10; i < BOTTOM_BOUND - 7; i++)              // 印黑底
     {
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(i) });
         for (unsigned j = ROW_ONE + 8; j < ROW_TWO - 6; j++)
@@ -394,12 +399,12 @@ bool showAlert(string message)
     {
         cout << "═";
     }
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(BOTTOM_BOUND - 9) });
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(BOTTOM_BOUND - 7) });
     for (short i = ROW_ONE + 8; i < ROW_TWO - 6; i++)     // 畫橫線
     {
         cout << "═";
     }
-    for (short i = TOP_BOUND + 10; i <= BOTTOM_BOUND - 9; i++)     // 畫直線
+    for (short i = TOP_BOUND + 10; i <= BOTTOM_BOUND - 7; i++)     // 畫直線
     {
 
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(i) });
@@ -408,9 +413,9 @@ bool showAlert(string message)
         cout << "║";
     }
 
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(BOTTOM_BOUND - 9) });
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(BOTTOM_BOUND - 7) });
     cout << "╙";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 8),static_cast<short>(BOTTOM_BOUND - 9) });
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 8),static_cast<short>(BOTTOM_BOUND - 7) });
     cout << "╜";
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(TOP_BOUND + 10) });
     cout << "╓";

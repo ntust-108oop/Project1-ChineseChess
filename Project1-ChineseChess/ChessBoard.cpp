@@ -37,13 +37,13 @@ ChessBoard::ChessBoard()
     wholePosition[6][9] = new Chess(10, 6, 9);
     wholePosition[7][9] = new Chess(12, 7, 9);
     wholePosition[8][9] = new Chess(11, 8, 9);
-    wholePosition[1][7] = new Chess(6, 1, 7);
-    wholePosition[7][7] = new Chess(6, 7, 7);
-    wholePosition[0][6] = new Chess(7, 0, 6);
-    wholePosition[2][6] = new Chess(7, 2, 6);
-    wholePosition[4][6] = new Chess(7, 4, 6);
-    wholePosition[6][6] = new Chess(7, 6, 6);
-    wholePosition[8][6] = new Chess(7, 8, 6);
+    wholePosition[1][7] = new Chess(13, 1, 7);
+    wholePosition[7][7] = new Chess(13, 7, 7);
+    wholePosition[0][6] = new Chess(14, 0, 6);
+    wholePosition[2][6] = new Chess(14, 2, 6);
+    wholePosition[4][6] = new Chess(14, 4, 6);
+    wholePosition[6][6] = new Chess(14, 6, 6);
+    wholePosition[8][6] = new Chess(14, 8, 6);
 }
 
 ChessBoard::~ChessBoard()
@@ -146,6 +146,7 @@ void printEmptyPlane()
 
 void ChessBoard::printThePlane()
 {
+   
     printEmptyPlane();
     for (unsigned i = 0; i < 9; i++)
     {
@@ -156,13 +157,13 @@ void ChessBoard::printThePlane()
                 int type = wholePosition[i][j]->getChessType();
                 if (type <= 7)
                 {
-                    SetColor(0x80);                         // 黑棋：灰底黑字
+                    SetColor(0x70);                         // 黑棋：灰底黑字
                 }
                 else if (type >= 8)
                 {
-                    SetColor(0x84);                         // 紅棋：灰底紅字
+                    SetColor(0x7C);                         // 紅棋：灰底紅字
                 }
-                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(BOARD_LEFT + i * 4), static_cast<short>(BOARD_TOP + 1 +2*  j) });
+                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(BOARD_LEFT + i * 4), static_cast<short>(BOARD_TOP + 1 + 2 * j) });
                 switch (type)
                 {
                 case 1:
@@ -212,42 +213,99 @@ void ChessBoard::printThePlane()
             }
         }
     }
+    printTurn();
 }
 
 void ChessBoard::printChosenPlane()
 {
-    for (int i = 5; i < 40; i++) // 測試排版：清一塊空白的區域
+    for (short k = 0; k < legalMove.size(); k++)
     {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(42),static_cast<short>(i) });
-        for (int j = 0; j < 65; j++)
+        short i = legalMove[k].x, j = legalMove[k].y;
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { BOARD_LEFT + i * 4,BOARD_TOP + 1 + j * 2 });
+        if (wholePosition[i][j] == NULL)
         {
-            cout << " ";
+            SetColor(0x70);
+            cout << "  ";
         }
+        else
+        {
+            if (wholePosition[i][j]->getChessType() <= 7)
+            {
+                SetColor(0x30);                         // 黑棋：灰底黑字
+            }
+            else
+            {
+                SetColor(0x34);                         // 紅棋：灰底紅字
+            }
+            switch (wholePosition[i][j]->getChessType())
+            {
+            case 1:
+                cout << "將";
+                break;
+            case 2:
+                cout << "士";
+                break;
+            case 3:
+                cout << "象";
+                break;
+            case 4:
+                cout << "車";
+                break;
+            case 5:
+                cout << "馬";
+                break;
+            case 6:
+                cout << "包";
+                break;
+            case 7:
+                cout << "卒";
+                break;
+            case 8:
+                cout << "帥";
+                break;
+            case 9:
+                cout << "仕";
+                break;
+            case 10:
+                cout << "相";
+                break;
+            case 11:
+                cout << "俥";
+                break;
+            case 12:
+                cout << "傌";
+                break;
+            case 13:
+                cout << "炮";
+                break;
+            case 14:
+                cout << "兵";
+                break;
+            }
+        }
+        
     }
 
-    for (int i = 0; i < 10; i++)
+}
+
+void ChessBoard::printTurn()
+{
+    SetColor(0x03);
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { ROW_TWO+9,TOP_BOUND+5});
+    cout << "現在輪到  ";
+    if (turns == 0)
     {
-        for (int j = 0; j < 9; j++)
-        {
-            // 測試排版
-            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50 + j * 5),static_cast<short>(2 + i * 4) });
-
-            position tmp;
-            tmp.x = j;
-            tmp.y = i;
-            //從legalMove中找到可以走的位置，改變顏色配置
-            vector<position>::iterator it = find(legalMove.begin(), legalMove.end(), tmp);
-            if (it != legalMove.end()) SetColor(112);
-            else SetColor();
-            if (wholePosition[j][i] != NULL)cout << wholePosition[j][i]->getChessType() << "\t";
-            else cout << "0\t";
-        }
-        cout << "\n";
+        SetColor(0x70);
+        cout << "黑色方";
     }
-    // 因為畫框框會被影響所以稍微寫一下
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(50),static_cast<short>(42) });
+    else
+    {
+        SetColor(0x0C);
+        cout << "紅色方";
+    }
+    SetColor(0x03);
+    cout << "  下棋";
 
-    cout << turns << "\n";
 }
 
 void ChessBoard::moveTheChess(int fromX, int fromY, int toX, int toY)

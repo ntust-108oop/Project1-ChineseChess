@@ -12,12 +12,10 @@ using std::cout;
 class UI
 {
 public:
-	ChessBoard chessBoard;
+    UI();
 
     // 印出遊戲畫面
 	static void printUI();
-
-
 
 	// 取得當前游標位置
 	static position getCursorPos();
@@ -30,6 +28,8 @@ public:
 
     // 讀取鍵盤
     void readKeyBoard();
+
+    ChessBoard chessBoard;
 
 private:
     // 當前游標位置
