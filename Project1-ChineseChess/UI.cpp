@@ -489,6 +489,6 @@ position cursorToChess(position cursorPosition)
 {
     position chessPosition;
     chessPosition.x = (cursorPosition.x - ROW_ONE - 3) / 4;
-    chessPosition.y = cursorPosition.y - TOP_BOUND - 3;
+    chessPosition.y = (cursorPosition.y - TOP_BOUND - 3)/2;
     return chessPosition;
 }
