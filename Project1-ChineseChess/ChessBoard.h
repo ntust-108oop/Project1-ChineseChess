@@ -58,9 +58,8 @@ public:
     Chess* getChess(position);
     // 取得當下的turn
     int getTurn();
-
-
 };
-
+position cursorToChess(position);
+position chessToCursor(position);
 
 #endif // !CHESSBOARD_H

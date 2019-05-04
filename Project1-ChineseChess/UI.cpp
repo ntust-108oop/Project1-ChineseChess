@@ -14,16 +14,14 @@ UI::UI()
 // Post: 依據鍵盤傳入的值做出反應
 void UI::readKeyBoard()
 {
-
-    SetPosition({ ROW_ONE + 3,TOP_BOUND + 3 });
-    char input;
+    SetPosition(chessToCursor({4,6}));
+    char key;
     while (1)
     {
-        position cursorPosition = getCursorPosition();
-        input = _getch();
-        switch (input)
+        position cursorPosition = getCursorPosition();  // 取得當前游標位置
+        switch (key = _getch())
         {
-        case UP:                                        //上
+        case UP:                                        // 上
             if (cursorPosition.y - 2 > TOP_BOUND + 2)
             {
                 SetPosition({ cursorPosition.x,cursorPosition.y - 2 });
@@ -51,15 +49,20 @@ void UI::readKeyBoard()
             position chessPosition = cursorToChess(cursorPosition);
             if (lastChosed == NULL)                                         // 若非選棋狀態
             {
-                if (chessBoard.getChess(chessPosition) != NULL)             // 選的地方又有棋子
+                Chess* currentChosed = chessBoard.getChess(chessPosition);
+                if (currentChosed != NULL)                                   // 選的地方又有棋子
                 {
-                    chessBoard.manageLegalMove(chessPosition.x, chessPosition.y);
-                    lastChosed = chessBoard.getChess(chessPosition);
-                    lastChosed->setChosen(true);
-                }
-                if (cueMode == true)
-                {
-                    chessBoard.printChosenPlane();
+                    if (chessBoard.getTurn() == 0 && currentChosed->getChessType() <= 7 ||
+                        chessBoard.getTurn() == 1 && currentChosed->getChessType() >= 8)    // 選棋符合turn
+                    {
+                        chessBoard.manageLegalMove(chessPosition.x, chessPosition.y);
+                        lastChosed = chessBoard.getChess(chessPosition);
+                        lastChosed->setChosen(true);
+                        if (cueMode == true)                                    // 若提示開啟則印出提示
+                        {
+                            chessBoard.printChosenPlane();
+                        }
+                    }
                 }
             }
             else                                                           // 若已有選擇的棋
@@ -79,14 +82,7 @@ void UI::readKeyBoard()
                         lastChosed = NULL;
                         chessBoard.changTurn();
                         chessBoard.printThePlane();
-                        if (chessBoard.getTurn() == 0)
-                        {
-                            SetPosition(chessToCursor({ 4, 3 }));
-                        }
-                        else
-                        {
-                            SetPosition(chessToCursor({ 4, 6 }));
-                        }
+                        chessBoard.clearLegalMove();
                         break;
                     }
                 }
@@ -107,9 +103,18 @@ void UI::readKeyBoard()
                 // 再看看需不需要做
                 chessBoard.printThePlane();
                 break;
-            case 2:                                     // 回主選單(?
-                // 再看看需不需要做
-                chessBoard.printThePlane();
+            case 2:                                     // 使用提示
+                if (showAlert("使用提示？") == true)
+                {
+                    cueMode = true;
+                    chessBoard.printThePlane();
+                }
+                else
+                {
+                    cueMode = false;
+                    chessBoard.printThePlane();
+                }
+                break;
                 break;
             case 3:                                     // 結束遊戲
                 if (showAlert("結束遊戲？") == true)
@@ -268,7 +273,7 @@ void UI::printUI()
 // Post: 回傳選擇
 int showMenu()
 {
-    vector<string> list = { "繼續遊戲", "重新開始", "回主選單", "結束遊戲" };
+    vector<string> list = { "繼續遊戲", "重新開始", "使用提示", "結束遊戲" };
     const short MENU_TOP = 10, MENU_LEFT = 38, MENU_RIGHT = 57;
     short menuBottom = static_cast<short>(MENU_TOP + list.size() * 2);
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x01);      // 設定黑底藍字
@@ -479,21 +484,7 @@ void UI::SetPosition(position newPosition)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(newPosition.x),static_cast<short>(newPosition.y) });
 }
 
-position cursorToChess(position cursorPosition)
-{
-    position chessPosition;
-    chessPosition.x = (cursorPosition.x - ROW_ONE - 3) / 4;
-    chessPosition.y = (cursorPosition.y - TOP_BOUND - 3) / 2;
-    return chessPosition;
-}
 
-position chessToCursor(position chessPosition)
-{
-    position cursorPosition;
-    cursorPosition.x = chessPosition.x * 4 + ROW_ONE + 3;
-    cursorPosition.y = chessPosition.y * 2 + TOP_BOUND + 3;
-    return cursorPosition;
-}
 
 // Intent: 取得當前游標位置
 // Pre: UI物件
@@ -503,5 +494,4 @@ position UI::getCursorPosition()
     CONSOLE_SCREEN_BUFFER_INFO cSBInfo;
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cSBInfo);
     return { cSBInfo.dwCursorPosition.X,cSBInfo.dwCursorPosition.Y };
-
 }

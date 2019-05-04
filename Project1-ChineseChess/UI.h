@@ -42,8 +42,5 @@ private:
 bool showAlert(string);
 // ¸õ¥X¿ï³æ
 int showMenu();
-position cursorToChess(position);
-position chessToCursor(position);
-
 #endif // !UI_H
 

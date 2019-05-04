@@ -213,6 +213,14 @@ void ChessBoard::printThePlane()
         }
     }
     printTurn();
+    if (turns == 0)
+    {
+        SetPosition(chessToCursor({ 4, 3 }));
+    }
+    else
+    {
+        SetPosition(chessToCursor({ 4, 6 }));
+    }
 }
 
 void ChessBoard::printChosenPlane()
@@ -878,4 +886,20 @@ void ChessBoard::SetColor(int color)
 void ChessBoard::SetPosition(position newPosition)
 {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(newPosition.x),static_cast<short>(newPosition.y) });
+}
+
+position cursorToChess(position cursorPosition)
+{
+    position chessPosition;
+    chessPosition.x = (cursorPosition.x - ROW_ONE - 3) / 4;
+    chessPosition.y = (cursorPosition.y - TOP_BOUND - 3) / 2;
+    return chessPosition;
+}
+
+position chessToCursor(position chessPosition)
+{
+    position cursorPosition;
+    cursorPosition.x = chessPosition.x * 4 + ROW_ONE + 3;
+    cursorPosition.y = chessPosition.y * 2 + TOP_BOUND + 3;
+    return cursorPosition;
 }
