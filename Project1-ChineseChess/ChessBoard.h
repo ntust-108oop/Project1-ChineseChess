@@ -27,7 +27,8 @@ public:
     ~ChessBoard();
     ChessBoard(string fileTxt);
 
-    
+    // 印出空白棋盤
+    void printEmptyPlane();
 	// 印出普通棋盤
     void printThePlane();
 	// 印出含有選中棋的可動步數的棋盤，使用前需要先確定legalMove內是否已排除拐馬步
@@ -39,6 +40,8 @@ public:
 
 	// 移動棋盤，偵測到選棋時會呼叫
 	void moveTheChess(int fromX, int fromY, int toX, int toY);
+    // 改變turn
+    void changTurn();
 
     // 應該在讀入棋盤時創建好所有chess物件
     void readTheBoard(string fileTxt);
@@ -49,13 +52,15 @@ public:
 	void manageLegalMove(int x, int y);		// UI在選擇棋子以後呼叫的
 	void clearLegalMove();
 	void SetColor(int = 7);//搬UI的函數過來設定顏色
-
+    void SetPosition(position);// 設定游標位置
+    
     // 以位置取得棋子指標
     Chess* getChess(position);
     // 取得當下的turn
     int getTurn();
+
+
 };
 
-void printEmptyPlane();
 
 #endif // !CHESSBOARD_H

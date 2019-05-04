@@ -55,7 +55,7 @@ ChessBoard::ChessBoard(string fileTxt)
     readTheBoard(fileTxt);
 }
 
-void printEmptyPlane()
+void ChessBoard::printEmptyPlane()
 {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);      // 設定白底黑字
 
@@ -146,7 +146,6 @@ void printEmptyPlane()
 
 void ChessBoard::printThePlane()
 {
-   
     printEmptyPlane();
     for (unsigned i = 0; i < 9; i++)
     {
@@ -283,7 +282,7 @@ void ChessBoard::printChosenPlane()
                 break;
             }
         }
-        
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { BOARD_LEFT + i * 4,BOARD_TOP + 1 + j * 2 });
     }
 
 }
@@ -320,6 +319,18 @@ void ChessBoard::moveTheChess(int fromX, int fromY, int toX, int toY)
     {
         wholePosition[toX][toY] = wholePosition[fromX][fromY];
         wholePosition[fromX][fromY] = NULL;
+    }
+}
+
+void ChessBoard::changTurn()
+{
+    if (turns == 0)
+    {
+        turns = 1;
+    }
+    else
+    {
+        turns = 0;
     }
 }
 
@@ -859,4 +870,12 @@ void ChessBoard::clearLegalMove()
 void ChessBoard::SetColor(int color)
 {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
+// Intent: 設定游標位置
+// Pre: UI物件
+// Post: 游標位置被改變
+void ChessBoard::SetPosition(position newPosition)
+{
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(newPosition.x),static_cast<short>(newPosition.y) });
 }

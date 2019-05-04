@@ -1,7 +1,5 @@
 #include "UI.h"
 
-position UI::cursorPosition = { 0,0 };
-
 const short TOP_BOUND = 1, BOTTOM_BOUND = 24, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = 28, ROW_TWO = 66;
 const char ESC = 0x1B, UP = 0x48, DOWN = 0x50, LEFT = 0x4B, RIGHT = 0x4D, ENTER = 0x0D;
 
@@ -21,35 +19,32 @@ void UI::readKeyBoard()
     char input;
     while (1)
     {
+        position cursorPosition = getCursorPosition();
         input = _getch();
         switch (input)
         {
         case UP:                                        //上
             if (cursorPosition.y - 2 > TOP_BOUND + 2)
             {
-                cursorPosition.y -= 2;
-                SetPosition(cursorPosition);
+                SetPosition({ cursorPosition.x,cursorPosition.y - 2 });
             }
             break;
         case DOWN:                                      // 下
             if (cursorPosition.y + 2 < BOTTOM_BOUND)
             {
-                cursorPosition.y += 2;
-                SetPosition(cursorPosition);
+                SetPosition({ cursorPosition.x,cursorPosition.y + 2 });
             }
             break;
         case  LEFT:                                     // 左
             if (cursorPosition.x - 4 > ROW_ONE + 2)
             {
-                cursorPosition.x -= 4;
-                SetPosition(cursorPosition);
+                SetPosition({ cursorPosition.x - 4,cursorPosition.y });
             }
             break;
         case  RIGHT:                                     // 右
             if (cursorPosition.x + 4 < ROW_TWO - 2)
             {
-                cursorPosition.x += 4;
-                SetPosition(cursorPosition);
+                SetPosition({ cursorPosition.x + 4,cursorPosition.y });
             }
             break;
         case ENTER:
@@ -76,13 +71,22 @@ void UI::readKeyBoard()
                     {
                         legal = true;
                         chessBoard.moveTheChess(lastChosed->getCurrentPosition().x,
-                                                lastChosed->getCurrentPosition().y,
-                                                chessPosition.x,
-                                                chessPosition.y);
+                            lastChosed->getCurrentPosition().y,
+                            chessPosition.x,
+                            chessPosition.y);
+                        
                         lastChosed->setChosen(false);
                         lastChosed = NULL;
-                            chessBoard.printThePlane();
-                        
+                        chessBoard.changTurn();
+                        chessBoard.printThePlane();
+                        if (chessBoard.getTurn() == 0)
+                        {
+                            SetPosition(chessToCursor({ 4, 3 }));
+                        }
+                        else
+                        {
+                            SetPosition(chessToCursor({ 4, 6 }));
+                        }
                         break;
                     }
                 }
@@ -164,7 +168,6 @@ void UI::readKeyBoard()
 // Post: 印出結果
 void UI::printUI()
 {
-
     for (short i = 0; i < BOTTOM_BOUND - 1; i++)            // 印直線
     {
         SetPosition({ LEFT_BOUND, TOP_BOUND + i });             // 最左兩條
@@ -267,10 +270,10 @@ int showMenu()
 {
     vector<string> list = { "繼續遊戲", "重新開始", "回主選單", "結束遊戲" };
     const short MENU_TOP = 10, MENU_LEFT = 38, MENU_RIGHT = 57;
-    short menuBottem = MENU_TOP + list.size() * 2;
+    short menuBottom = static_cast<short>(MENU_TOP + list.size() * 2);
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x01);      // 設定黑底藍字
 
-    for (short i = MENU_TOP; i < menuBottem; i++)              // 印黑底
+    for (short i = MENU_TOP; i < menuBottom; i++)              // 印黑底
     {
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT,i });
         for (short j = MENU_LEFT; j <= MENU_RIGHT; j++)
@@ -282,11 +285,11 @@ int showMenu()
     {
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { i,MENU_TOP });
         cout << "═";
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { i,menuBottem });
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { i,menuBottom });
         cout << "═";
     }
 
-    for (short i = MENU_TOP; i < menuBottem; i++)     // 畫直線
+    for (short i = MENU_TOP; i < menuBottom; i++)     // 畫直線
     {
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT,i });
         cout << "║";
@@ -294,9 +297,9 @@ int showMenu()
         cout << "║";
     }
 
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT,menuBottem });
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT,menuBottom });
     cout << "╙";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_RIGHT - 1,menuBottem });
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_RIGHT - 1,menuBottom });
     cout << "╜";
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT,MENU_TOP });
     cout << "╓";
@@ -408,7 +411,7 @@ bool showAlert(string message)
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(BOTTOM_BOUND - 7) });
         cout << "═";
     }
-    
+
     for (short i = TOP_BOUND + 10; i <= BOTTOM_BOUND - 7; i++)     // 畫直線
     {
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(i) });
@@ -460,14 +463,6 @@ bool showAlert(string message)
     }
 }
 
-// Intent: 取得當前游標位置
-// Pre: UI物件
-// Post: 回傳position
-position UI::getCursorPos()
-{
-    return cursorPosition;
-}
-
 // Intent: 設定文字顏色
 // Pre: UI物件
 // Post: 文字顏色被改變
@@ -481,14 +476,32 @@ void UI::SetColor(int color)
 // Post: 游標位置被改變
 void UI::SetPosition(position newPosition)
 {
-    UI::cursorPosition = newPosition;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(cursorPosition.x),static_cast<short>(cursorPosition.y) });
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(newPosition.x),static_cast<short>(newPosition.y) });
 }
 
 position cursorToChess(position cursorPosition)
 {
     position chessPosition;
     chessPosition.x = (cursorPosition.x - ROW_ONE - 3) / 4;
-    chessPosition.y = (cursorPosition.y - TOP_BOUND - 3)/2;
+    chessPosition.y = (cursorPosition.y - TOP_BOUND - 3) / 2;
     return chessPosition;
+}
+
+position chessToCursor(position chessPosition)
+{
+    position cursorPosition;
+    cursorPosition.x = chessPosition.x * 4 + ROW_ONE + 3;
+    cursorPosition.y = chessPosition.y * 2 + TOP_BOUND + 3;
+    return cursorPosition;
+}
+
+// Intent: 取得當前游標位置
+// Pre: UI物件
+// Post: 回傳position
+position UI::getCursorPosition()
+{
+    CONSOLE_SCREEN_BUFFER_INFO cSBInfo;
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cSBInfo);
+    return { cSBInfo.dwCursorPosition.X,cSBInfo.dwCursorPosition.Y };
+
 }
