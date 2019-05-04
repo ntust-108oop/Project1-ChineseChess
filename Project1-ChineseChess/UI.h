@@ -35,7 +35,7 @@ private:
     // 當前游標位置
     static position cursorPosition;
     Chess* lastChosed;
-    
+    bool cueMode;
 };
 
 bool showAlert(string);

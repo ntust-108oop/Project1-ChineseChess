@@ -841,11 +841,8 @@ void ChessBoard::manageLegalMove(int x, int y)
 }
 
 
-Chess* ChessBoard::getChess(position cursorPosition)
+Chess* ChessBoard::getChess(position chessPosition)
 {
-    position chessPosition;
-    chessPosition.x = cursorPosition.x;
-    chessPosition.y = cursorPosition.y;
     return wholePosition[chessPosition.x][chessPosition.y];
 }
 

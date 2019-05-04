@@ -8,6 +8,7 @@ const char ESC = 0x1B, UP = 0x48, DOWN = 0x50, LEFT = 0x4B, RIGHT = 0x4D, ENTER 
 UI::UI()
 {
     lastChosed = NULL;
+    cueMode = true;
 }
 
 // Intent: 讀取鍵盤
@@ -58,8 +59,12 @@ void UI::readKeyBoard()
                 if (chessBoard.getChess(chessPosition) != NULL)             // 選的地方又有棋子
                 {
                     chessBoard.manageLegalMove(chessPosition.x, chessPosition.y);
-                    lastChosed = chessBoard.getChess(cursorPosition);
+                    lastChosed = chessBoard.getChess(chessPosition);
                     lastChosed->setChosen(true);
+                }
+                if (cueMode == true)
+                {
+                    chessBoard.printChosenPlane();
                 }
             }
             else                                                           // 若已有選擇的棋
@@ -76,6 +81,8 @@ void UI::readKeyBoard()
                                                 chessPosition.y);
                         lastChosed->setChosen(false);
                         lastChosed = NULL;
+                            chessBoard.printThePlane();
+                        
                         break;
                     }
                 }
@@ -368,7 +375,7 @@ int showMenu()
             }
             break;
         case ENTER:
-            temp.dwSize = 100;
+            temp.dwSize = 100;                                                           // 顯示游標
             temp.bVisible = true;
             SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &temp);
             SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { ROW_ONE + 3,TOP_BOUND + 3 });
@@ -394,19 +401,16 @@ bool showAlert(string message)
             cout << " ";
         }
     }
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(TOP_BOUND + 10) });
     for (short i = ROW_ONE + 8; i < ROW_TWO - 6; i++)     // 畫橫線
     {
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(TOP_BOUND + 10) });
+        cout << "═";
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(BOTTOM_BOUND - 7) });
         cout << "═";
     }
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(BOTTOM_BOUND - 7) });
-    for (short i = ROW_ONE + 8; i < ROW_TWO - 6; i++)     // 畫橫線
-    {
-        cout << "═";
-    }
+    
     for (short i = TOP_BOUND + 10; i <= BOTTOM_BOUND - 7; i++)     // 畫直線
     {
-
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(i) });
         cout << "║";
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 8),static_cast<short>(i) });
