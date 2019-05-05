@@ -57,11 +57,11 @@ ChessBoard::ChessBoard(string fileTxt)
 
 void ChessBoard::printEmptyPlane()
 {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 240);      // 設定白底黑字
+    SetColor(0xF0);                                               // 設定白底黑字
 
     for (short i = BOARD_TOP; i < BOARD_BOTTOM; i++)              // 印白底
     {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { BOARD_LEFT,i });
+        SetPosition({ BOARD_LEFT,i });
         for (unsigned j = BOARD_LEFT; j <= BOARD_RIGHT; j++)
         {
             cout << " ";
@@ -69,7 +69,7 @@ void ChessBoard::printEmptyPlane()
     }
     for (short i = BOARD_TOP + 1; i <= BOARD_BOTTOM; i += 2)            // 印橫線
     {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { BOARD_LEFT + 1,i });
+        SetPosition({ BOARD_LEFT + 1,i });
         for (short j = BOARD_LEFT + 1; j <= BOARD_RIGHT - 1; j++)
         {
             cout << "─";
@@ -77,71 +77,71 @@ void ChessBoard::printEmptyPlane()
     }
     for (short i = BOARD_TOP; i <= BOARD_BOTTOM; i++)                // 印直線
     {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { BOARD_LEFT,i });
+        SetPosition({ BOARD_LEFT,i });
         cout << "║";
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { BOARD_RIGHT - 1,i });
+        SetPosition({ BOARD_RIGHT - 1,i });
         cout << "║";
         for (short j = BOARD_LEFT + 4; j <= BOARD_RIGHT - 1 - 4; j += 4)
         {
-            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { j,i });
+            SetPosition({ j,i });
             cout << "│";
         }
     }
 
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 3),static_cast<short>(BOTTOM_BOUND - 2) });
+    SetPosition({ static_cast<short>(ROW_ONE + 3),static_cast<short>(BOTTOM_BOUND - 2) });
     cout << "╙";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 3),static_cast<short>(BOTTOM_BOUND - 2) });
+    SetPosition({ static_cast<short>(ROW_TWO - 3),static_cast<short>(BOTTOM_BOUND - 2) });
     cout << "╜";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 3),static_cast<short>(TOP_BOUND + 3) });
+    SetPosition({ static_cast<short>(ROW_ONE + 3),static_cast<short>(TOP_BOUND + 3) });
     cout << "╓";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 3),static_cast<short>(TOP_BOUND + 3) });
+    SetPosition({ static_cast<short>(ROW_TWO - 3),static_cast<short>(TOP_BOUND + 3) });
     cout << "╖";
 
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 4) });
+    SetPosition({ static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 4) });
     cout << "╲";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 6) });
+    SetPosition({ static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 6) });
     cout << "╲";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 18) });
+    SetPosition({ static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 18) });
     cout << "╲";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 20) });
+    SetPosition({ static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 20) });
     cout << "╲";
 
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 4) });
+    SetPosition({ static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 4) });
     cout << "╱";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 6) });
+    SetPosition({ static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 6) });
     cout << "╱";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 18) });
+    SetPosition({ static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 18) });
     cout << "╱";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 20) });
+    SetPosition({ static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 20) });
     cout << "╱";
 
     for (short i = ROW_ONE + 7; i < ROW_TWO - 3; i += 4)
     {
         for (short j = TOP_BOUND + 5; j < BOTTOM_BOUND - 2; j += 2)
         {
-            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(j) });
+            SetPosition({ static_cast<short>(i),static_cast<short>(j) });
             cout << "┼";
         }
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(TOP_BOUND + 13) });
+        SetPosition({ static_cast<short>(i),static_cast<short>(TOP_BOUND + 13) });
         cout << "┬";
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(TOP_BOUND + 3) });
+        SetPosition({ static_cast<short>(i),static_cast<short>(TOP_BOUND + 3) });
         cout << "┬";
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(TOP_BOUND + 11) });
+        SetPosition({ static_cast<short>(i),static_cast<short>(TOP_BOUND + 11) });
         cout << "┴";
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(BOTTOM_BOUND - 2) });
+        SetPosition({ static_cast<short>(i),static_cast<short>(BOTTOM_BOUND - 2) });
         cout << "┴";
     }
 
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 4),static_cast<short>(TOP_BOUND + 12) });
+    SetPosition({ static_cast<short>(ROW_ONE + 4),static_cast<short>(TOP_BOUND + 12) });
     cout << "     楚河            漢界      ";
 
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 253);      // 設定白底粉字
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 3),static_cast<short>(TOP_BOUND + 2) });
+    SetColor(0xFD);      // 設定亮白底粉字
+    SetPosition({ static_cast<short>(ROW_ONE + 3),static_cast<short>(TOP_BOUND + 2) });
     cout << "１  ２  ３  ４  ５  ６  ７  ８  ９";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 3),static_cast<short>(BOTTOM_BOUND - 1) });
+    SetPosition({ static_cast<short>(ROW_ONE + 3),static_cast<short>(BOTTOM_BOUND - 1) });
     cout << "九  八  七  六  五  四  三  二  一";
 
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+    SetColor(0x07);
 }
 
 void ChessBoard::printThePlane()
@@ -162,7 +162,7 @@ void ChessBoard::printThePlane()
                 {
                     SetColor(0x7C);                         // 紅棋：灰底紅字
                 }
-                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(BOARD_LEFT + i * 4), static_cast<short>(BOARD_TOP + 1 + 2 * j) });
+                SetPosition({ static_cast<short>(BOARD_LEFT + i * 4), static_cast<short>(BOARD_TOP + 1 + 2 * j) });
                 switch (type)
                 {
                 case 1:
@@ -228,7 +228,7 @@ void ChessBoard::printChosenPlane()
     for (short k = 0; k < legalMove.size(); k++)
     {
         short i = legalMove[k].x, j = legalMove[k].y;
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { BOARD_LEFT + i * 4,BOARD_TOP + 1 + j * 2 });
+        SetPosition({ BOARD_LEFT + i * 4,BOARD_TOP + 1 + j * 2 });
         if (wholePosition[i][j] == NULL)
         {
             SetColor(0x70);
@@ -290,7 +290,7 @@ void ChessBoard::printChosenPlane()
                 break;
             }
         }
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { BOARD_LEFT + i * 4,BOARD_TOP + 1 + j * 2 });
+        SetPosition({ BOARD_LEFT + i * 4,BOARD_TOP + 1 + j * 2 });
     }
 
 }
@@ -298,7 +298,7 @@ void ChessBoard::printChosenPlane()
 void ChessBoard::printTurn()
 {
     SetColor(0x03);
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { ROW_TWO+9,TOP_BOUND+5});
+    SetPosition({ ROW_TWO + 9,TOP_BOUND + 5 });
     cout << "現在輪到  ";
     if (turns == 0)
     {
@@ -875,31 +875,3 @@ void ChessBoard::clearLegalMove()
     legalMove.clear();
 }
 
-void ChessBoard::SetColor(int color)
-{
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
-}
-
-// Intent: 設定游標位置
-// Pre: UI物件
-// Post: 游標位置被改變
-void ChessBoard::SetPosition(position newPosition)
-{
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(newPosition.x),static_cast<short>(newPosition.y) });
-}
-
-position cursorToChess(position cursorPosition)
-{
-    position chessPosition;
-    chessPosition.x = (cursorPosition.x - ROW_ONE - 3) / 4;
-    chessPosition.y = (cursorPosition.y - TOP_BOUND - 3) / 2;
-    return chessPosition;
-}
-
-position chessToCursor(position chessPosition)
-{
-    position cursorPosition;
-    cursorPosition.x = chessPosition.x * 4 + ROW_ONE + 3;
-    cursorPosition.y = chessPosition.y * 2 + TOP_BOUND + 3;
-    return cursorPosition;
-}

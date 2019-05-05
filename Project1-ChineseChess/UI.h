@@ -18,17 +18,6 @@ public:
     // 印出遊戲畫面
 	static void printUI();
 
-	// 取得當前游標位置
-	static position getCursorPosition();
-
-    // 設定當前輸出底色
-    static void SetColor(int = 7);
-
-    // 設定游標位置
-    static void SetPosition(position);
-
-    
-
     // 讀取鍵盤
     void readKeyBoard();
 

@@ -7,6 +7,7 @@
 #include <string>
 #include <Windows.h>
 #include "Chess.h"
+#include "Console.h"
 using std::cout;
 using std::string;
 using std::vector;
@@ -51,15 +52,13 @@ public:
 	vector <position> legalMove;	//存放能走的路，UI能直接使用到它
 	void manageLegalMove(int x, int y);		// UI在選擇棋子以後呼叫的
 	void clearLegalMove();
-	void SetColor(int = 7);//搬UI的函數過來設定顏色
-    void SetPosition(position);// 設定游標位置
+
     
     // 以位置取得棋子指標
     Chess* getChess(position);
     // 取得當下的turn
     int getTurn();
 };
-position cursorToChess(position);
-position chessToCursor(position);
+
 
 #endif // !CHESSBOARD_H

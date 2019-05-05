@@ -30,6 +30,9 @@
     <ClCompile Include="Record.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="Console.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chess.h">
@@ -42,6 +45,9 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="ChessBoard.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Console.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

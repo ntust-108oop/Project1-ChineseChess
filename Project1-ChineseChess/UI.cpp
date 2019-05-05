@@ -14,7 +14,7 @@ UI::UI()
 // Post: 依據鍵盤傳入的值做出反應
 void UI::readKeyBoard()
 {
-    SetPosition(chessToCursor({4,6}));
+    SetPosition(chessToCursor({ 4,6 }));
     char key;
     while (1)
     {
@@ -77,7 +77,7 @@ void UI::readKeyBoard()
                             lastChosed->getCurrentPosition().y,
                             chessPosition.x,
                             chessPosition.y);
-                        
+
                         lastChosed->setChosen(false);
                         lastChosed = NULL;
                         chessBoard.changTurn();
@@ -276,11 +276,11 @@ int showMenu()
     vector<string> list = { "繼續遊戲", "重新開始", "使用提示", "結束遊戲" };
     const short MENU_TOP = 10, MENU_LEFT = 38, MENU_RIGHT = 57;
     short menuBottom = static_cast<short>(MENU_TOP + list.size() * 2);
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x01);      // 設定黑底藍字
+    SetColor(0x01);      // 設定黑底藍字
 
     for (short i = MENU_TOP; i < menuBottom; i++)              // 印黑底
     {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT,i });
+        SetPosition({ MENU_LEFT,i });
         for (short j = MENU_LEFT; j <= MENU_RIGHT; j++)
         {
             cout << " ";
@@ -288,47 +288,44 @@ int showMenu()
     }
     for (short i = MENU_LEFT; i <= MENU_RIGHT; i++)     // 畫橫線
     {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { i,MENU_TOP });
+        SetPosition({ i,MENU_TOP });
         cout << "═";
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { i,menuBottom });
+        SetPosition({ i,menuBottom });
         cout << "═";
     }
 
     for (short i = MENU_TOP; i < menuBottom; i++)     // 畫直線
     {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT,i });
+        SetPosition({ MENU_LEFT,i });
         cout << "║";
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_RIGHT - 1,i });
+        SetPosition({ MENU_RIGHT - 1,i });
         cout << "║";
     }
 
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT,menuBottom });
+    SetPosition({ MENU_LEFT,menuBottom });
     cout << "╙";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_RIGHT - 1,menuBottom });
+    SetPosition({ MENU_RIGHT - 1,menuBottom });
     cout << "╜";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT,MENU_TOP });
+    SetPosition({ MENU_LEFT,MENU_TOP });
     cout << "╓";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_RIGHT - 1,MENU_TOP });
+    SetPosition({ MENU_RIGHT - 1,MENU_TOP });
     cout << "╖";
 
 
-    CONSOLE_CURSOR_INFO temp;                                                   // 隱藏游標
-    temp.dwSize = 100;
-    temp.bVisible = false;
-    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &temp);
+    setCursorVisable(false);
 
     char key, choice = 0;
     for (short i = 0; i < static_cast<short>(list.size()); i++)
     {
         if (i == choice)
         {
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x70);      // 設定白底黑字
+            SetColor(0x70);      // 設定亮灰底黑字
         }
         else
         {
-            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x07);      // 設定黑底白字
+            SetColor(0x07);      // 設定黑底亮灰字
         }
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT + 6,MENU_TOP + 1 + 2 * i });
+        SetPosition({ MENU_LEFT + 6,MENU_TOP + 1 + 2 * i });
         cout << list[i];
     }
     while (1)
@@ -349,13 +346,13 @@ int showMenu()
             {
                 if (i == choice)
                 {
-                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x70);      // 設定白底黑字
+                    SetColor(0x70);      // 設定亮灰底黑字
                 }
                 else
                 {
-                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x07);      // 設定黑底白字
+                    SetColor(0x07);      // 設定黑底亮灰字
                 }
-                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT + 6,MENU_TOP + 1 + 2 * i });
+                SetPosition({ MENU_LEFT + 6,MENU_TOP + 1 + 2 * i });
                 cout << list[i];
             }
             break;
@@ -372,21 +369,19 @@ int showMenu()
             {
                 if (i == choice)
                 {
-                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x70);      // 設定白底黑字
+                    SetColor(0x70);      // 設定亮灰底黑字
                 }
                 else
                 {
-                    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 0x07);      // 設定黑底白字
+                    SetColor(0x07);      // 設定黑底亮灰字
                 }
-                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { MENU_LEFT + 6,MENU_TOP + 1 + 2 * i });
+                SetPosition({ MENU_LEFT + 6,MENU_TOP + 1 + 2 * i });
                 cout << list[i];
             }
             break;
         case ENTER:
-            temp.dwSize = 100;                                                           // 顯示游標
-            temp.bVisible = true;
-            SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &temp);
-            SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { ROW_ONE + 3,TOP_BOUND + 3 });
+            setCursorVisable(true);
+            SetPosition({ ROW_ONE + 3,TOP_BOUND + 3 });
 
             return choice;
             break;
@@ -399,48 +394,49 @@ int showMenu()
 // Post: 回傳真假值
 bool showAlert(string message)
 {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4);      // 設定黑底白字
+    const short ALERT_TOP = TOP_BOUND + 9, ALERT_BOTTOM = BOTTOM_BOUND - 7, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
+    SetColor(0x04);      // 設定黑底暗紅字
 
-    for (short i = TOP_BOUND + 10; i < BOTTOM_BOUND - 7; i++)              // 印黑底
+    for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // 印黑底
     {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(i) });
-        for (unsigned j = ROW_ONE + 8; j < ROW_TWO - 6; j++)
+        SetPosition({ ALERT_LEFT,i });
+        for (unsigned j = ALERT_LEFT; j <= ALERT_RIGHT; j++)
         {
             cout << " ";
         }
     }
-    for (short i = ROW_ONE + 8; i < ROW_TWO - 6; i++)     // 畫橫線
+    for (short i = ALERT_LEFT; i <= ALERT_RIGHT; i++)     // 畫橫線
     {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(TOP_BOUND + 10) });
+        SetPosition({ i,ALERT_TOP });
         cout << "═";
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(i),static_cast<short>(BOTTOM_BOUND - 7) });
+        SetPosition({ i,BOTTOM_BOUND - 7 });
         cout << "═";
     }
 
-    for (short i = TOP_BOUND + 10; i <= BOTTOM_BOUND - 7; i++)     // 畫直線
+    for (short i = ALERT_TOP; i <= ALERT_BOTTOM; i++)     // 畫直線
     {
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(i) });
+        SetPosition({ ALERT_LEFT,i });
         cout << "║";
-        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 8),static_cast<short>(i) });
+        SetPosition({ ALERT_RIGHT - 1,i });
         cout << "║";
     }
 
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(BOTTOM_BOUND - 7) });
+    SetPosition({ ALERT_LEFT,ALERT_BOTTOM });
     cout << "╙";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 8),static_cast<short>(BOTTOM_BOUND - 7) });
+    SetPosition({ ALERT_RIGHT - 1,ALERT_BOTTOM });
     cout << "╜";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 8),static_cast<short>(TOP_BOUND + 10) });
+    SetPosition({ ALERT_LEFT,ALERT_TOP });
     cout << "╓";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_TWO - 8),static_cast<short>(TOP_BOUND + 10) });
+    SetPosition({ ALERT_RIGHT - 1,ALERT_TOP });
     cout << "╖";
 
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 16),static_cast<short>(TOP_BOUND + 13) });
+    SetColor(0x07);
+    SetPosition({ ALERT_LEFT + 8,ALERT_TOP + 3 });
     cout << message;
 
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 14),static_cast<short>(TOP_BOUND + 15) });
+    SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 5 });
     cout << "是        否";
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 24),static_cast<short>(TOP_BOUND + 15) });
+    SetPosition({ ALERT_LEFT + 16,ALERT_TOP + 5 });
 
     char key;
     bool choice = false;
@@ -454,44 +450,16 @@ bool showAlert(string message)
             if (choice == true)
             {
                 choice = false;
-                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 24),static_cast<short>(TOP_BOUND + 15) });
+                SetPosition({ ROW_ONE + 24,ALERT_TOP + 5 });
             }
             else
             {
                 choice = true;
-                SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(ROW_ONE + 14),static_cast<short>(TOP_BOUND + 15) });
+                SetPosition({ ROW_ONE + 14,ALERT_TOP + 5 });
             }
             break;
         case ENTER:
             return choice;
         }
     }
-}
-
-// Intent: 設定文字顏色
-// Pre: UI物件
-// Post: 文字顏色被改變
-void UI::SetColor(int color)
-{
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
-}
-
-// Intent: 設定游標位置
-// Pre: UI物件
-// Post: 游標位置被改變
-void UI::SetPosition(position newPosition)
-{
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { static_cast<short>(newPosition.x),static_cast<short>(newPosition.y) });
-}
-
-
-
-// Intent: 取得當前游標位置
-// Pre: UI物件
-// Post: 回傳position
-position UI::getCursorPosition()
-{
-    CONSOLE_SCREEN_BUFFER_INFO cSBInfo;
-    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cSBInfo);
-    return { cSBInfo.dwCursorPosition.X,cSBInfo.dwCursorPosition.Y };
 }
