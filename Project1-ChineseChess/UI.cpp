@@ -271,7 +271,7 @@ void UI::printUI()
 // Intent: 跳出選單
 // Pre: UI物件
 // Post: 回傳選擇
-int showMenu()
+int UI::showMenu()
 {
     vector<string> list = { "繼續遊戲", "重新開始", "使用提示", "結束遊戲" };
     const short MENU_TOP = 10, MENU_LEFT = 38, MENU_RIGHT = 57;
@@ -392,7 +392,7 @@ int showMenu()
 // Intent: 跳出Y/N視窗
 // Pre: UI物件
 // Post: 回傳真假值
-bool showAlert(string message)
+bool UI::showAlert(string message)
 {
     const short ALERT_TOP = TOP_BOUND + 9, ALERT_BOTTOM = BOTTOM_BOUND - 7, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
     SetColor(0x04);      // 設定黑底暗紅字

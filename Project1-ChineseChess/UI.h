@@ -1,11 +1,9 @@
 #ifndef UI_H
 #define UI_H
-
-#include <windows.h>
-#include <conio.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <conio.h>
 #include "ChessBoard.h"
 #include "Record.h"
 using std::cout;
@@ -16,10 +14,16 @@ public:
     UI();
 
     // 印出遊戲畫面
-	static void printUI();
+    static void printUI();
 
     // 讀取鍵盤
     void readKeyBoard();
+
+    // 跳出確認視窗
+    bool showAlert(string);
+
+    // 跳出選單
+    int showMenu();
 
     ChessBoard chessBoard;
 
@@ -28,8 +32,5 @@ private:
     bool cueMode;
 };
 
-bool showAlert(string);
-// 跳出選單
-int showMenu();
 #endif // !UI_H
 

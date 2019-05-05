@@ -5,7 +5,6 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <Windows.h>
 #include "Chess.h"
 #include "Console.h"
 using std::cout;
