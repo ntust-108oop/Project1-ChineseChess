@@ -88,57 +88,57 @@ void ChessBoard::printEmptyPlane()
         }
     }
 
-    SetPosition({ static_cast<short>(ROW_ONE + 3),static_cast<short>(BOTTOM_BOUND - 2) });
+    SetPosition({ BOARD_LEFT,BOARD_BOTTOM - 1 });
     cout << "╙";
-    SetPosition({ static_cast<short>(ROW_TWO - 3),static_cast<short>(BOTTOM_BOUND - 2) });
+    SetPosition({ BOARD_RIGHT - 1,BOARD_BOTTOM - 1 });
     cout << "╜";
-    SetPosition({ static_cast<short>(ROW_ONE + 3),static_cast<short>(TOP_BOUND + 3) });
+    SetPosition({ BOARD_LEFT,BOARD_TOP + 1 });
     cout << "╓";
-    SetPosition({ static_cast<short>(ROW_TWO - 3),static_cast<short>(TOP_BOUND + 3) });
+    SetPosition({ BOARD_RIGHT - 1,BOARD_TOP + 1 });
     cout << "╖";
 
-    SetPosition({ static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 4) });
+    SetPosition({ BOARD_LEFT + 14,BOARD_TOP + 2 });
     cout << "╲";
-    SetPosition({ static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 6) });
+    SetPosition({ BOARD_LEFT + 18,BOARD_TOP + 4 });
     cout << "╲";
-    SetPosition({ static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 18) });
+    SetPosition({ BOARD_LEFT + 14,BOARD_TOP + 16 });
     cout << "╲";
-    SetPosition({ static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 20) });
+    SetPosition({ BOARD_LEFT + 18,BOARD_TOP + 18 });
     cout << "╲";
 
-    SetPosition({ static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 4) });
+    SetPosition({ BOARD_LEFT + 18,BOARD_TOP + 2 });
     cout << "╱";
-    SetPosition({ static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 6) });
+    SetPosition({ BOARD_LEFT + 14,BOARD_TOP + 4 });
     cout << "╱";
-    SetPosition({ static_cast<short>(ROW_ONE + 21),static_cast<short>(TOP_BOUND + 18) });
+    SetPosition({ BOARD_LEFT + 18,BOARD_TOP + 16 });
     cout << "╱";
-    SetPosition({ static_cast<short>(ROW_ONE + 17),static_cast<short>(TOP_BOUND + 20) });
+    SetPosition({ BOARD_LEFT + 14,BOARD_TOP + 18 });
     cout << "╱";
 
-    for (short i = ROW_ONE + 7; i < ROW_TWO - 3; i += 4)
+    for (short i = BOARD_LEFT + 4; i < BOARD_RIGHT - 1; i += 4)
     {
         for (short j = TOP_BOUND + 5; j < BOTTOM_BOUND - 2; j += 2)
         {
-            SetPosition({ static_cast<short>(i),static_cast<short>(j) });
+            SetPosition({ i,j });
             cout << "┼";
         }
-        SetPosition({ static_cast<short>(i),static_cast<short>(TOP_BOUND + 13) });
+        SetPosition({ i,BOARD_TOP + 11 });
         cout << "┬";
-        SetPosition({ static_cast<short>(i),static_cast<short>(TOP_BOUND + 3) });
+        SetPosition({ i,BOARD_TOP + 1 });
         cout << "┬";
-        SetPosition({ static_cast<short>(i),static_cast<short>(TOP_BOUND + 11) });
+        SetPosition({ i,BOARD_TOP + 9 });
         cout << "┴";
-        SetPosition({ static_cast<short>(i),static_cast<short>(BOTTOM_BOUND - 2) });
+        SetPosition({ i,BOARD_BOTTOM - 1 });
         cout << "┴";
     }
 
-    SetPosition({ static_cast<short>(ROW_ONE + 4),static_cast<short>(TOP_BOUND + 12) });
-    cout << "     楚河            漢界      ";
+    SetPosition({ BOARD_LEFT + 2,BOARD_TOP + 10 });
+    cout << "     楚河            漢界     ";
 
     SetColor(0xFD);      // 設定亮白底粉字
-    SetPosition({ static_cast<short>(ROW_ONE + 3),static_cast<short>(TOP_BOUND + 2) });
+    SetPosition({ BOARD_LEFT,BOARD_TOP });
     cout << "１  ２  ３  ４  ５  ６  ７  ８  ９";
-    SetPosition({ static_cast<short>(ROW_ONE + 3),static_cast<short>(BOTTOM_BOUND - 1) });
+    SetPosition({ BOARD_LEFT,BOARD_BOTTOM });
     cout << "九  八  七  六  五  四  三  二  一";
 
     SetColor(0x07);
@@ -196,8 +196,8 @@ void ChessBoard::printThePlane()
                     cout << "相";
                     break;
                 case 11:
-                    cout << "俥";
-                    break;
+                    cout << "車";
+                    break;  
                 case 12:
                     cout << "傌";
                     break;
@@ -277,7 +277,7 @@ void ChessBoard::printChosenPlane()
                 cout << "相";
                 break;
             case 11:
-                cout << "俥";
+                cout << "車";
                 break;
             case 12:
                 cout << "傌";
