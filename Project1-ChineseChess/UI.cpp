@@ -76,9 +76,18 @@ void UI::readKeyBoard()
                         inLegalMove = true;
                         if (chessBoard.getChess(chessPosition) != NULL && chessBoard.getChess(chessPosition)->getChessType() == 1) // 吃到將
                         {
+                            lastChosed = NULL;
                             if (showWin(1))
                             {
                                 // 重新開始
+                                SetColor(0x07);
+                                chessBoard.readTheBoard("Initial.txt");
+                                chessBoard.setTurn(1);
+                                Record::clearRecord();
+                                system("cls");
+                                printUI();
+                                chessBoard.printThePlane();
+                                SetPosition(chessToCursor({ 4, 6 }));
                             }
                             else
                             {
@@ -87,9 +96,18 @@ void UI::readKeyBoard()
                         }
                         else if (chessBoard.getChess(chessPosition) != NULL && chessBoard.getChess(chessPosition)->getChessType() == 8) // 吃到帥
                         {
+                            lastChosed = NULL;
                             if (showWin(0))
                             {
                                 // 重新開始
+                                SetColor(0x07);
+                                chessBoard.readTheBoard("Initial.txt");
+                                chessBoard.setTurn(1);
+                                Record::clearRecord();
+                                system("cls");
+                                printUI();
+                                chessBoard.printThePlane();
+                                SetPosition(chessToCursor({ 4, 6 }));
                             }
                             else
                             {
@@ -138,10 +156,17 @@ void UI::readKeyBoard()
             {
             case 0:                                     // 繼續遊戲
                 chessBoard.printThePlane();
+                SetPosition(cursorPosition);
                 break;
             case 1:                                     // 重新開始
-                // 再看看需不需要做
+                SetColor(0x07);
+                chessBoard.readTheBoard("Initial.txt");
+                chessBoard.setTurn(1);
+                Record::clearRecord();
+                system("cls");
+                printUI();
                 chessBoard.printThePlane();
+                SetPosition(chessToCursor({ 4, 6 }));
                 break;
             case 2:                                     // 使用提示
                 if (showAlert("使用提示？") == true)
@@ -168,7 +193,6 @@ void UI::readKeyBoard()
                 }
                 break;
             }
-            SetPosition(cursorPosition);
             break;
         case 'u':
         case 'U':                                       // 悔棋
@@ -217,6 +241,7 @@ void UI::readKeyBoard()
 // Post: 印出結果
 void UI::printUI()
 {
+    SetColor(0x07);
     for (short i = 0; i < BOTTOM_BOUND - 1; i++)            // 印直線
     {
         SetPosition({ LEFT_BOUND, TOP_BOUND + i });             // 最左兩條
