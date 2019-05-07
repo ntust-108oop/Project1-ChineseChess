@@ -1,4 +1,4 @@
-#include "UI.h"
+ï»¿#include "UI.h"
 
 const short TOP_BOUND = 1, BOTTOM_BOUND = 24, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = 28, ROW_TWO = 66;
 const char ESC = 0x1B, UP = 0x48, DOWN = 0x50, LEFT = 0x4B, RIGHT = 0x4D, ENTER = 0x0D;
@@ -9,37 +9,37 @@ UI::UI()
     cueMode = true;
 }
 
-// Intent: Åª¨úÁä½L
-// Pre: UIª«¥ó
-// Post: ¨Ì¾ÚÁä½L¶Ç¤Jªº­È°µ¥X¤ÏÀ³
+// Intent: è®€å–éµç›¤
+// Pre: UIç‰©ä»¶
+// Post: ä¾æ“šéµç›¤å‚³å…¥çš„å€¼åšå‡ºåæ‡‰
 void UI::readKeyBoard()
 {
     SetPosition(chessToCursor({ 4,6 }));
     char key;
     while (1)
     {
-        position cursorPosition = getCursorPosition();  // ¨ú±o·í«e´å¼Ğ¦ì¸m
+        position cursorPosition = getCursorPosition();  // å–å¾—ç•¶å‰æ¸¸æ¨™ä½ç½®
         switch (key = _getch())
         {
-        case UP:                                        // ¤W
+        case UP:                                        // ä¸Š
             if (cursorPosition.y - 2 > TOP_BOUND + 2)
             {
                 SetPosition({ cursorPosition.x,cursorPosition.y - 2 });
             }
             break;
-        case DOWN:                                      // ¤U
+        case DOWN:                                      // ä¸‹
             if (cursorPosition.y + 2 < BOTTOM_BOUND)
             {
                 SetPosition({ cursorPosition.x,cursorPosition.y + 2 });
             }
             break;
-        case  LEFT:                                     // ¥ª
+        case  LEFT:                                     // å·¦
             if (cursorPosition.x - 4 > ROW_ONE + 2)
             {
                 SetPosition({ cursorPosition.x - 4,cursorPosition.y });
             }
             break;
-        case  RIGHT:                                     // ¥k
+        case  RIGHT:                                     // å³
             if (cursorPosition.x + 4 < ROW_TWO - 2)
             {
                 SetPosition({ cursorPosition.x + 4,cursorPosition.y });
@@ -47,18 +47,18 @@ void UI::readKeyBoard()
             break;
         case ENTER:
             position chessPosition = cursorToChess(cursorPosition);
-            if (lastChosed == NULL)                                         // ­Y«D¿ï´Ñª¬ºA
+            if (lastChosed == NULL)                                         // è‹¥éé¸æ£‹ç‹€æ…‹
             {
                 Chess* currentChosed = chessBoard.getChess(chessPosition);
-                if (currentChosed != NULL)                                   // ¿ïªº¦a¤è¤S¦³´Ñ¤l
+                if (currentChosed != NULL)                                   // é¸çš„åœ°æ–¹åˆæœ‰æ£‹å­
                 {
                     if (chessBoard.getTurn() == 0 && currentChosed->getChessType() <= 7 ||
-                        chessBoard.getTurn() == 1 && currentChosed->getChessType() >= 8)    // ¿ï´Ñ²Å¦Xturn
+                        chessBoard.getTurn() == 1 && currentChosed->getChessType() >= 8)    // é¸æ£‹ç¬¦åˆturn
                     {
                         chessBoard.manageLegalMove(chessPosition.x, chessPosition.y);
                         lastChosed = chessBoard.getChess(chessPosition);
                         lastChosed->setChosen(true);
-                        if (cueMode == true)                                    // ­Y´£¥Ü¶}±Ò«h¦L¥X´£¥Ü
+                        if (cueMode == true)                                    // è‹¥æç¤ºé–‹å•Ÿå‰‡å°å‡ºæç¤º
                         {
                             chessBoard.printChosenPlane();
                             SetPosition(cursorPosition);
@@ -66,21 +66,35 @@ void UI::readKeyBoard()
                     }
                 }
             }
-            else                                                           // ­Y¤w¦³¿ï¾Üªº´Ñ
+            else                                                           // è‹¥å·²æœ‰é¸æ“‡çš„æ£‹
             {
-                bool inLegalMove = false;                                         // ÂI¿ï¥i²¾°Êªº°Ï°ì«h²¾°Ê
+                bool inLegalMove = false;                                         // é»é¸å¯ç§»å‹•çš„å€åŸŸå‰‡ç§»å‹•
                 for (unsigned i = 0; i < chessBoard.legalMove.size(); i++)
                 {
                     if (chessPosition == chessBoard.legalMove[i])
                     {
                         inLegalMove = true;
-                        if (chessBoard.getChess(chessPosition)->getChessType() == 1) // ¦Y¨ì±N
+                        if (chessBoard.getChess(chessPosition) != NULL && chessBoard.getChess(chessPosition)->getChessType() == 1) // åƒåˆ°å°‡
                         {
-                            showWin("¬õ¤èÀò³Ó");
+                            if (showWin(1))
+                            {
+                                // é‡æ–°é–‹å§‹
+                            }
+                            else
+                            {
+                                return;
+                            }
                         }
-                        else if (chessBoard.getChess(chessPosition)->getChessType() == 8) // ¦Y¨ì«Ó
+                        else if (chessBoard.getChess(chessPosition) != NULL && chessBoard.getChess(chessPosition)->getChessType() == 8) // åƒåˆ°å¸¥
                         {
-                            showWin("¶Â¤èÀò³Ó");
+                            if (showWin(0))
+                            {
+                                // é‡æ–°é–‹å§‹
+                            }
+                            else
+                            {
+                                return;
+                            }
                         }
                         else
                         {
@@ -109,7 +123,7 @@ void UI::readKeyBoard()
                         break;
                     }
                 }
-                if (inLegalMove == false)                                         // ÂI¿ï¨ä¥L¦a¤è«h¨ú®ø
+                if (inLegalMove == false)                                         // é»é¸å…¶ä»–åœ°æ–¹å‰‡å–æ¶ˆ
                 {
                     lastChosed->setChosen(false);
                     lastChosed = NULL;
@@ -119,18 +133,18 @@ void UI::readKeyBoard()
                 SetPosition(cursorPosition);
             }
             break;
-        case ESC:                                      // ¿ï³æ
+        case ESC:                                      // é¸å–®
             switch (showMenu())
             {
-            case 0:                                     // Ä~Äò¹CÀ¸
+            case 0:                                     // ç¹¼çºŒéŠæˆ²
                 chessBoard.printThePlane();
                 break;
-            case 1:                                     // ­«·s¶}©l
-                // ¦A¬İ¬İ»İ¤£»İ­n°µ
+            case 1:                                     // é‡æ–°é–‹å§‹
+                // å†çœ‹çœ‹éœ€ä¸éœ€è¦åš
                 chessBoard.printThePlane();
                 break;
-            case 2:                                     // ¨Ï¥Î´£¥Ü
-                if (showAlert("¨Ï¥Î´£¥Ü¡H") == true)
+            case 2:                                     // ä½¿ç”¨æç¤º
+                if (showAlert("ä½¿ç”¨æç¤ºï¼Ÿ") == true)
                 {
                     cueMode = true;
                     chessBoard.printThePlane();
@@ -140,10 +154,11 @@ void UI::readKeyBoard()
                     cueMode = false;
                     chessBoard.printThePlane();
                 }
+                SetPosition(cursorPosition);
                 break;
                 break;
-            case 3:                                     // µ²§ô¹CÀ¸
-                if (showAlert("µ²§ô¹CÀ¸¡H") == true)
+            case 3:                                     // çµæŸéŠæˆ²
+                if (showAlert("çµæŸéŠæˆ²ï¼Ÿ") == true)
                 {
                     return;
                 }
@@ -153,158 +168,161 @@ void UI::readKeyBoard()
                 }
                 break;
             }
+            SetPosition(cursorPosition);
             break;
         case 'u':
-        case 'U':                                       // ®¬´Ñ
-            if (showAlert("½T©w®¬´Ñ¡H") == true)
+        case 'U':                                       // æ‚”æ£‹
+            if (showAlert("ç¢ºå®šæ‚”æ£‹ï¼Ÿ") == true)
             {
                 /*
 
-                ³o¸Ì­n call ®¬´Ñªºfunction
+                é€™è£¡è¦ call æ‚”æ£‹çš„function
 
                 */
-                // ¡õ®¬´Ñ«á¦L¥X§ó·s«áªº´Ñ½L
+                // â†“æ‚”æ£‹å¾Œå°å‡ºæ›´æ–°å¾Œçš„æ£‹ç›¤
                 chessBoard.printThePlane();
             }
             else
             {
-                // ¤£®¬´Ñ´Nª½±µ¦L­ì¥»´Ñ½L§âalert»\±¼
+                // ä¸æ‚”æ£‹å°±ç›´æ¥å°åŸæœ¬æ£‹ç›¤æŠŠalertè“‹æ‰
                 chessBoard.printThePlane();
             }
+            SetPosition(cursorPosition);
             break;
         case 'r':
-        case 'R':                                       // ÁÙ­ì
-            if (showAlert("½T©wÁÙ­ì¡H") == true)
+        case 'R':                                       // é‚„åŸ
+            if (showAlert("ç¢ºå®šé‚„åŸï¼Ÿ") == true)
             {
                 /*
 
-                ³o¸Ì­n call ÁÙ­ìªºfunction
+                é€™è£¡è¦ call é‚„åŸçš„function
 
                 */
-                // ¡õÁÙ­ì«á¦L¥X§ó·s«áªº´Ñ½L
+                // â†“é‚„åŸå¾Œå°å‡ºæ›´æ–°å¾Œçš„æ£‹ç›¤
                 chessBoard.printThePlane();
             }
             else
             {
-                // ¤£ÁÙ­ì´Nª½±µ¦L­ì¥»´Ñ½L§âalert»\±¼
+                // ä¸é‚„åŸå°±ç›´æ¥å°åŸæœ¬æ£‹ç›¤æŠŠalertè“‹æ‰
                 chessBoard.printThePlane();
             }
+            SetPosition(cursorPosition);
             break;
         }
     }
 }
 
-// Intent: ¦L¥X¾Ş§@µe­±
-// Pre: UIª«¥ó
-// Post: ¦L¥Xµ²ªG
+// Intent: å°å‡ºæ“ä½œç•«é¢
+// Pre: UIç‰©ä»¶
+// Post: å°å‡ºçµæœ
 void UI::printUI()
 {
-    for (short i = 0; i < BOTTOM_BOUND - 1; i++)            // ¦Lª½½u
+    for (short i = 0; i < BOTTOM_BOUND - 1; i++)            // å°ç›´ç·š
     {
-        SetPosition({ LEFT_BOUND, TOP_BOUND + i });             // ³Ì¥ª¨â±ø
-        cout << "ùø ùø";
-        SetPosition({ ROW_ONE, TOP_BOUND + i });                // ´Ñ½L¥ªÃä
-        cout << "ùø";
-        SetPosition({ ROW_TWO, TOP_BOUND + i });                // ´Ñ½L¥kÃä
-        cout << "ùø";
-        SetPosition({ RIGHT_BOUND - 2, TOP_BOUND + i });        // ³Ì¥k¨â±ø
-        cout << "ùø ùø";
+        SetPosition({ LEFT_BOUND, TOP_BOUND + i });             // æœ€å·¦å…©æ¢
+        cout << "â•‘ â•‘";
+        SetPosition({ ROW_ONE, TOP_BOUND + i });                // æ£‹ç›¤å·¦é‚Š
+        cout << "â•‘";
+        SetPosition({ ROW_TWO, TOP_BOUND + i });                // æ£‹ç›¤å³é‚Š
+        cout << "â•‘";
+        SetPosition({ RIGHT_BOUND - 2, TOP_BOUND + i });        // æœ€å³å…©æ¢
+        cout << "â•‘ â•‘";
     }
 
-    SetPosition({ LEFT_BOUND, TOP_BOUND });                 // ¦L¾î½u
-    for (short i = 0; i < RIGHT_BOUND - 1; i++)                 // ³Ì¤W
+    SetPosition({ LEFT_BOUND, TOP_BOUND });                 // å°æ©«ç·š
+    for (short i = 0; i < RIGHT_BOUND - 1; i++)                 // æœ€ä¸Š
     {
-        cout << "ùù";
+        cout << "â•";
     }
-    SetPosition({ LEFT_BOUND, BOTTOM_BOUND });                  // ³Ì¤U
+    SetPosition({ LEFT_BOUND, BOTTOM_BOUND });                  // æœ€ä¸‹
     for (short i = 0; i < RIGHT_BOUND - 1; i++)
     {
-        cout << "ùù";
+        cout << "â•";
     }
-    SetPosition({ LEFT_BOUND + 2, TOP_BOUND + 1 });             // ¥ªÄæªº¤WÃä
+    SetPosition({ LEFT_BOUND + 2, TOP_BOUND + 1 });             // å·¦æ¬„çš„ä¸Šé‚Š
     for (short i = 0; i < ROW_ONE - 2; i++)
     {
-        cout << "ùù";
+        cout << "â•";
     }
-    SetPosition({ LEFT_BOUND + 2, BOTTOM_BOUND - 1 });              // ¥ªÄæªº¤UÃä
+    SetPosition({ LEFT_BOUND + 2, BOTTOM_BOUND - 1 });              // å·¦æ¬„çš„ä¸‹é‚Š
     for (short i = 0; i < ROW_ONE - 2; i++)
     {
-        cout << "ùù";
+        cout << "â•";
     }
-    SetPosition({ ROW_TWO, TOP_BOUND + 1 });             // ¥kÄæªº¤WÃä
+    SetPosition({ ROW_TWO, TOP_BOUND + 1 });             // å³æ¬„çš„ä¸Šé‚Š
     for (short i = 0; i < RIGHT_BOUND - 2 - ROW_TWO; i++)
     {
-        cout << "ùù";
+        cout << "â•";
     }
-    SetPosition({ ROW_TWO + 1, BOTTOM_BOUND - 1 });          // ¥kÄæªº¤UÃä
+    SetPosition({ ROW_TWO + 1, BOTTOM_BOUND - 1 });          // å³æ¬„çš„ä¸‹é‚Š
     for (short i = 0; i < RIGHT_BOUND - 2 - ROW_TWO; i++)
     {
-        cout << "ùù";
+        cout << "â•";
     }
-    SetPosition({ ROW_TWO, BOTTOM_BOUND - 9 });                  // ¥kÄæªº¤À¹j½u
+    SetPosition({ ROW_TWO, BOTTOM_BOUND - 9 });                  // å³æ¬„çš„åˆ†éš”ç·š
     for (short i = 0; i < RIGHT_BOUND - ROW_TWO - 1; i++)
     {
-        cout << "ùù";
+        cout << "â•";
     }
 
-    SetPosition({ LEFT_BOUND, TOP_BOUND });                 // ¦L¨¤¨¤
-    cout << "ùİ";
+    SetPosition({ LEFT_BOUND, TOP_BOUND });                 // å°è§’è§’
+    cout << "â•”";
     SetPosition({ LEFT_BOUND + 2, TOP_BOUND + 1 });
-    cout << "ùİ";
+    cout << "â•”";
     SetPosition({ ROW_TWO, TOP_BOUND + 1 });
-    cout << "ùİ";
+    cout << "â•”";
 
     SetPosition({ RIGHT_BOUND, TOP_BOUND });
-    cout << "ùß";
+    cout << "â•—";
     SetPosition({ RIGHT_BOUND - 2, TOP_BOUND + 1 });
-    cout << "ùß";
+    cout << "â•—";
     SetPosition({ ROW_ONE, TOP_BOUND + 1 });
-    cout << "ùß";
+    cout << "â•—";
 
     SetPosition({ LEFT_BOUND, BOTTOM_BOUND });
-    cout << "ùã";
+    cout << "â•š";
     SetPosition({ LEFT_BOUND + 2, BOTTOM_BOUND - 1 });
-    cout << "ùã";
+    cout << "â•š";
     SetPosition({ ROW_TWO, BOTTOM_BOUND - 1 });
-    cout << "ùã";
+    cout << "â•š";
 
     SetPosition({ RIGHT_BOUND, BOTTOM_BOUND });
-    cout << "ùå";
+    cout << "â•";
     SetPosition({ RIGHT_BOUND - 2, BOTTOM_BOUND - 1 });
-    cout << "ùå";
+    cout << "â•";
     SetPosition({ ROW_ONE, BOTTOM_BOUND - 1 });
-    cout << "ùå";
+    cout << "â•";
 
     SetPosition({ ROW_TWO, BOTTOM_BOUND - 9 });
-    cout << "ùà";
+    cout << "â• ";
     SetPosition({ RIGHT_BOUND - 2, BOTTOM_BOUND - 9 });
-    cout << "ùâ";
+    cout << "â•£";
 
-    SetPosition({ LEFT_BOUND + 6, TOP_BOUND + 1 });           // ¦L¦r
-    cout << "  ¾Ô  ªp  Åã  ¥Ü  ";
+    SetPosition({ LEFT_BOUND + 6, TOP_BOUND + 1 });           // å°å­—
+    cout << "  æˆ°  æ³  é¡¯  ç¤º  ";
     SetPosition({ ROW_TWO + 6,BOTTOM_BOUND - 8 });
-    cout << "ESC ¿ï³æ    U ®¬´Ñ    R ÁÙ­ì";
+    cout << "ESC é¸å–®    U æ‚”æ£‹    R é‚„åŸ";
     SetPosition({ ROW_TWO + 9,BOTTOM_BOUND - 6 });
-    cout << "Enter     ¿ï¨ú´Ñ¤l";
+    cout << "Enter     é¸å–æ£‹å­";
     SetPosition({ ROW_TWO + 11,BOTTOM_BOUND - 4 });
-    cout << "¡ô";
+    cout << "â†‘";
     SetPosition({ ROW_TWO + 9,BOTTOM_BOUND - 3 });
-    cout << "¡ö  ¡÷  ¤è¦VÁä±±¨î´å¼Ğ";
+    cout << "â†  â†’  æ–¹å‘éµæ§åˆ¶æ¸¸æ¨™";
     SetPosition({ ROW_TWO + 11,BOTTOM_BOUND - 2 });
-    cout << "¡õ";
+    cout << "â†“";
 }
 
-// Intent: ¸õ¥X¿ï³æ
-// Pre: UIª«¥ó
-// Post: ¦^¶Ç¿ï¾Ü
+// Intent: è·³å‡ºé¸å–®
+// Pre: UIç‰©ä»¶
+// Post: å›å‚³é¸æ“‡
 int UI::showMenu()
 {
-    vector<string> list = { "Ä~Äò¹CÀ¸", "­«·s¶}©l", "¨Ï¥Î´£¥Ü", "µ²§ô¹CÀ¸" };
+    vector<string> list = { "ç¹¼çºŒéŠæˆ²", "é‡æ–°é–‹å§‹", "ä½¿ç”¨æç¤º", "çµæŸéŠæˆ²" };
     const short MENU_TOP = 10, MENU_LEFT = 38, MENU_RIGHT = 57;
     short menuBottom = static_cast<short>(MENU_TOP + list.size() * 2);
-    SetColor(0x01);      // ³]©w¶Â©³ÂÅ¦r
+    SetColor(0x01);      // è¨­å®šé»‘åº•è—å­—
 
-    for (short i = MENU_TOP; i < menuBottom; i++)              // ¦L¶Â©³
+    for (short i = MENU_TOP; i < menuBottom; i++)              // å°é»‘åº•
     {
         SetPosition({ MENU_LEFT,i });
         for (short j = MENU_LEFT; j <= MENU_RIGHT; j++)
@@ -312,30 +330,30 @@ int UI::showMenu()
             cout << " ";
         }
     }
-    for (short i = MENU_LEFT; i <= MENU_RIGHT; i++)     // µe¾î½u
+    for (short i = MENU_LEFT; i <= MENU_RIGHT; i++)     // ç•«æ©«ç·š
     {
         SetPosition({ i,MENU_TOP });
-        cout << "ùù";
+        cout << "â•";
         SetPosition({ i,menuBottom });
-        cout << "ùù";
+        cout << "â•";
     }
 
-    for (short i = MENU_TOP; i < menuBottom; i++)     // µeª½½u
+    for (short i = MENU_TOP; i < menuBottom; i++)     // ç•«ç›´ç·š
     {
         SetPosition({ MENU_LEFT,i });
-        cout << "ùø";
+        cout << "â•‘";
         SetPosition({ MENU_RIGHT - 1,i });
-        cout << "ùø";
+        cout << "â•‘";
     }
 
     SetPosition({ MENU_LEFT,menuBottom });
-    cout << "ùõ";
+    cout << "â•™";
     SetPosition({ MENU_RIGHT - 1,menuBottom });
-    cout << "ù÷";
+    cout << "â•œ";
     SetPosition({ MENU_LEFT,MENU_TOP });
-    cout << "ùï";
+    cout << "â•“";
     SetPosition({ MENU_RIGHT - 1,MENU_TOP });
-    cout << "ùñ";
+    cout << "â•–";
 
 
     setCursorVisable(false);
@@ -345,11 +363,11 @@ int UI::showMenu()
     {
         if (i == choice)
         {
-            SetColor(0x70);      // ³]©w«G¦Ç©³¶Â¦r
+            SetColor(0x70);      // è¨­å®šäº®ç°åº•é»‘å­—
         }
         else
         {
-            SetColor(0x07);      // ³]©w¶Â©³«G¦Ç¦r
+            SetColor(0x07);      // è¨­å®šé»‘åº•äº®ç°å­—
         }
         SetPosition({ MENU_LEFT + 6,MENU_TOP + 1 + 2 * i });
         cout << list[i];
@@ -372,11 +390,11 @@ int UI::showMenu()
             {
                 if (i == choice)
                 {
-                    SetColor(0x70);      // ³]©w«G¦Ç©³¶Â¦r
+                    SetColor(0x70);      // è¨­å®šäº®ç°åº•é»‘å­—
                 }
                 else
                 {
-                    SetColor(0x07);      // ³]©w¶Â©³«G¦Ç¦r
+                    SetColor(0x07);      // è¨­å®šé»‘åº•äº®ç°å­—
                 }
                 SetPosition({ MENU_LEFT + 6,MENU_TOP + 1 + 2 * i });
                 cout << list[i];
@@ -395,11 +413,11 @@ int UI::showMenu()
             {
                 if (i == choice)
                 {
-                    SetColor(0x70);      // ³]©w«G¦Ç©³¶Â¦r
+                    SetColor(0x70);      // è¨­å®šäº®ç°åº•é»‘å­—
                 }
                 else
                 {
-                    SetColor(0x07);      // ³]©w¶Â©³«G¦Ç¦r
+                    SetColor(0x07);      // è¨­å®šé»‘åº•äº®ç°å­—
                 }
                 SetPosition({ MENU_LEFT + 6,MENU_TOP + 1 + 2 * i });
                 cout << list[i];
@@ -415,15 +433,15 @@ int UI::showMenu()
     }
 }
 
-// Intent: ¸õ¥XY/Nµøµ¡
-// Pre: UIª«¥ó
-// Post: ¦^¶Ç¯u°²­È
+// Intent: è·³å‡ºY/Nè¦–çª—
+// Pre: UIç‰©ä»¶
+// Post: å›å‚³çœŸå‡å€¼
 bool UI::showAlert(string message)
 {
     const short ALERT_TOP = TOP_BOUND + 9, ALERT_BOTTOM = BOTTOM_BOUND - 7, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
-    SetColor(0x04);      // ³]©w¶Â©³·t¬õ¦r
+    SetColor(0x04);      // è¨­å®šé»‘åº•æš—ç´…å­—
 
-    for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // ¦L¶Â©³
+    for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // å°é»‘åº•
     {
         SetPosition({ ALERT_LEFT,i });
         for (unsigned j = ALERT_LEFT; j <= ALERT_RIGHT; j++)
@@ -431,37 +449,37 @@ bool UI::showAlert(string message)
             cout << " ";
         }
     }
-    for (short i = ALERT_LEFT; i <= ALERT_RIGHT; i++)     // µe¾î½u
+    for (short i = ALERT_LEFT; i <= ALERT_RIGHT; i++)     // ç•«æ©«ç·š
     {
         SetPosition({ i,ALERT_TOP });
-        cout << "ùù";
+        cout << "â•";
         SetPosition({ i,BOTTOM_BOUND - 7 });
-        cout << "ùù";
+        cout << "â•";
     }
 
-    for (short i = ALERT_TOP; i <= ALERT_BOTTOM; i++)     // µeª½½u
+    for (short i = ALERT_TOP; i <= ALERT_BOTTOM; i++)     // ç•«ç›´ç·š
     {
         SetPosition({ ALERT_LEFT,i });
-        cout << "ùø";
+        cout << "â•‘";
         SetPosition({ ALERT_RIGHT - 1,i });
-        cout << "ùø";
+        cout << "â•‘";
     }
 
     SetPosition({ ALERT_LEFT,ALERT_BOTTOM });
-    cout << "ùõ";
+    cout << "â•™";
     SetPosition({ ALERT_RIGHT - 1,ALERT_BOTTOM });
-    cout << "ù÷";
+    cout << "â•œ";
     SetPosition({ ALERT_LEFT,ALERT_TOP });
-    cout << "ùï";
+    cout << "â•“";
     SetPosition({ ALERT_RIGHT - 1,ALERT_TOP });
-    cout << "ùñ";
+    cout << "â•–";
 
     SetColor(0x07);
     SetPosition({ ALERT_LEFT + 8,ALERT_TOP + 3 });
     cout << message;
 
     SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 5 });
-    cout << "¬O        §_";
+    cout << "æ˜¯        å¦";
     SetPosition({ ALERT_LEFT + 16,ALERT_TOP + 5 });
 
     char key;
@@ -490,57 +508,113 @@ bool UI::showAlert(string message)
     }
 }
 
-// Intent: ¸õ¥XÀò³Óµøµ¡
-// Pre: UIª«¥ó
-// Post: ¦^¶Ç¯u°²­È
-bool UI::showWin(string message)
+// Intent: è·³å‡ºç²å‹è¦–çª—
+// Pre: UIç‰©ä»¶
+// Post: å›å‚³çœŸå‡å€¼
+bool UI::showWin(unsigned color)
 {
-    const short ALERT_TOP = TOP_BOUND + 9, ALERT_BOTTOM = BOTTOM_BOUND - 7, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
-    SetColor(0x04);      // ³]©w¶Â©³·t¬õ¦r
+    const short WIN_TOP = TOP_BOUND + 1, WIN_BOTTOM = BOTTOM_BOUND - 1, WIN_LEFT = LEFT_BOUND + 24, WIN_RIGHT = RIGHT_BOUND - 25;
+    SetColor(0x77);
+    setCursorVisable(false);
 
-    for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // ¦L¶Â©³
+    for (short i = WIN_TOP; i < WIN_BOTTOM; i++)              // å°ç™½åº•
     {
-        SetPosition({ ALERT_LEFT,i });
-        for (unsigned j = ALERT_LEFT; j <= ALERT_RIGHT; j++)
+        SetPosition({ WIN_LEFT,i });
+        for (unsigned j = WIN_LEFT; j <= WIN_RIGHT-1; j++)
         {
             cout << " ";
         }
     }
-    for (short i = ALERT_LEFT; i <= ALERT_RIGHT; i++)     // µe¾î½u
+
+    SetColor(0x11);
+    for (short i = WIN_TOP; i <= WIN_BOTTOM; i++)     // ç•«ç›´ç·š
     {
-        SetPosition({ i,ALERT_TOP });
-        cout << "ùù";
-        SetPosition({ i,BOTTOM_BOUND - 7 });
-        cout << "ùù";
+        SetPosition({ WIN_LEFT,i });
+        cout << "â–ˆ";
+        SetPosition({ WIN_RIGHT-2,i });
+        cout << "â–ˆ";
     }
 
-    for (short i = ALERT_TOP; i <= ALERT_BOTTOM; i++)     // µeª½½u
+    for (short i = WIN_LEFT; i <= WIN_RIGHT - 1; i+=2)     // ç•«æ©«ç·š
     {
-        SetPosition({ ALERT_LEFT,i });
-        cout << "ùø";
-        SetPosition({ ALERT_RIGHT - 1,i });
-        cout << "ùø";
+        SetPosition({ i,WIN_TOP });
+        cout << "â–ˆ";
+        SetPosition({ i,WIN_BOTTOM });
+        cout << "â–ˆ";
     }
 
-    SetPosition({ ALERT_LEFT,ALERT_BOTTOM });
-    cout << "ùõ";
-    SetPosition({ ALERT_RIGHT - 1,ALERT_BOTTOM });
-    cout << "ù÷";
-    SetPosition({ ALERT_LEFT,ALERT_TOP });
-    cout << "ùï";
-    SetPosition({ ALERT_RIGHT - 1,ALERT_TOP });
-    cout << "ùñ";
-
+    if (color == 0)
+    {
+        SetColor(0x70);
+    }
+    else
+    {
+        SetColor(0x7C);
+    }
+    for (int i = 0; i < 15; i++)
+    {
+        SetPosition({ WIN_LEFT + 4,WIN_TOP + 2+i });
+        switch (i)
+        {
+        case 0:
+            cout << "â–ˆâ–ˆ     â–ˆâ–ˆâ–ˆ          â–ˆâ–ˆâ–ˆâ–ˆ   â–ˆâ–ˆâ–ˆâ–ˆ";
+            break;
+        case 1:
+            cout << " â–ˆâ–ˆ     â–ˆâ–ˆ  â–ˆâ–ˆâ–ˆâ–ˆ  â–ˆâ–ˆâ–ˆ   ã€€â–ˆâ–ˆ ";
+            break;
+        case 2:
+            cout << "  â–ˆâ–ˆ  â–ˆâ–ˆ   â–ˆâ–ˆ   â–ˆâ–ˆ  â–ˆâ–ˆ     â–ˆâ–ˆ";
+            break;
+        case 3:
+            cout << "   â–ˆâ–ˆâ–ˆâ–ˆ    â–ˆâ–ˆ   â–ˆâ–ˆ  â–ˆâ–ˆ    â–ˆâ–ˆ";
+            break;
+        case 4:
+            cout << "     â–ˆâ–ˆ      â–ˆâ–ˆ  â–ˆâ–ˆ    â–ˆâ–ˆâ–ˆâ–ˆâ–ˆ";
+            break;
+        case 5:
+            cout << "   â–ˆâ–ˆâ–ˆâ–ˆ     â–ˆâ–ˆâ–ˆâ–ˆ      â–ˆâ–ˆâ–ˆâ–ˆ      â–ˆ";
+            break;
+        case 6:
+            cout << "                                           â–ˆâ–ˆ";
+            break;
+        case 7:
+            cout << "â–ˆâ–ˆâ–ˆ  â–ˆ  â–ˆâ–ˆâ–ˆ â–ˆâ–ˆâ–ˆ â–ˆâ–ˆ    â–ˆâ–ˆâ–ˆ  â–ˆâ–ˆâ–ˆ";
+            break;
+        case 8:
+            cout << " â–ˆâ–ˆ  â–ˆâ–ˆ  â–ˆâ–ˆ   â–ˆâ–ˆ   â–ˆâ–ˆ    â–ˆâ–ˆ   â–ˆâ–ˆâ–ˆ";
+            break;
+        case 9:
+            cout << " â–ˆâ–ˆ  â–ˆâ–ˆ  â–ˆâ–ˆ   â–ˆâ–ˆ   â–ˆâ–ˆâ–ˆ  â–ˆâ–ˆ    â–ˆâ–ˆ";
+            break;
+        case 10:
+            cout << "  â–ˆâ–ˆ â–ˆâ–ˆ â–ˆâ–ˆ    â–ˆâ–ˆ   â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ     â–ˆ";
+            break;
+        case 11:
+            cout << "  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ    â–ˆâ–ˆ   â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ";
+            break;
+        case 12:
+            cout << "   â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ     â–ˆâ–ˆ   â–ˆâ–ˆ   â–ˆâ–ˆâ–ˆ    â–ˆ";
+            break;
+        case 13:
+            cout << "    â–ˆâ–ˆ  â–ˆâ–ˆ      â–ˆâ–ˆ   â–ˆâ–ˆ     â–ˆâ–ˆ   â–ˆâ–ˆ";
+            break;
+        case 14:
+            cout << "     â–ˆ    â–ˆ      â–ˆâ–ˆâ–ˆ â–ˆâ–ˆâ–ˆ     â–ˆâ–ˆ   â–ˆ";
+            break;
+        }
+    }
+    
     SetColor(0x07);
-    SetPosition({ ALERT_LEFT + 8,ALERT_TOP + 3 });
-    cout << message;
-
-    SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 5 });
-    cout << "¬O        §_";
-    SetPosition({ ALERT_LEFT + 16,ALERT_TOP + 5 });
+    SetPosition({ WIN_RIGHT - 37,WIN_BOTTOM-2 });
+    
+    cout << "é–‹å•Ÿæ–°å±€";
+    
+    SetColor(0x70);
+    cout << "  ";
+    cout << "çµæŸéŠæˆ²";
 
     char key;
-    bool choice = false;
+    bool choice = true;
     while (1)
     {
         key = _getch();
@@ -551,15 +625,26 @@ bool UI::showWin(string message)
             if (choice == true)
             {
                 choice = false;
-                SetPosition({ ROW_ONE + 24,ALERT_TOP + 5 });
+                SetColor(0x70);
+                SetPosition({ WIN_RIGHT - 37,WIN_BOTTOM - 2 });
+                cout << "é–‹å•Ÿæ–°å±€";
+                cout << "  ";
+                SetColor(0x07);
+                cout << "çµæŸéŠæˆ²";
             }
             else
             {
                 choice = true;
-                SetPosition({ ROW_ONE + 14,ALERT_TOP + 5 });
+                SetColor(0x07);
+                SetPosition({ WIN_RIGHT - 37,WIN_BOTTOM - 2 });
+                cout << "é–‹å•Ÿæ–°å±€";
+                SetColor(0x70);
+                cout << "  ";
+                cout << "çµæŸéŠæˆ²";
             }
             break;
         case ENTER:
+            setCursorVisable(true);
             return choice;
         }
     }

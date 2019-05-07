@@ -22,8 +22,8 @@ public:
     // 跳出確認視窗
     bool showAlert(string);
 
-    // 跳出確認視窗
-    bool showWin(string);
+    // 跳出獲勝視窗
+    bool showWin(unsigned);
 
     // 跳出選單
     int showMenu();
