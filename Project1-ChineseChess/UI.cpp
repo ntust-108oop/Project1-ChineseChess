@@ -74,27 +74,38 @@ void UI::readKeyBoard()
                     if (chessPosition == chessBoard.legalMove[i])
                     {
                         inLegalMove = true;
-						Record::saveThisStep(lastChosed->getChessType(), lastChosed->getCurrentPosition().x, lastChosed->getCurrentPosition().y,
-							chessPosition.x, chessPosition.y, 0);
-                        chessBoard.moveTheChess(lastChosed->getCurrentPosition().x,
-                            lastChosed->getCurrentPosition().y,
-                            chessPosition.x,
-                            chessPosition.y);
-
-                        lastChosed->setChosen(false);
-                        lastChosed = NULL;
-                        chessBoard.clearLegalMove();
-                        chessBoard.changTurn();
-                        chessBoard.printThePlane();
-                        if (chessBoard.getTurn() == 0)
+                        if (chessBoard.getChess(chessPosition)->getChessType() == 1) // 吃到將
                         {
-                            SetPosition(chessToCursor({ 4, 3 }));
+                            showWin("紅方獲勝");
+                        }
+                        else if (chessBoard.getChess(chessPosition)->getChessType() == 8) // 吃到帥
+                        {
+                            showWin("黑方獲勝");
                         }
                         else
                         {
-                            SetPosition(chessToCursor({ 4, 6 }));
+                            Record::saveThisStep(lastChosed->getChessType(), lastChosed->getCurrentPosition().x, lastChosed->getCurrentPosition().y,
+                                chessPosition.x, chessPosition.y, 0);
+                            chessBoard.moveTheChess(lastChosed->getCurrentPosition().x,
+                                lastChosed->getCurrentPosition().y,
+                                chessPosition.x,
+                                chessPosition.y);
+
+                            lastChosed->setChosen(false);
+                            lastChosed = NULL;
+                            chessBoard.clearLegalMove();
+                            chessBoard.changTurn();
+                            chessBoard.printThePlane();
+                            Record::printRecord();
+                            if (chessBoard.getTurn() == 0)
+                            {
+                                SetPosition(chessToCursor({ 4, 3 }));
+                            }
+                            else
+                            {
+                                SetPosition(chessToCursor({ 4, 6 }));
+                            }
                         }
-						Record::printRecord();
                         break;
                     }
                 }
@@ -408,6 +419,81 @@ int UI::showMenu()
 // Pre: UI物件
 // Post: 回傳真假值
 bool UI::showAlert(string message)
+{
+    const short ALERT_TOP = TOP_BOUND + 9, ALERT_BOTTOM = BOTTOM_BOUND - 7, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
+    SetColor(0x04);      // 設定黑底暗紅字
+
+    for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // 印黑底
+    {
+        SetPosition({ ALERT_LEFT,i });
+        for (unsigned j = ALERT_LEFT; j <= ALERT_RIGHT; j++)
+        {
+            cout << " ";
+        }
+    }
+    for (short i = ALERT_LEFT; i <= ALERT_RIGHT; i++)     // 畫橫線
+    {
+        SetPosition({ i,ALERT_TOP });
+        cout << "═";
+        SetPosition({ i,BOTTOM_BOUND - 7 });
+        cout << "═";
+    }
+
+    for (short i = ALERT_TOP; i <= ALERT_BOTTOM; i++)     // 畫直線
+    {
+        SetPosition({ ALERT_LEFT,i });
+        cout << "║";
+        SetPosition({ ALERT_RIGHT - 1,i });
+        cout << "║";
+    }
+
+    SetPosition({ ALERT_LEFT,ALERT_BOTTOM });
+    cout << "╙";
+    SetPosition({ ALERT_RIGHT - 1,ALERT_BOTTOM });
+    cout << "╜";
+    SetPosition({ ALERT_LEFT,ALERT_TOP });
+    cout << "╓";
+    SetPosition({ ALERT_RIGHT - 1,ALERT_TOP });
+    cout << "╖";
+
+    SetColor(0x07);
+    SetPosition({ ALERT_LEFT + 8,ALERT_TOP + 3 });
+    cout << message;
+
+    SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 5 });
+    cout << "是        否";
+    SetPosition({ ALERT_LEFT + 16,ALERT_TOP + 5 });
+
+    char key;
+    bool choice = false;
+    while (1)
+    {
+        key = _getch();
+        switch (key)
+        {
+        case LEFT:
+        case RIGHT:
+            if (choice == true)
+            {
+                choice = false;
+                SetPosition({ ROW_ONE + 24,ALERT_TOP + 5 });
+            }
+            else
+            {
+                choice = true;
+                SetPosition({ ROW_ONE + 14,ALERT_TOP + 5 });
+            }
+            break;
+        case ENTER:
+            return choice;
+        }
+    }
+}
+
+// Intent: 跳出獲勝視窗
+// Pre: UI物件
+// Post: 回傳真假值
+bool UI::showWin(string message)
 {
     const short ALERT_TOP = TOP_BOUND + 9, ALERT_BOTTOM = BOTTOM_BOUND - 7, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
     SetColor(0x04);      // 設定黑底暗紅字
