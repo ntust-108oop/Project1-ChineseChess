@@ -197,7 +197,7 @@ void ChessBoard::printThePlane()
                     break;
                 case 11:
                     cout << "車";
-                    break;  
+                    break;
                 case 12:
                     cout << "傌";
                     break;
@@ -213,14 +213,6 @@ void ChessBoard::printThePlane()
         }
     }
     printTurn();
-    if (turns == 0)
-    {
-        SetPosition(chessToCursor({ 4, 3 }));
-    }
-    else
-    {
-        SetPosition(chessToCursor({ 4, 6 }));
-    }
 }
 
 void ChessBoard::printChosenPlane()
@@ -290,7 +282,6 @@ void ChessBoard::printChosenPlane()
                 break;
             }
         }
-        SetPosition({ BOARD_LEFT + i * 4,BOARD_TOP + 1 + j * 2 });
     }
 
 }
