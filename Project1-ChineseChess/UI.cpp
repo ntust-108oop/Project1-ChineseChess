@@ -61,18 +61,19 @@ void UI::readKeyBoard()
                         if (cueMode == true)                                    // 若提示開啟則印出提示
                         {
                             chessBoard.printChosenPlane();
+                            SetPosition(cursorPosition);
                         }
                     }
                 }
             }
             else                                                           // 若已有選擇的棋
             {
-                bool legal = false;                                         // 看能否合法移動
+                bool inLegalMove = false;                                         // 點選可移動的區域則移動
                 for (unsigned i = 0; i < chessBoard.legalMove.size(); i++)
                 {
                     if (chessPosition == chessBoard.legalMove[i])
                     {
-                        legal = true;
+                        inLegalMove = true;
 						Record::saveThisStep(lastChosed->getChessType(), lastChosed->getCurrentPosition().x, lastChosed->getCurrentPosition().y,
 							chessPosition.x, chessPosition.y, 0);
                         chessBoard.moveTheChess(lastChosed->getCurrentPosition().x,
@@ -82,18 +83,29 @@ void UI::readKeyBoard()
 
                         lastChosed->setChosen(false);
                         lastChosed = NULL;
+                        chessBoard.clearLegalMove();
                         chessBoard.changTurn();
                         chessBoard.printThePlane();
-                        chessBoard.clearLegalMove();
+                        if (chessBoard.getTurn() == 0)
+                        {
+                            SetPosition(chessToCursor({ 4, 3 }));
+                        }
+                        else
+                        {
+                            SetPosition(chessToCursor({ 4, 6 }));
+                        }
 						Record::printRecord();
                         break;
                     }
                 }
-                if (legal == false)                                         // 沒合法就輸了
+                if (inLegalMove == false)                                         // 點選其他地方則取消
                 {
-                    // 輸了
+                    lastChosed->setChosen(false);
+                    lastChosed = NULL;
+                    chessBoard.clearLegalMove();
+                    chessBoard.printThePlane();
                 }
-
+                SetPosition(cursorPosition);
             }
             break;
         case ESC:                                      // 選單
