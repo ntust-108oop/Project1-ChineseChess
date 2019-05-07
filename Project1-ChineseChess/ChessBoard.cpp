@@ -321,11 +321,13 @@ void ChessBoard::moveTheChess(int fromX, int fromY, int toX, int toY)
     {
         delete wholePosition[toX][toY];
         wholePosition[toX][toY] = wholePosition[fromX][fromY];
+		wholePosition[toX][toY]->setCurrentPosition(toX, toY);
         wholePosition[fromX][fromY] = NULL;
     }
     else
     {
         wholePosition[toX][toY] = wholePosition[fromX][fromY];
+		wholePosition[toX][toY]->setCurrentPosition(toX, toY);
         wholePosition[fromX][fromY] = NULL;
     }
 }
