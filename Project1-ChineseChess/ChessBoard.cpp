@@ -660,6 +660,7 @@ void ChessBoard::manageLegalMove(int x, int y)
 				{
 					legalMove.push_back(temp);
 				}
+				break;
 			}
 			else
 			{
@@ -676,6 +677,7 @@ void ChessBoard::manageLegalMove(int x, int y)
 				{
 					legalMove.push_back(temp);
 				}
+				break;
 			}
 			else
 			{
@@ -692,6 +694,7 @@ void ChessBoard::manageLegalMove(int x, int y)
 				{
 					legalMove.push_back(temp);
 				}
+				break;
 			}
 			else
 			{
@@ -708,6 +711,7 @@ void ChessBoard::manageLegalMove(int x, int y)
 				{
 					legalMove.push_back(temp);
 				}
+				break;
 			}
 			else
 			{
@@ -1087,7 +1091,7 @@ void ChessBoard::manageLegalMove(int x, int y)
             if (wholePosition[temp.x][temp.y] != NULL)
             {
                 // 若是中間被擋住就沒事
-                if (wholePosition[temp.x][temp.y]->getChessType() != 8)
+                if (wholePosition[temp.x][temp.y]->getChessType() != 1)
                 {
                     break;
                 }
@@ -1250,6 +1254,7 @@ void ChessBoard::manageLegalMove(int x, int y)
 				{
 					legalMove.push_back(temp);
 				}
+				break;
 			}
 			else
 			{
@@ -1266,6 +1271,7 @@ void ChessBoard::manageLegalMove(int x, int y)
 				{
 					legalMove.push_back(temp);
 				}
+				break;
 			}
 			else
 			{
@@ -1282,6 +1288,7 @@ void ChessBoard::manageLegalMove(int x, int y)
 				{
 					legalMove.push_back(temp);
 				}
+				break;
 			}
 			else
 			{
@@ -1298,6 +1305,7 @@ void ChessBoard::manageLegalMove(int x, int y)
 				{
 					legalMove.push_back(temp);
 				}
+				break;
 			}
 			else
 			{

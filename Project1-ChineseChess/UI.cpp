@@ -73,6 +73,8 @@ void UI::readKeyBoard()
                     if (chessPosition == chessBoard.legalMove[i])
                     {
                         legal = true;
+						Record::saveThisStep(lastChosed->getChessType(), lastChosed->getCurrentPosition().x, lastChosed->getCurrentPosition().y,
+							chessPosition.x, chessPosition.y, 0);
                         chessBoard.moveTheChess(lastChosed->getCurrentPosition().x,
                             lastChosed->getCurrentPosition().y,
                             chessPosition.x,
@@ -83,6 +85,7 @@ void UI::readKeyBoard()
                         chessBoard.changTurn();
                         chessBoard.printThePlane();
                         chessBoard.clearLegalMove();
+						Record::printRecord();
                         break;
                     }
                 }

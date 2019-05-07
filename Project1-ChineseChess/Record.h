@@ -15,9 +15,10 @@ public:
 	static vector<int> chessTypeData;
     static vector<struct position> fromPos;
     static vector<struct position> toPos;
+	static vector<int> ifOnly;
 
     static void printRecord();
-    static void saveThisStep(int chessType, int fromX, int fromY, int toX, int toY);
+    static void saveThisStep(int chessType, int fromX, int fromY, int toX, int toY, int only);
 	static void clearRecord();
 };
 
