@@ -335,7 +335,7 @@ void ChessBoard::changTurn()
     }
 }
 
-void ChessBoard::readTheBoard(string fileTxt)
+bool ChessBoard::readTheBoard(string fileTxt)
 {
     //開檔讀取並新建所需的棋子
     fstream file(fileTxt);
@@ -363,12 +363,15 @@ void ChessBoard::readTheBoard(string fileTxt)
             }
         }
         file >> turns;
+
+		file.close();
+		file.clear();
+		return true;
     }
-    file.close();
-    file.clear();
+	else return false;
 }
 
-void ChessBoard::saveTheBoard(string fileTxt)
+bool ChessBoard::saveTheBoard(string fileTxt)
 {
     fstream file(fileTxt, ios::out);
     if (file.is_open())
@@ -383,12 +386,15 @@ void ChessBoard::saveTheBoard(string fileTxt)
             file << '\n';
         }
         file << turns;
+
+		file.close();
+		file.clear();
+		return true;
     }
-    file.close();
-    file.clear();
+	else return false;
 }
 
-void ChessBoard::saveTheBoard()
+bool ChessBoard::saveTheBoard()
 {
     fstream file;
     file.open("file.txt", ios::trunc);
@@ -405,9 +411,12 @@ void ChessBoard::saveTheBoard()
             file << '\n';
         }
         file >> turns;
-    }
-    file.close();
-    file.clear();
+		
+		file.close();
+		file.clear();
+		return true;
+	}
+	else return false;
 }
 
 void ChessBoard::manageLegalMove(int x, int y)

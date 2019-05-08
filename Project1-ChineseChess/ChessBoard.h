@@ -42,9 +42,9 @@ public:
     void changTurn();
 
     // 應該在讀入棋盤時創建好所有chess物件
-    void readTheBoard(string fileTxt);
-    void saveTheBoard(string fileTxt);
-	void saveTheBoard();
+    bool readTheBoard(string fileTxt);
+    bool saveTheBoard(string fileTxt);
+	bool saveTheBoard();
 
 	vector <position> legalMove;	//存放能走的路，UI能直接使用到它
 	void manageLegalMove(int x, int y);		// UI在選擇棋子以後呼叫的
