@@ -4,10 +4,9 @@
 #include <iomanip>
 #include "Console.h"
 
-vector<int> Record::chessTypeData;
-vector<struct position> Record::fromPos;
-vector<struct position> Record::toPos;
-vector<int> Record::ifOnly;
+vector<struct recordForm> Record::record;
+vector<struct recordForm> Record::returnStep;
+
 short leftStart = 5, topStart = 4;
 
 Record::Record()
@@ -23,13 +22,17 @@ void Record::printRecord()
 {
 	int count = 0;
 	int i = 0;
-	if (chessTypeData.size() > 9)
+	if (record.size() > 9)
 	{
-		i = chessTypeData.size() - 10;
+		i = record.size() - 10;
+	}
+	else
+	{
+		Record::clearBoardRecord();
 	}
 	position storeCursor = getCursorPosition();
 
-	while(i < chessTypeData.size())
+	while(i < record.size())
 	{
 		position printPosition = { leftStart, topStart + count * 2 };
 		SetPosition(printPosition);
@@ -37,13 +40,13 @@ void Record::printRecord()
 		std::cout << setw(3) << i + 1 << " ";
 		count++;
 
-		if(chessTypeData[i] <= 7)	// 黑
+		if(record[i].chessTypeData <= 7)	// 黑
 		{
 			SetColor(0x08);
 			std::cout << "黑" << " " ;
 		}
 
-		if(chessTypeData[i] > 7)	// 紅
+		if(record[i].chessTypeData > 7)	// 紅
 		{
 			SetColor(0x0c);
 			std::cout << "紅" << " " ;
@@ -51,9 +54,9 @@ void Record::printRecord()
 
 		// 前面兩個字
 		SetColor(0x07);
-		if (ifOnly[i] == 0)			// 普通的情況
+		if (record[i].ifOnly == 0)			// 普通的情況
 		{
-			switch (chessTypeData[i])
+			switch (record[i].chessTypeData)
 			{
 			case 1:
 				std::cout << "：" << " " << "將" << " ";
@@ -101,9 +104,9 @@ void Record::printRecord()
 				break;
 			}
 
-			if (chessTypeData[i] <= 7)		// 黑
+			if (record[i].chessTypeData <= 7)		// 黑
 			{
-				switch (fromPos[i].x)
+				switch (record[i].fromPos.x)
 				{
 				case 0:
 					std::cout << "１" << " ";
@@ -137,9 +140,9 @@ void Record::printRecord()
 				}
 
 			}
-			else if (chessTypeData[i] > 7)		// 紅
+			else if (record[i].chessTypeData > 7)		// 紅
 			{
-				switch (fromPos[i].x)
+				switch (record[i].fromPos.x)
 				{
 				case 0:
 					std::cout << "九" << " ";
@@ -175,44 +178,88 @@ void Record::printRecord()
 		}
 		else		// 如果這個棋不是自己這條線上唯一的一個自己的種類，需要額外處理
 		{
-			if (chessTypeData[i] <= 7)	//黑
+			if (record[i].chessTypeData <= 7)	//黑
 			{
-				if (chessTypeData[i] == 7)		//卒額外處理
+				if (record[i].chessTypeData == 7)		//卒額外處理
 				{
-
-				}
-				else
-				{
-					if (ifOnly[i] == 1)
+					if (record[i].ifOnly % 10 == 1)
 					{
 						std::cout << "：" << " " << "後" << " ";
 					}
-					else if (ifOnly[i] == 2)
+					else if (record[i].ifOnly / 10 == record[i].ifOnly % 10)
+					{
+						std::cout << "：" << " " << "前" << " ";
+					}
+					else
+					{
+						switch (record[i].ifOnly % 10)
+						{
+						case 2:
+							std::cout << "：" << " " << "二" << " ";
+							break;
+						case 3:
+							std::cout << "：" << " " << "三" << " ";
+							break;
+						case 4:
+							std::cout << "：" << " " << "四" << " ";
+							break;
+						}
+					}
+				}
+				else
+				{
+					if (record[i].ifOnly == 1)
+					{
+						std::cout << "：" << " " << "後" << " ";
+					}
+					else if (record[i].ifOnly == 2)
 					{
 						std::cout << "：" << " " << "前" << " ";
 					}
 				}
 			}
-			else if (chessTypeData[i] > 7)	//紅
+			else if (record[i].chessTypeData > 7)	//紅
 			{
-				if (chessTypeData[i] == 14)		//兵額外處理
+				if (record[i].chessTypeData == 14)		//兵額外處理
 				{
-
-				}
-				else
-				{
-					if (ifOnly[i] == 1)
+					if (record[i].ifOnly % 10 == 1)
 					{
 						std::cout << "：" << " " << "前" << " ";
 					}
-					else if (ifOnly[i] == 2)
+					else if (record[i].ifOnly / 10 == record[i].ifOnly % 10)
+					{
+						std::cout << "：" << " " << "後" << " ";
+					}
+					else
+					{
+						switch (6 - (record[i].ifOnly % 10))
+						{
+						case 2:
+							std::cout << "：" << " " << "四" << " ";
+							break;
+						case 3:
+							std::cout << "：" << " " << "三" << " ";
+							break;
+						case 4:
+							std::cout << "：" << " " << "二" << " ";
+							break;
+						}
+					}
+				}
+				else
+				{
+					if (record[i].ifOnly == 1)
+					{
+						std::cout << "：" << " " << "前" << " ";
+					}
+					else if (record[i].ifOnly == 2)
 					{
 						std::cout << "：" << " " << "後" << " ";
 					}
 				}
 			}
 
-			switch (chessTypeData[i])
+			switch (record[i].chessTypeData)
 			{
 			case 1:
 				std::cout << "將" << " ";
@@ -262,9 +309,9 @@ void Record::printRecord()
 		}
 
 		// 後面兩個字
-		if (chessTypeData[i] <= 7)
+		if (record[i].chessTypeData <= 7)
 		{
-			int move = toPos[i].y - fromPos[i].y;
+			int move = record[i].toPos.y - record[i].fromPos.y;
 			if (move > 0)
 			{
 				std::cout << "進" << " ";
@@ -277,7 +324,7 @@ void Record::printRecord()
 			else if (move == 0)
 			{
 				std::cout << "平" << " ";
-				move = toPos[i].x + 1;
+				move = record[i].toPos.x + 1;
 			}
 
 			switch (move)
@@ -313,9 +360,9 @@ void Record::printRecord()
 				break;
 			}
 		}
-		else if (chessTypeData[i] > 7)
+		else if (record[i].chessTypeData > 7)
 		{
-			int move = toPos[i].y - fromPos[i].y;
+			int move = record[i].toPos.y - record[i].fromPos.y;
 			if (move > 0)
 			{
 				std::cout << "退" << " ";
@@ -328,7 +375,7 @@ void Record::printRecord()
 			else if (move == 0)
 			{
 				std::cout << "平" << " ";
-				move = toPos[i].x + 1;
+				move = record[i].toPos.x + 1;
 			}
 
 			switch (move)
@@ -372,27 +419,34 @@ void Record::printRecord()
 	
 }
 
-void Record::saveThisStep(int chessType, int fromX, int fromY, int toX, int toY, int only)
+void Record::saveThisStep(int chessType, struct position from, struct position to, int only, int eatenChessType)
 {
-	struct position from;
-	struct position to;
+	struct recordForm temp;
 
-	from.x = fromX;
-	from.y = fromY;
-	to.x = toX;
-	to.y = toY;
-
-	chessTypeData.push_back(chessType);
-	fromPos.push_back(from);
-	toPos.push_back(to);
-	ifOnly.push_back(only);
+	temp.chessTypeData = chessType;
+	temp.fromPos = from;
+	temp.toPos = to;
+	temp.ifOnly = only;
+	temp.eaten = eatenChessType;
 	
+	record.push_back(temp);
 }
 
 void Record::clearRecord()
 {
-	chessTypeData.clear();
-	fromPos.clear();
-	toPos.clear();
+	record.clear();
 }
+
+void Record::clearBoardRecord()
+{
+	int i = 0;
+	while (i <= 10)
+	{
+		position printPosition = { leftStart, topStart + (i + 1) * 2 };
+		SetPosition(printPosition);
+		std::cout << "             ";
+		i++;
+	}
+}
+
 
