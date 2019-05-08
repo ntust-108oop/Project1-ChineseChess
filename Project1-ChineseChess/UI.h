@@ -7,6 +7,8 @@
 #include <direct.h>
 #include "ChessBoard.h"
 #include "Record.h"
+#include <thread>
+#include "Music.h"
 using std::cout;
 
 class UI

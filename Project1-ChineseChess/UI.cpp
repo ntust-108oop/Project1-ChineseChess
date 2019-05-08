@@ -9,6 +9,7 @@ UI::UI()
     cueMode = true;
 }
 
+
 // Intent: 讀取鍵盤
 // Pre: UI物件
 // Post: 依據鍵盤傳入的值做出反應
@@ -249,7 +250,10 @@ void UI::readKeyBoard()
                 SetPosition(cursorPosition);
                 break;
                 break;
-            case 5:                                     // 結束遊戲
+            case 5:                                     // 設定音樂
+                Music::setMusic(1);
+                break;
+            case 6:                                     // 結束遊戲
                 if (showAlert("結束遊戲？", false) == true)
                 {
                     return;
@@ -410,7 +414,7 @@ void UI::printUI()
 // Post: 回傳選擇
 int UI::showMenu()
 {
-    vector<string> list = { "繼續遊戲", "重新開始","儲存遊戲","讀取遊戲", "使用提示", "結束遊戲" };
+    vector<string> list = { "繼續遊戲", "重新開始","儲存遊戲","讀取遊戲", "設定提示", "設定音樂", "結束遊戲" };
     const short MENU_TOP = 7, MENU_LEFT = 38, MENU_RIGHT = 57;
     short menuBottom = static_cast<short>(MENU_TOP + list.size() * 2);
     SetColor(0x01);      // 設定黑底藍字
@@ -451,7 +455,8 @@ int UI::showMenu()
 
     setCursorVisable(false);
 
-    char key, choice = 0;
+    char key;
+    int choice = 0;
     for (short i = 0; i < static_cast<short>(list.size()); i++)
     {
         if (i == choice)
@@ -477,7 +482,7 @@ int UI::showMenu()
             }
             else
             {
-                choice = list.size() - 1;
+                choice = static_cast<int>(list.size() - 1);
             }
             for (short i = 0; i < static_cast<short>(list.size()); i++)
             {

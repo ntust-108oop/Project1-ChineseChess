@@ -6,7 +6,6 @@ using namespace std;
 int main()
 {
 	UI thisGameUI;
-	// thisGameUI.chessBoard.readTheBoard("file.txt");
 
 	thisGameUI.printUI();
 	thisGameUI.chessBoard.printThePlane();
