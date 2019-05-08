@@ -188,7 +188,15 @@ void UI::readKeyBoard()
                 chessBoard.printThePlane();
                 SetPosition(cursorPosition);
                 break;
-            case 3:                                     // 讀取遊戲
+            case 3:                            
+                fileName = showInput("輸入檔名");       // 讀取遊戲
+                if (showAlert("確定讀取？", false, fileName.insert(0, "檔名：")) == true)
+                {
+                    fileName = fileName.substr(6);
+                    _mkdir("save");
+                    chessBoard.readTheBoard(fileName.insert(0, "save/"));
+                    // 應該要給回饋看檔案存不存在 有空再寫
+                }
                 chessBoard.printThePlane();
                 SetPosition(chessToCursor({ 4, 6 }));
                 break;
