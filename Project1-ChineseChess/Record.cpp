@@ -381,31 +381,31 @@ void Record::printRecord()
 			switch (move)
 			{
 			case 1:
-				std::cout << "一";
+				std::cout << "九";
 				break;
 			case 2:
-				std::cout << "二";
+				std::cout << "八";
 				break;
 			case 3:
-				std::cout << "三";
+				std::cout << "七";
 				break;
 			case 4:
-				std::cout << "四";
+				std::cout << "六";
 				break;
 			case 5:
 				std::cout << "五";
 				break;
 			case 6:
-				std::cout << "六";
+				std::cout << "四";
 				break;
 			case 7:
-				std::cout << "七";
+				std::cout << "三";
 				break;
 			case 8:
-				std::cout << "八";
+				std::cout << "二";
 				break;
 			case 9:
-				std::cout << "九";
+				std::cout << "一";
 				break;
 			default:
 				break;
