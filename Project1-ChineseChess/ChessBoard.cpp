@@ -370,14 +370,14 @@ void ChessBoard::readTheBoard(string fileTxt)
 
 void ChessBoard::saveTheBoard(string fileTxt)
 {
-    fstream file(fileTxt);
+    fstream file(fileTxt, ios::out);
     if (file.is_open())
     {
         for (int i = 0; i < 10; i++)
         {
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < 9; j++)
             {
-                wholePosition[j][i] == NULL ? file << wholePosition[j][i]->getChessType() : file << '0';
+                wholePosition[j][i] == NULL ?  file << '0':file << wholePosition[j][i]->getChessType();
                 file << ' ';
             }
             file << '\n';

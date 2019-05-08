@@ -16,6 +16,7 @@ void UI::readKeyBoard()
 {
     SetPosition(chessToCursor({ 4,6 }));
     char key;
+    string fileName;
     while (1)
     {
         position cursorPosition = getCursorPosition();  // 取得當前游標位置
@@ -189,17 +190,48 @@ void UI::readKeyBoard()
                 SetPosition(cursorPosition);
                 break;
             case 1:                                     // 重新開始
-                SetColor(0x07);
-                chessBoard.readTheBoard("Initial.txt");
-                chessBoard.clearLegalMove();
-                Record::clearRecord();
-                system("cls");
-                printUI();
+                if (showAlert("重新開始？", false) == true)
+                {
+                    SetColor(0x07);
+                    chessBoard.readTheBoard("Initial.txt");
+                    chessBoard.clearLegalMove();
+                    Record::clearRecord();
+                    system("cls");
+                    printUI();
+                    chessBoard.printThePlane();
+                    SetPosition(chessToCursor({ 4, 6 }));
+                }
+                else
+                {
+                    chessBoard.printThePlane();
+                    SetPosition(cursorPosition);
+                }
+                break;
+            case 2:                                     // 儲存遊戲
+                fileName = showInput("輸入檔名");
+                if (showAlert("確定儲存？", false, fileName.insert(0,"檔名：")) == true)
+                {
+                    fileName = fileName.substr(6);
+                    _mkdir("save");
+                    chessBoard.saveTheBoard(fileName.insert(0, "save/"));
+                }
+                chessBoard.printThePlane();
+                SetPosition(cursorPosition);
+                break;
+            case 3:                            
+                fileName = showInput("輸入檔名");       // 讀取遊戲
+                if (showAlert("確定讀取？", false, fileName.insert(0, "檔名：")) == true)
+                {
+                    fileName = fileName.substr(6);
+                    _mkdir("save");
+                    chessBoard.readTheBoard(fileName.insert(0, "save/"));
+                    // 應該要給回饋看檔案存不存在 有空再寫
+                }
                 chessBoard.printThePlane();
                 SetPosition(chessToCursor({ 4, 6 }));
                 break;
-            case 2:                                     // 使用提示
-                if (showAlert("使用提示？") == true)
+            case 4:                                     // 使用提示
+                if (showAlert("使用提示？", true) == true)
                 {
                     cueMode = true;
                     chessBoard.printThePlane();
@@ -212,21 +244,22 @@ void UI::readKeyBoard()
                 SetPosition(cursorPosition);
                 break;
                 break;
-            case 3:                                     // 結束遊戲
-                if (showAlert("結束遊戲？") == true)
+            case 5:                                     // 結束遊戲
+                if (showAlert("結束遊戲？", false) == true)
                 {
                     return;
                 }
                 else
                 {
                     chessBoard.printThePlane();
+                    SetPosition(cursorPosition);
                 }
                 break;
             }
             break;
         case 'u':
         case 'U':                                       // 悔棋
-            if (showAlert("確定悔棋？") == true)
+            if (showAlert("確定悔棋？", false) == true)
             {
                 /*
 
@@ -245,7 +278,7 @@ void UI::readKeyBoard()
             break;
         case 'r':
         case 'R':                                       // 還原
-            if (showAlert("確定還原？") == true)
+            if (showAlert("確定還原？", false) == true)
             {
                 /*
 
@@ -372,8 +405,8 @@ void UI::printUI()
 // Post: 回傳選擇
 int UI::showMenu()
 {
-    vector<string> list = { "繼續遊戲", "重新開始", "使用提示", "結束遊戲" };
-    const short MENU_TOP = 10, MENU_LEFT = 38, MENU_RIGHT = 57;
+    vector<string> list = { "繼續遊戲", "重新開始","儲存遊戲","讀取遊戲", "使用提示", "結束遊戲" };
+    const short MENU_TOP = 7, MENU_LEFT = 38, MENU_RIGHT = 57;
     short menuBottom = static_cast<short>(MENU_TOP + list.size() * 2);
     SetColor(0x01);      // 設定黑底藍字
 
@@ -439,7 +472,7 @@ int UI::showMenu()
             }
             else
             {
-                choice = 3;
+                choice = list.size() - 1;
             }
             for (short i = 0; i < static_cast<short>(list.size()); i++)
             {
@@ -456,7 +489,7 @@ int UI::showMenu()
             }
             break;
         case DOWN:
-            if (choice < 3)
+            if (choice < list.size() - 1)
             {
                 choice++;
             }
@@ -489,9 +522,9 @@ int UI::showMenu()
 }
 
 // Intent: 跳出Y/N視窗
-// Pre: UI物件
+// Pre: UI物件、訊息、預設為是或否
 // Post: 回傳真假值
-bool UI::showAlert(string message)
+bool UI::showAlert(string message, bool defaultChoice)
 {
     const short ALERT_TOP = TOP_BOUND + 9, ALERT_BOTTOM = BOTTOM_BOUND - 7, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
     SetColor(0x04);      // 設定黑底暗紅字
@@ -535,10 +568,17 @@ bool UI::showAlert(string message)
 
     SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 5 });
     cout << "是        否";
-    SetPosition({ ALERT_LEFT + 16,ALERT_TOP + 5 });
+    if (defaultChoice == true)
+    {
+        SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 5 });
+    }
+    else
+    {
+        SetPosition({ ALERT_LEFT + 16,ALERT_TOP + 5 });
+    }
 
     char key;
-    bool choice = false;
+    bool choice = defaultChoice;
     while (1)
     {
         key = _getch();
@@ -563,6 +603,91 @@ bool UI::showAlert(string message)
     }
 }
 
+// Intent: 跳出Y/N視窗(兩行)
+// Pre: UI物件、訊息、預設為是或否
+// Post: 回傳真假值
+bool UI::showAlert(string message, bool defaultChoice, string secondaryMessage)
+{
+    const short ALERT_TOP = TOP_BOUND + 9, ALERT_BOTTOM = BOTTOM_BOUND - 6, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
+    SetColor(0x04);      // 設定黑底暗紅字
+
+    for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // 印黑底
+    {
+        SetPosition({ ALERT_LEFT,i });
+        for (unsigned j = ALERT_LEFT; j <= ALERT_RIGHT; j++)
+        {
+            cout << " ";
+        }
+    }
+    for (short i = ALERT_LEFT; i <= ALERT_RIGHT; i++)     // 畫橫線
+    {
+        SetPosition({ i,ALERT_TOP });
+        cout << "═";
+        SetPosition({ i,ALERT_BOTTOM });
+        cout << "═";
+    }
+
+    for (short i = ALERT_TOP; i <= ALERT_BOTTOM; i++)     // 畫直線
+    {
+        SetPosition({ ALERT_LEFT,i });
+        cout << "║";
+        SetPosition({ ALERT_RIGHT - 1,i });
+        cout << "║";
+    }
+
+    SetPosition({ ALERT_LEFT,ALERT_BOTTOM });
+    cout << "╙";
+    SetPosition({ ALERT_RIGHT - 1,ALERT_BOTTOM });
+    cout << "╜";
+    SetPosition({ ALERT_LEFT,ALERT_TOP });
+    cout << "╓";
+    SetPosition({ ALERT_RIGHT - 1,ALERT_TOP });
+    cout << "╖";
+
+    SetColor(0x07);
+    SetPosition({ ALERT_LEFT + 8,ALERT_TOP + 3 });
+    cout << message;
+    SetColor(0x08);
+    SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 4 });
+    cout << secondaryMessage;
+
+    SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 6 });
+    cout << "是        否";
+    if (defaultChoice == true)
+    {
+        SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 6 });
+    }
+    else
+    {
+        SetPosition({ ALERT_LEFT + 16,ALERT_TOP + 6 });
+    }
+
+    char key;
+    bool choice = defaultChoice;
+    while (1)
+    {
+        key = _getch();
+        switch (key)
+        {
+        case LEFT:
+        case RIGHT:
+            if (choice == true)
+            {
+                choice = false;
+                SetPosition({ ROW_ONE + 24,ALERT_TOP + 6 });
+            }
+            else
+            {
+                choice = true;
+                SetPosition({ ROW_ONE + 14,ALERT_TOP + 6 });
+            }
+            break;
+        case ENTER:
+            return choice;
+        }
+    }
+}
+
 // Intent: 跳出獲勝視窗
 // Pre: UI物件
 // Post: 回傳真假值
@@ -575,7 +700,7 @@ bool UI::showWin(unsigned color)
     for (short i = WIN_TOP; i < WIN_BOTTOM; i++)              // 印白底
     {
         SetPosition({ WIN_LEFT,i });
-        for (unsigned j = WIN_LEFT; j <= WIN_RIGHT-1; j++)
+        for (unsigned j = WIN_LEFT; j <= WIN_RIGHT - 1; j++)
         {
             cout << " ";
         }
@@ -586,11 +711,11 @@ bool UI::showWin(unsigned color)
     {
         SetPosition({ WIN_LEFT,i });
         cout << "█";
-        SetPosition({ WIN_RIGHT-2,i });
+        SetPosition({ WIN_RIGHT - 2,i });
         cout << "█";
     }
 
-    for (short i = WIN_LEFT; i <= WIN_RIGHT - 1; i+=2)     // 畫橫線
+    for (short i = WIN_LEFT; i <= WIN_RIGHT - 1; i += 2)     // 畫橫線
     {
         SetPosition({ i,WIN_TOP });
         cout << "█";
@@ -608,7 +733,7 @@ bool UI::showWin(unsigned color)
     }
     for (int i = 0; i < 15; i++)
     {
-        SetPosition({ WIN_LEFT + 4,WIN_TOP + 2+i });
+        SetPosition({ WIN_LEFT + 4,WIN_TOP + 2 + i });
         switch (i)
         {
         case 0:
@@ -658,12 +783,12 @@ bool UI::showWin(unsigned color)
             break;
         }
     }
-    
+
     SetColor(0x07);
-    SetPosition({ WIN_RIGHT - 37,WIN_BOTTOM-2 });
-    
+    SetPosition({ WIN_RIGHT - 37,WIN_BOTTOM - 2 });
+
     cout << "開啟新局";
-    
+
     SetColor(0x70);
     cout << "  ";
     cout << "結束遊戲";
@@ -703,4 +828,59 @@ bool UI::showWin(unsigned color)
             return choice;
         }
     }
+}
+
+// Intent: 跳出輸入視窗
+// Pre: UI物件、訊息
+// Post: 回傳字串
+string UI::showInput(string message)
+{
+    const short ALERT_TOP = TOP_BOUND + 9, ALERT_BOTTOM = BOTTOM_BOUND - 7, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
+    SetColor(0x04);      // 設定黑底暗紅字
+
+    for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // 印黑底
+    {
+        SetPosition({ ALERT_LEFT,i });
+        for (unsigned j = ALERT_LEFT; j <= ALERT_RIGHT; j++)
+        {
+            cout << " ";
+        }
+    }
+    for (short i = ALERT_LEFT; i <= ALERT_RIGHT; i++)     // 畫橫線
+    {
+        SetPosition({ i,ALERT_TOP });
+        cout << "═";
+        SetPosition({ i,ALERT_BOTTOM });
+        cout << "═";
+    }
+
+    for (short i = ALERT_TOP; i <= ALERT_BOTTOM; i++)     // 畫直線
+    {
+        SetPosition({ ALERT_LEFT,i });
+        cout << "║";
+        SetPosition({ ALERT_RIGHT - 1,i });
+        cout << "║";
+    }
+
+    SetPosition({ ALERT_LEFT,ALERT_BOTTOM });
+    cout << "╙";
+    SetPosition({ ALERT_RIGHT - 1,ALERT_BOTTOM });
+    cout << "╜";
+    SetPosition({ ALERT_LEFT,ALERT_TOP });
+    cout << "╓";
+    SetPosition({ ALERT_RIGHT - 1,ALERT_TOP });
+    cout << "╖";
+
+    SetColor(0x07);
+    SetPosition({ ALERT_LEFT + 8,ALERT_TOP + 3 });
+    cout << message;
+
+    SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 5 });
+    SetColor(0x70);
+    cout << "           ";
+    SetPosition({ ALERT_LEFT + 7,ALERT_TOP + 5 });
+
+    string userInput;
+    cin >> userInput;
+    return userInput;
 }
