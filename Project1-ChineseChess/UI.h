@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <conio.h>
+#include <direct.h>
 #include "ChessBoard.h"
 #include "Record.h"
 using std::cout;
@@ -20,7 +21,11 @@ public:
     void readKeyBoard();
 
     // 跳出確認視窗
-    bool showAlert(string);
+    bool showAlert(string, bool);
+    bool showAlert(string, bool, string);
+
+    // 跳出輸入視窗
+    string showInput(string);
 
     // 跳出獲勝視窗
     bool showWin(unsigned);
