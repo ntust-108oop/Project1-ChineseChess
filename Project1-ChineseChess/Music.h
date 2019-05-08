@@ -6,20 +6,24 @@
 #include <windows.h>
 #include <thread>
 using namespace std;
+
+struct note
+{
+    DWORD frequency;
+    double duration;
+};
+
 class Music
 {
 public:
-    Music();
     ~Music();
+    // ¿ï¾Ü¦±¥Ø
     static void setMusic(unsigned);
+    static void player(vector<note>, double);
 
 private:
     static bool play;
     static thread* music;
-
-    // ¦±¥Ø
-    static void bee();
-    static void familyMart();
 };
 
 #endif // !MUSIC_H

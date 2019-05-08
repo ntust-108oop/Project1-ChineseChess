@@ -252,6 +252,8 @@ void UI::readKeyBoard()
                 break;
             case 5:                                     // 設定音樂
                 Music::setMusic(1);
+                chessBoard.printThePlane();
+                SetPosition(cursorPosition);
                 break;
             case 6:                                     // 結束遊戲
                 if (showAlert("結束遊戲？", false) == true)
