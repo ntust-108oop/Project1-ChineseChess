@@ -4,6 +4,15 @@
 #include <vector>
 using namespace std;
 
+struct recordForm
+{
+	int chessTypeData;
+	struct position fromPos;
+	struct position toPos;
+	int ifOnly;
+	int eaten;
+};
+
 class Record
 {
 
@@ -12,14 +21,14 @@ public:
     ~Record();
 
 	// 用來儲存資料的
-	static vector<int> chessTypeData;
-    static vector<struct position> fromPos;
-    static vector<struct position> toPos;
-	static vector<int> ifOnly;
+    static vector<struct recordForm> record;
+	static vector<struct recordForm> returnStep;
 
     static void printRecord();
-    static void saveThisStep(int chessType, int fromX, int fromY, int toX, int toY, int only);
+    static void saveThisStep(int chessType, struct position from, struct position to, int only, int eatenChessType);
+	// 移動的棋、是不是唯一的這種棋、被吃得棋(0就是沒被吃)
 	static void clearRecord();
+	static void clearBoardRecord();
 };
 
 #endif // !RECORD_H

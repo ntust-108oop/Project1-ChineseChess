@@ -116,12 +116,42 @@ void UI::readKeyBoard()
                         }
                         else
                         {
-                            Record::saveThisStep(lastChosed->getChessType(), lastChosed->getCurrentPosition().x, lastChosed->getCurrentPosition().y,
-                                chessPosition.x, chessPosition.y, 0);
+							int eatenType = 0, ifOnly = 0, total = 0, soldierPos = 0;
+							if (chessBoard.wholePosition[chessPosition.x][chessPosition.y] != NULL)
+							{
+								eatenType = chessBoard.wholePosition[chessPosition.x][chessPosition.y]->getChessType();
+							}
+							for (int i = 0; i < 10; i++)
+							{
+								if (chessBoard.wholePosition[lastChosed->getCurrentPosition().x][i] != NULL)
+								{
+									if (lastChosed->getChessType() == chessBoard.wholePosition[lastChosed->getCurrentPosition().x][i]->getChessType())
+									{
+										total++;
+										if (i < lastChosed->getCurrentPosition().y) { ifOnly = 2; soldierPos++; }
+										else if (i > lastChosed->getCurrentPosition().y) { ifOnly = 1; }
+									}
+								}
+							}
+
+							if (lastChosed->getChessType() == 7 || lastChosed->getChessType() == 14)
+							{
+								if (total == 1)
+								{
+									ifOnly = 0;
+								}
+								else
+								{
+									ifOnly = total * 10 + soldierPos + 1;
+								}
+							}
+							
+                            Record::saveThisStep(lastChosed->getChessType(), lastChosed->getCurrentPosition(),chessPosition, ifOnly, eatenType);
                             chessBoard.moveTheChess(lastChosed->getCurrentPosition().x,
                                 lastChosed->getCurrentPosition().y,
                                 chessPosition.x,
-                                chessPosition.y);
+                                chessPosition.y
+							);
 
                             lastChosed->setChosen(false);
                             lastChosed = NULL;
