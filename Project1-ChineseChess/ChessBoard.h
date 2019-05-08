@@ -42,7 +42,6 @@ public:
 	void moveTheChess(int fromX, int fromY, int toX, int toY);
     // 改變turn
     void changTurn();
-    void setTurn(int);
 
     // 應該在讀入棋盤時創建好所有chess物件
     void readTheBoard(string fileTxt);

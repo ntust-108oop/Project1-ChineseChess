@@ -82,7 +82,7 @@ void UI::readKeyBoard()
                                 // 重新開始
                                 SetColor(0x07);
                                 chessBoard.readTheBoard("Initial.txt");
-                                chessBoard.setTurn(1);
+                                chessBoard.clearLegalMove();
                                 Record::clearRecord();
                                 system("cls");
                                 printUI();
@@ -102,7 +102,7 @@ void UI::readKeyBoard()
                                 // 重新開始
                                 SetColor(0x07);
                                 chessBoard.readTheBoard("Initial.txt");
-                                chessBoard.setTurn(1);
+                                chessBoard.clearLegalMove();
                                 Record::clearRecord();
                                 system("cls");
                                 printUI();
@@ -161,7 +161,7 @@ void UI::readKeyBoard()
             case 1:                                     // 重新開始
                 SetColor(0x07);
                 chessBoard.readTheBoard("Initial.txt");
-                chessBoard.setTurn(1);
+                chessBoard.clearLegalMove();
                 Record::clearRecord();
                 system("cls");
                 printUI();

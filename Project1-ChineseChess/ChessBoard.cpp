@@ -1606,11 +1606,6 @@ int ChessBoard::getTurn()
     return turns;
 }
 
-void ChessBoard::setTurn(int color)
-{
-    turns = color;
-}
-
 void ChessBoard::clearLegalMove()
 {
     legalMove.clear();
