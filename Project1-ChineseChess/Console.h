@@ -21,8 +21,6 @@ void SetPosition(position);
 position getCursorPosition();
 // 取得游標是否顯示
 void setCursorVisable(bool);
-// 設定視窗
-void setWindow();
 
 // 轉換座標
 position cursorToChess(position);

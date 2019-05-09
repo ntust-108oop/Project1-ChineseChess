@@ -60,13 +60,3 @@ position chessToCursor(position chessPosition)
     cursorPosition.y = chessPosition.y * 2 + TOP_BOUND + 3;
     return cursorPosition;
 }
-
-void setWindow()
-{
-    SMALL_RECT sr;
-    sr.Top = 0;
-    sr.Left = 0;
-    sr.Right = 109;
-    sr.Bottom = 26;
-    SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE),true, &sr);
-}
