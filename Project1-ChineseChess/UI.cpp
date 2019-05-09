@@ -224,14 +224,14 @@ void UI::readKeyBoard()
                 if (showAlert("確定讀取？", false, fileName.insert(0, "檔名：")) == true)
                 {
                     fileName = fileName.substr(6);
-                    //if (chessBoard.readTheBoard(fileName.insert(0, "save/")) == true)
-                    //{
-                    //    // 讀取成功
-                    //}
-                    //else
-                    //{
-                    //    // 讀取失敗
-                    //}
+                    if (chessBoard.readTheBoard(fileName.insert(0, "save/")) == true)
+                    {
+                        // 待補讀取成功
+                    }
+                    else
+                    {
+                        // 待補讀取失敗
+                    }
                 }
                 chessBoard.printThePlane();
                 SetPosition(chessToCursor({ 4, 6 }));
