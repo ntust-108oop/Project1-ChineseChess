@@ -39,7 +39,7 @@ public:
 	// 移動棋盤，偵測到選棋時會呼叫
 	void moveTheChess(int fromX, int fromY, int toX, int toY);
     // 改變turn
-    void changTurn();
+    void changeTurn();
 
     // 應該在讀入棋盤時創建好所有chess物件
     bool readTheBoard(string fileTxt);

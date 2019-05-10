@@ -158,7 +158,7 @@ void UI::readKeyBoard()
                             lastChosed->setChosen(false);
                             lastChosed = NULL;
                             chessBoard.clearLegalMove();
-                            chessBoard.changTurn();
+                            chessBoard.changeTurn();
                             chessBoard.printThePlane();
                             Record::printRecord();
                             if (chessBoard.getTurn() == 0)
@@ -268,17 +268,26 @@ void UI::readKeyBoard()
                 break;
             }
             break;
-        case 'u':
-        case 'U':                                       // 悔棋
+        case 'r':
+        case 'R':                                       // 悔棋
             if (showAlert("確定悔棋？", false) == true)
             {
-                /*
-
-                這裡要 call 悔棋的function
-
-                */
-                // ↓悔棋後印出更新後的棋盤
+				if (Record::record.size() != 0)
+				{
+					chessBoard.moveTheChess(Record::getToPos().x, Record::getToPos().y, Record::getFromPos().x, Record::getFromPos().y);
+					if (Record::getEaten() != 0)
+					{
+						chessBoard.wholePosition[Record::getToPos().x][Record::getToPos().y] = new Chess(Record::getEaten(), Record::getToPos().x, Record::getToPos().y);
+					}
+					Record::regretStep();
+					chessBoard.changeTurn();
+				}
+				else
+				{
+					showAlert("已經沒有更早的步數了", true); // 麻煩幫我檢查一下
+				}
                 chessBoard.printThePlane();
+				Record::printRecord();
             }
             else
             {
@@ -287,17 +296,27 @@ void UI::readKeyBoard()
             }
             SetPosition(cursorPosition);
             break;
-        case 'r':
-        case 'R':                                       // 還原
+        case 'u':
+        case 'U':                                       // 還原
             if (showAlert("確定還原？", false) == true)
             {
-                /*
-
-                這裡要 call 還原的function
-
-                */
-                // ↓還原後印出更新後的棋盤
+				if (Record::returnStep.size() != 0)
+				{
+					chessBoard.moveTheChess(Record::returnStep[Record::returnStep.size() - 1].fromPos.x,
+						Record::returnStep[Record::returnStep.size() - 1].fromPos.y,
+						Record::returnStep[Record::returnStep.size() - 1].toPos.x,
+						Record::returnStep[Record::returnStep.size() - 1].toPos.y
+					);
+					Record::returnRegret();
+					chessBoard.changeTurn();
+				}
+				else
+				{
+					showAlert("已經到最新的步數了", true);
+				}
+				
                 chessBoard.printThePlane();
+				Record::printRecord();
             }
             else
             {
@@ -400,7 +419,7 @@ void UI::printUI()
     SetPosition({ LEFT_BOUND + 6, TOP_BOUND + 1 });           // 印字
     cout << "  戰  況  顯  示  ";
     SetPosition({ ROW_TWO + 6,BOTTOM_BOUND - 8 });
-    cout << "ESC 選單    U 悔棋    R 還原";
+    cout << "ESC 選單    R 悔棋    U 還原";
     SetPosition({ ROW_TWO + 9,BOTTOM_BOUND - 6 });
     cout << "Enter     選取棋子";
     SetPosition({ ROW_TWO + 11,BOTTOM_BOUND - 4 });

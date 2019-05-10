@@ -323,7 +323,7 @@ void ChessBoard::moveTheChess(int fromX, int fromY, int toX, int toY)
     }
 }
 
-void ChessBoard::changTurn()
+void ChessBoard::changeTurn()
 {
     if (turns == 0)
     {

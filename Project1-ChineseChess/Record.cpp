@@ -365,12 +365,14 @@ void Record::printRecord()
 			int move = record[i].toPos.y - record[i].fromPos.y;
 			if (move > 0)
 			{
+				move = 10 - move;
 				std::cout << "°h" << " ";
 			}
 			else if (move < 0)
 			{
 				std::cout << "¶i" << " ";
 				move = -move;
+				move = 10 - move ;
 			}
 			else if (move == 0)
 			{
@@ -440,13 +442,41 @@ void Record::clearRecord()
 void Record::clearBoardRecord()
 {
 	int i = 0;
-	while (i <= 10)
+	while (i < 10)
 	{
-		position printPosition = { leftStart, topStart + (i + 1) * 2 };
+		position printPosition = { leftStart, topStart + (i * 2) };
 		SetPosition(printPosition);
-		std::cout << "             ";
+		std::cout << "                       ";
 		i++;
 	}
 }
 
+void Record::regretStep()
+{
+	struct recordForm temp = record[record.size() - 1];
+	returnStep.push_back(temp);
+	record.pop_back();
+}
+
+position Record::getFromPos()
+{
+	return record[record.size() - 1].fromPos;
+}
+
+position Record::getToPos()
+{
+	return record[record.size() - 1].toPos;
+}
+
+int Record::getEaten()
+{
+	return record[record.size() - 1].eaten;
+}
+
+void Record::returnRegret()
+{
+	struct recordForm temp = returnStep[returnStep.size() - 1];
+	record.push_back(temp);
+	returnStep.pop_back();
+}
 

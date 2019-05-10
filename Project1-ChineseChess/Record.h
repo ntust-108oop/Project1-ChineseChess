@@ -29,6 +29,13 @@ public:
 	// 移動的棋、是不是唯一的這種棋、被吃得棋(0就是沒被吃)
 	static void clearRecord();
 	static void clearBoardRecord();
+
+	static void regretStep();
+	static struct position getFromPos();
+	static struct position getToPos();
+	static int getEaten();
+
+	static void returnRegret();
 };
 
 #endif // !RECORD_H
