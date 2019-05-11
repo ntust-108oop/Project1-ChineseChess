@@ -2,6 +2,8 @@
 
 const short TOP_BOUND = 1, BOTTOM_BOUND = 24, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = 28, ROW_TWO = 66;
 const char ESC = 0x1B, UP = 0x48, DOWN = 0x50, LEFT = 0x4B, RIGHT = 0x4D, ENTER = 0x0D;
+const vector<string> menu = { "繼續遊戲", "重新開始","儲存遊戲","讀取遊戲", "設定提示", "設定音樂", "結束遊戲" };
+const vector<string> song = { "關閉音樂"," 小蜜蜂 ", " FAMIMA "};
 
 UI::UI()
 {
@@ -21,6 +23,7 @@ void UI::readKeyBoard()
     while (1)
     {
         position cursorPosition = getCursorPosition();  // 取得當前游標位置
+        
         switch (key = _getch())
         {
         case UP:                                        // 上
@@ -187,7 +190,7 @@ void UI::readKeyBoard()
             }
             break;
         case ESC:                                      // 選單
-            switch (showMenu())
+            switch (showMenu(menu))
             {
             case 0:                                     // 繼續遊戲
                 chessBoard.printThePlane();
@@ -254,7 +257,8 @@ void UI::readKeyBoard()
                 break;
                 break;
             case 5:                                     // 設定音樂
-                Music::setMusic(1);
+                chessBoard.printThePlane();
+                Music::setMusic(showMenu(song));
                 chessBoard.printThePlane();
                 SetPosition(cursorPosition);
                 break;
@@ -436,9 +440,8 @@ void UI::printUI()
 // Intent: 跳出選單
 // Pre: UI物件
 // Post: 回傳選擇
-int UI::showMenu()
+int UI::showMenu(vector<string> list)
 {
-    vector<string> list = { "繼續遊戲", "重新開始","儲存遊戲","讀取遊戲", "設定提示", "設定音樂", "結束遊戲" };
     const short MENU_TOP = 7, MENU_LEFT = 38, MENU_RIGHT = 57;
     short menuBottom = static_cast<short>(MENU_TOP + list.size() * 2);
     SetColor(0x01);      // 設定黑底藍字
@@ -547,8 +550,6 @@ int UI::showMenu()
             break;
         case ENTER:
             setCursorVisable(true);
-            SetPosition({ ROW_ONE + 3,TOP_BOUND + 3 });
-
             return choice;
             break;
         }

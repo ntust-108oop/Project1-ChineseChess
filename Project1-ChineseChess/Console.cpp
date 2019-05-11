@@ -61,12 +61,24 @@ position chessToCursor(position chessPosition)
     return cursorPosition;
 }
 
-void setWindow()
+void setWindow(int width, int height)
 {
-    SMALL_RECT sr;
+    if (width != 1 && height != 1)
+    {
+        setWindow(1, 1);
+    }
+    _COORD c;
+    c.X = width;
+    c.Y = height;
+    SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), c);
+
+    _SMALL_RECT sr;
     sr.Top = 0;
     sr.Left = 0;
-    sr.Right = 109;
-    sr.Bottom = 26;
+    sr.Right = width-1;
+    sr.Bottom = height-1;
     SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), true, &sr);
+
+    SetConsoleTitle("Chinese Chess");
+    
 }

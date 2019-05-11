@@ -7,11 +7,9 @@ using namespace std;
 
 int main()
 {
-
-    // setWindow(); //調整視窗大小 字體大小等  修改中
+    setWindow(110, 26);
 
 	UI thisGameUI;
-    Music::setMusic(2);
 	
 	thisGameUI.printUI();
 	thisGameUI.chessBoard.printThePlane();

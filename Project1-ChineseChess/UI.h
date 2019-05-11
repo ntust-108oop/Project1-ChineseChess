@@ -34,7 +34,7 @@ public:
     bool showWin(unsigned);
 
     // ¸õ¥X¿ï³æ
-    int showMenu();
+    int showMenu(vector<string>);
 
     ChessBoard chessBoard;
 
