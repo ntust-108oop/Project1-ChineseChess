@@ -36,9 +36,6 @@
     <ClCompile Include="Music.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
-    <ClCompile Include="Marquee.cpp">
-      <Filter>來源檔案</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chess.h">
@@ -57,9 +54,6 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="Music.h">
-      <Filter>標頭檔</Filter>
-    </ClInclude>
-    <ClInclude Include="Marquee.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

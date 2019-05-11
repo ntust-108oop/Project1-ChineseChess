@@ -23,6 +23,7 @@ public:
     void readKeyBoard();
 
     // ¸õ¥X½T»{µøµ¡
+    void showYesAlert(string, short);
     bool showAlert(string, bool);
     bool showAlert(string, bool, string);
 

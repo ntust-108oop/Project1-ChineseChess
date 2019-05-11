@@ -287,7 +287,7 @@ void UI::readKeyBoard()
 				}
 				else
 				{
-					showAlert("已經沒有更早的步數了", true); // 麻煩幫我檢查一下
+					showYesAlert("已經沒有更早的步數了",34);
 				}
                 chessBoard.printThePlane();
 				Record::printRecord();
@@ -315,7 +315,7 @@ void UI::readKeyBoard()
 				}
 				else
 				{
-					showAlert("已經到最新的步數了", true);
+					showYesAlert("已經到最新的步數了",34);
 				}
 				
                 chessBoard.printThePlane();
@@ -560,7 +560,7 @@ int UI::showMenu()
 // Post: 回傳真假值
 bool UI::showAlert(string message, bool defaultChoice)
 {
-    const short ALERT_TOP = TOP_BOUND + 9, ALERT_BOTTOM = BOTTOM_BOUND - 7, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
+    const short ALERT_TOP = TOP_BOUND + 8, ALERT_BOTTOM = ALERT_TOP+6, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
     SetColor(0x04);      // 設定黑底暗紅字
 
     for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // 印黑底
@@ -575,7 +575,7 @@ bool UI::showAlert(string message, bool defaultChoice)
     {
         SetPosition({ i,ALERT_TOP });
         cout << "═";
-        SetPosition({ i,BOTTOM_BOUND - 7 });
+        SetPosition({ i,ALERT_BOTTOM });
         cout << "═";
     }
 
@@ -597,18 +597,18 @@ bool UI::showAlert(string message, bool defaultChoice)
     cout << "╖";
 
     SetColor(0x07);
-    SetPosition({ ALERT_LEFT + 8,ALERT_TOP + 3 });
+    SetPosition({ ALERT_LEFT + 8,ALERT_TOP + 2 });
     cout << message;
 
-    SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 5 });
+    SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 4 });
     cout << "是        否";
     if (defaultChoice == true)
     {
-        SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 5 });
+        SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 4 });
     }
     else
     {
-        SetPosition({ ALERT_LEFT + 16,ALERT_TOP + 5 });
+        SetPosition({ ALERT_LEFT + 16,ALERT_TOP + 4 });
     }
 
     char key;
@@ -623,12 +623,12 @@ bool UI::showAlert(string message, bool defaultChoice)
             if (choice == true)
             {
                 choice = false;
-                SetPosition({ ROW_ONE + 24,ALERT_TOP + 5 });
+                SetPosition({ ALERT_LEFT + 16,ALERT_TOP + 4 });
             }
             else
             {
                 choice = true;
-                SetPosition({ ROW_ONE + 14,ALERT_TOP + 5 });
+                SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 4 });
             }
             break;
         case ENTER:
@@ -718,6 +718,68 @@ bool UI::showAlert(string message, bool defaultChoice, string secondaryMessage)
             break;
         case ENTER:
             return choice;
+        }
+    }
+}
+
+// Intent: 跳出確定視窗
+// Pre: UI物件、訊息、預設為是或否
+// Post: 回傳真假值
+void UI::showYesAlert(string message, short left)
+{
+    const short ALERT_TOP = TOP_BOUND + 8, ALERT_BOTTOM = ALERT_TOP +6, ALERT_LEFT = left, ALERT_RIGHT = left+static_cast<short>(message.length())+8;
+    SetColor(0x04);      // 設定黑底暗紅字
+
+    for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // 印黑底
+    {
+        SetPosition({ ALERT_LEFT,i });
+        for (auto j = ALERT_LEFT; j <= ALERT_RIGHT; j++)
+        {
+            cout << " ";
+        }
+    }
+    for (short i = ALERT_LEFT; i <= ALERT_RIGHT; i++)     // 畫橫線
+    {
+        SetPosition({ i,ALERT_TOP });
+        cout << "═";
+        SetPosition({ i,ALERT_BOTTOM });
+        cout << "═";
+    }
+
+    for (short i = ALERT_TOP; i <= ALERT_BOTTOM; i++)     // 畫直線
+    {
+        SetPosition({ ALERT_LEFT,i });
+        cout << "║";
+        SetPosition({ ALERT_RIGHT - 1,i });
+        cout << "║";
+    }
+
+    SetPosition({ ALERT_LEFT,ALERT_BOTTOM });
+    cout << "╙";
+    SetPosition({ ALERT_RIGHT - 1,ALERT_BOTTOM });
+    cout << "╜";
+    SetPosition({ ALERT_LEFT,ALERT_TOP });
+    cout << "╓";
+    SetPosition({ ALERT_RIGHT - 1,ALERT_TOP });
+    cout << "╖";
+
+    SetColor(0x07);
+    SetPosition({ ALERT_LEFT + 4,ALERT_TOP + 2 });
+    cout << message;
+    SetColor(0x70);
+    SetPosition({ ALERT_LEFT+(ALERT_RIGHT - ALERT_LEFT)/2  -2,ALERT_TOP + 4 });
+    cout << "確定";
+
+    setCursorVisable(false);
+    char key;
+    while (1)
+    {
+        key = _getch();
+        switch (key)
+        {
+        case ENTER:
+            setCursorVisable(true);
+            return;
         }
     }
 }
