@@ -119,6 +119,7 @@
     <ClCompile Include="ChessBoard.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Marquee.cpp" />
     <ClCompile Include="Music.cpp" />
     <ClCompile Include="Record.cpp" />
     <ClCompile Include="UI.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="Chess.h" />
     <ClInclude Include="ChessBoard.h" />
     <ClInclude Include="Console.h" />
+    <ClInclude Include="Marquee.h" />
     <ClInclude Include="Music.h" />
     <ClInclude Include="Record.h" />
     <ClInclude Include="UI.h" />

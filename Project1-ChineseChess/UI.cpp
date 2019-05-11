@@ -86,6 +86,7 @@ void UI::readKeyBoard()
                                 chessBoard.readTheBoard("Initial.txt");
                                 chessBoard.clearLegalMove();
                                 Record::clearRecord();
+								Record::returnStep.clear();
                                 system("cls");
                                 printUI();
                                 chessBoard.printThePlane();
@@ -106,6 +107,7 @@ void UI::readKeyBoard()
                                 chessBoard.readTheBoard("Initial.txt");
                                 chessBoard.clearLegalMove();
                                 Record::clearRecord();
+								Record::returnStep.clear();
                                 system("cls");
                                 printUI();
                                 chessBoard.printThePlane();
@@ -149,6 +151,7 @@ void UI::readKeyBoard()
 							}
 							
                             Record::saveThisStep(lastChosed->getChessType(), lastChosed->getCurrentPosition(),chessPosition, ifOnly, eatenType);
+							Record::returnStep.clear();
                             chessBoard.moveTheChess(lastChosed->getCurrentPosition().x,
                                 lastChosed->getCurrentPosition().y,
                                 chessPosition.x,

@@ -1,5 +1,7 @@
 #include "UI.h"
 #include "Record.h"
+#include "Marquee.h"
+
 
 using namespace std;
 
@@ -10,9 +12,11 @@ int main()
 
 	UI thisGameUI;
     Music::setMusic(2);
+	
 	thisGameUI.printUI();
 	thisGameUI.chessBoard.printThePlane();
 	Record::printRecord();
+	// Marquee::runWord();
 
     thisGameUI.readKeyBoard();
 
