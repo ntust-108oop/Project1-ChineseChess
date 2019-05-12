@@ -571,7 +571,7 @@ bool UI::showAlert(vector<string> message, bool defaultChoice)
     {
         if (message[i].length() > maxLength)
         {
-            maxLength = message[i].length();
+            maxLength = static_cast<int>(message[i].length());
         }
     }
     const short ALERT_TOP = TOP_BOUND + 7, ALERT_BOTTOM = ALERT_TOP+5+static_cast<short>(message.size()), ALERT_LEFT = ROW_ONE+(ROW_TWO-ROW_ONE-maxLength-8)/2+1, ALERT_RIGHT = ALERT_LEFT + static_cast<short>(maxLength)+8;
@@ -580,7 +580,7 @@ bool UI::showAlert(vector<string> message, bool defaultChoice)
     for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // 印黑底
     {
         SetPosition({ ALERT_LEFT,i });
-        for (unsigned j = ALERT_LEFT; j <= ALERT_RIGHT; j++)
+        for (short j = ALERT_LEFT; j <= ALERT_RIGHT; j++)
         {
             cout << " ";
         }
@@ -664,7 +664,7 @@ void UI::showAlert(vector<string> message)
     {
         if (message[i].length() > maxLength)
         {
-            maxLength = message[i].length();
+            maxLength = static_cast<int>(message[i].length());
         }
     }
     const short ALERT_TOP = TOP_BOUND + 7, ALERT_BOTTOM = ALERT_TOP + 5 + static_cast<short>(message.size()), ALERT_LEFT = ROW_ONE + (ROW_TWO - ROW_ONE - maxLength - 8) / 2+1, ALERT_RIGHT = ALERT_LEFT + static_cast<short>(maxLength) + 8-1;
@@ -728,8 +728,8 @@ void UI::showAlert(vector<string> message)
 }
 
 // Intent: 跳出獲勝視窗
-// Pre: UI物件
-// Post: 回傳真假值
+// Pre: UI物件、獲勝方編號
+// Post: 回傳真假值（開啟新局/結束遊戲）
 bool UI::showWin(unsigned color)
 {
     const short WIN_TOP = TOP_BOUND + 1, WIN_BOTTOM = BOTTOM_BOUND - 1, WIN_LEFT = LEFT_BOUND + 24, WIN_RIGHT = RIGHT_BOUND - 25;

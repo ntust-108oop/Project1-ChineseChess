@@ -22,8 +22,10 @@ public:
     // 讀取鍵盤
     void readKeyBoard();
 
-    // 跳出確認視窗
+    // 跳出確定視窗
     void showAlert(vector<string>);
+
+    // 跳出Y/N視窗
     bool showAlert(vector<string>, bool);
 
     // 跳出輸入視窗
