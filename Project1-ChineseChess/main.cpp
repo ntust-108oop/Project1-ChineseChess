@@ -7,7 +7,7 @@ using namespace std;
 
 int main()
 {
-    setWindow(110, 26);
+    setConsole(110, 26);
 
 	UI thisGameUI;
 	

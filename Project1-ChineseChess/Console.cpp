@@ -61,11 +61,14 @@ position chessToCursor(position chessPosition)
     return cursorPosition;
 }
 
-void setWindow(int width, int height)
+void setConsole(int width, int height, int fontSize)
 {
     if (width != 1 && height != 1)
     {
-        setWindow(1, 1);
+        _COORD c;
+        c.X = 1;
+        c.Y = 1;
+        SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), c);
     }
     _COORD c;
     c.X = width;
@@ -78,6 +81,13 @@ void setWindow(int width, int height)
     sr.Right = width-1;
     sr.Bottom = height-1;
     SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), true, &sr);
+
+    PCONSOLE_FONT_INFOEX pfi = new CONSOLE_FONT_INFOEX();
+    pfi->cbSize = sizeof(CONSOLE_FONT_INFOEX);
+    GetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), 0, pfi);
+    pfi->dwFontSize.X = 0;
+    pfi->dwFontSize.Y = fontSize;
+    SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), 0, pfi);
 
     SetConsoleTitle("Chinese Chess");
     
