@@ -23,9 +23,8 @@ public:
     void readKeyBoard();
 
     // 跳出確認視窗
-    void showYesAlert(string, short);
-    bool showAlert(string, bool);
-    bool showAlert(string, bool, string);
+    void showAlert(vector<string>);
+    bool showAlert(vector<string>, bool);
 
     // 跳出輸入視窗
     string showInput(string);

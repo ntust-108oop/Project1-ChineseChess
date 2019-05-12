@@ -11,7 +11,6 @@ UI::UI()
     cueMode = true;
 }
 
-
 // Intent: 讀取鍵盤
 // Pre: UI物件
 // Post: 依據鍵盤傳入的值做出反應
@@ -197,7 +196,7 @@ void UI::readKeyBoard()
                 SetPosition(cursorPosition);
                 break;
             case 1:                                     // 重新開始
-                if (showAlert("重新開始？", false) == true)
+                if (showAlert({ "重新開始？" }, false) == true)
                 {
                     SetColor(0x07);
                     chessBoard.readTheBoard("Initial.txt");
@@ -216,7 +215,8 @@ void UI::readKeyBoard()
                 break;
             case 2:                                     // 儲存遊戲
                 fileName = showInput("輸入檔名");
-                if (showAlert("確定儲存？", false, fileName.insert(0,"檔名：")) == true)
+                chessBoard.printThePlane();
+                if (showAlert({ "確定儲存？", fileName.insert(0, "檔名：") }, false) == true)
                 {
                     fileName = fileName.substr(6);
                     _mkdir("save");
@@ -227,23 +227,26 @@ void UI::readKeyBoard()
                 break;
             case 3:                            
                 fileName = showInput("輸入檔名");       // 讀取遊戲
-                if (showAlert("確定讀取？", false, fileName.insert(0, "檔名：")) == true)
+                chessBoard.printThePlane();
+                
+                if (showAlert({ "確定讀取？", fileName.insert(0, "檔名：") }, false) == true)
                 {
                     fileName = fileName.substr(6);
+                    chessBoard.printThePlane();
                     if (chessBoard.readTheBoard(fileName.insert(0, "save/")) == true)
                     {
-                        // 待補讀取成功
+                        showAlert({ "讀取成功" });
                     }
                     else
                     {
-                        // 待補讀取失敗
+                        showAlert({ "讀取失敗" });
                     }
                 }
                 chessBoard.printThePlane();
                 SetPosition(chessToCursor({ 4, 6 }));
                 break;
             case 4:                                     // 使用提示
-                if (showAlert("使用提示？", true) == true)
+                if (showAlert({ "使用提示？" }, true) == true)
                 {
                     cueMode = true;
                     chessBoard.printThePlane();
@@ -263,7 +266,7 @@ void UI::readKeyBoard()
                 SetPosition(cursorPosition);
                 break;
             case 6:                                     // 結束遊戲
-                if (showAlert("結束遊戲？", false) == true)
+                if (showAlert({ "結束遊戲？" }, false) == true)
                 {
                     return;
                 }
@@ -277,7 +280,7 @@ void UI::readKeyBoard()
             break;
         case 'r':
         case 'R':                                       // 悔棋
-            if (showAlert("確定悔棋？", false) == true)
+            if (showAlert({ "確定悔棋？" }, false) == true)
             {
 				if (Record::record.size() != 0)
 				{
@@ -291,7 +294,8 @@ void UI::readKeyBoard()
 				}
 				else
 				{
-					showYesAlert("已經沒有更早的步數了",34);
+                    chessBoard.printThePlane();
+                    showAlert({ "已經沒有更早的步數了" });
 				}
                 chessBoard.printThePlane();
 				Record::printRecord();
@@ -305,7 +309,7 @@ void UI::readKeyBoard()
             break;
         case 'u':
         case 'U':                                       // 還原
-            if (showAlert("確定還原？", false) == true)
+            if (showAlert({ "確定還原？" }, false) == true)
             {
 				if (Record::returnStep.size() != 0)
 				{
@@ -319,7 +323,8 @@ void UI::readKeyBoard()
 				}
 				else
 				{
-					showYesAlert("已經到最新的步數了",34);
+                    chessBoard.printThePlane();
+                    showAlert({ "已經到最新的步數了" });
 				}
 				
                 chessBoard.printThePlane();
@@ -556,12 +561,20 @@ int UI::showMenu(vector<string> list)
     }
 }
 
-// Intent: 跳出Y/N視窗
-// Pre: UI物件、訊息、預設為是或否
+// Intent: 跳出Y/N視窗(多行)
+// Pre: UI物件、訊息(每行訊息不超過棋盤寬度-8)、預設為是或否
 // Post: 回傳真假值
-bool UI::showAlert(string message, bool defaultChoice)
+bool UI::showAlert(vector<string> message, bool defaultChoice)
 {
-    const short ALERT_TOP = TOP_BOUND + 8, ALERT_BOTTOM = ALERT_TOP+6, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
+    int maxLength = 12;
+    for (auto i = 0; i < message.size(); i++)
+    {
+        if (message[i].length() > maxLength)
+        {
+            maxLength = message[i].length();
+        }
+    }
+    const short ALERT_TOP = TOP_BOUND + 7, ALERT_BOTTOM = ALERT_TOP+5+static_cast<short>(message.size()), ALERT_LEFT = ROW_ONE+(ROW_TWO-ROW_ONE-maxLength-8)/2+1, ALERT_RIGHT = ALERT_LEFT + static_cast<short>(maxLength)+8;
     SetColor(0x04);      // 設定黑底暗紅字
 
     for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // 印黑底
@@ -598,18 +611,21 @@ bool UI::showAlert(string message, bool defaultChoice)
     cout << "╖";
 
     SetColor(0x07);
-    SetPosition({ ALERT_LEFT + 8,ALERT_TOP + 2 });
-    cout << message;
+    for (auto i = 0; i < message.size(); i++)
+    {
+        SetPosition({ ALERT_LEFT + (ALERT_RIGHT-ALERT_LEFT-static_cast<short>(message[i].length())+2)/2,ALERT_TOP + 2 +i });
+        cout << message[i];
+    }
 
-    SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 4 });
+    SetPosition({ ALERT_LEFT+(ALERT_RIGHT - ALERT_LEFT) / 2 - 6,ALERT_BOTTOM - 2 });
     cout << "是        否";
     if (defaultChoice == true)
     {
-        SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 4 });
+        SetPosition({ ALERT_LEFT + (ALERT_RIGHT-ALERT_LEFT)/2 - 6,ALERT_BOTTOM - 2 });
     }
     else
     {
-        SetPosition({ ALERT_LEFT + 16,ALERT_TOP + 4 });
+        SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT) / 2 +4,ALERT_BOTTOM - 2 });
     }
 
     char key;
@@ -624,97 +640,12 @@ bool UI::showAlert(string message, bool defaultChoice)
             if (choice == true)
             {
                 choice = false;
-                SetPosition({ ALERT_LEFT + 16,ALERT_TOP + 4 });
+                SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT) / 2 + 4,ALERT_BOTTOM - 2 });
             }
             else
             {
                 choice = true;
-                SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 4 });
-            }
-            break;
-        case ENTER:
-            return choice;
-        }
-    }
-}
-
-// Intent: 跳出Y/N視窗(兩行)
-// Pre: UI物件、訊息、預設為是或否
-// Post: 回傳真假值
-bool UI::showAlert(string message, bool defaultChoice, string secondaryMessage)
-{
-    const short ALERT_TOP = TOP_BOUND + 9, ALERT_BOTTOM = BOTTOM_BOUND - 6, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
-    SetColor(0x04);      // 設定黑底暗紅字
-
-    for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // 印黑底
-    {
-        SetPosition({ ALERT_LEFT,i });
-        for (unsigned j = ALERT_LEFT; j <= ALERT_RIGHT; j++)
-        {
-            cout << " ";
-        }
-    }
-    for (short i = ALERT_LEFT; i <= ALERT_RIGHT; i++)     // 畫橫線
-    {
-        SetPosition({ i,ALERT_TOP });
-        cout << "═";
-        SetPosition({ i,ALERT_BOTTOM });
-        cout << "═";
-    }
-
-    for (short i = ALERT_TOP; i <= ALERT_BOTTOM; i++)     // 畫直線
-    {
-        SetPosition({ ALERT_LEFT,i });
-        cout << "║";
-        SetPosition({ ALERT_RIGHT - 1,i });
-        cout << "║";
-    }
-
-    SetPosition({ ALERT_LEFT,ALERT_BOTTOM });
-    cout << "╙";
-    SetPosition({ ALERT_RIGHT - 1,ALERT_BOTTOM });
-    cout << "╜";
-    SetPosition({ ALERT_LEFT,ALERT_TOP });
-    cout << "╓";
-    SetPosition({ ALERT_RIGHT - 1,ALERT_TOP });
-    cout << "╖";
-
-    SetColor(0x07);
-    SetPosition({ ALERT_LEFT + 8,ALERT_TOP + 3 });
-    cout << message;
-    SetColor(0x08);
-    SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 4 });
-    cout << secondaryMessage;
-
-    SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 6 });
-    cout << "是        否";
-    if (defaultChoice == true)
-    {
-        SetPosition({ ALERT_LEFT + 6,ALERT_TOP + 6 });
-    }
-    else
-    {
-        SetPosition({ ALERT_LEFT + 16,ALERT_TOP + 6 });
-    }
-
-    char key;
-    bool choice = defaultChoice;
-    while (1)
-    {
-        key = _getch();
-        switch (key)
-        {
-        case LEFT:
-        case RIGHT:
-            if (choice == true)
-            {
-                choice = false;
-                SetPosition({ ROW_ONE + 24,ALERT_TOP + 6 });
-            }
-            else
-            {
-                choice = true;
-                SetPosition({ ROW_ONE + 14,ALERT_TOP + 6 });
+                SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT) / 2 - 6,ALERT_BOTTOM - 2 });
             }
             break;
         case ENTER:
@@ -724,11 +655,19 @@ bool UI::showAlert(string message, bool defaultChoice, string secondaryMessage)
 }
 
 // Intent: 跳出確定視窗
-// Pre: UI物件、訊息、預設為是或否
-// Post: 回傳真假值
-void UI::showYesAlert(string message, short left)
+// Pre: UI物件、訊息(每行不超過棋盤範圍-8)
+// Post: 無
+void UI::showAlert(vector<string> message)
 {
-    const short ALERT_TOP = TOP_BOUND + 8, ALERT_BOTTOM = ALERT_TOP +6, ALERT_LEFT = left, ALERT_RIGHT = left+static_cast<short>(message.length())+8;
+    int maxLength = 12;
+    for (auto i = 0; i < message.size(); i++)
+    {
+        if (message[i].length() > maxLength)
+        {
+            maxLength = message[i].length();
+        }
+    }
+    const short ALERT_TOP = TOP_BOUND + 7, ALERT_BOTTOM = ALERT_TOP + 5 + static_cast<short>(message.size()), ALERT_LEFT = ROW_ONE + (ROW_TWO - ROW_ONE - maxLength - 8) / 2+1, ALERT_RIGHT = ALERT_LEFT + static_cast<short>(maxLength) + 8-1;
     SetColor(0x04);      // 設定黑底暗紅字
 
     for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // 印黑底
@@ -765,10 +704,13 @@ void UI::showYesAlert(string message, short left)
     cout << "╖";
 
     SetColor(0x07);
-    SetPosition({ ALERT_LEFT + 4,ALERT_TOP + 2 });
-    cout << message;
+    for (auto i = 0; i < message.size(); i++)
+    {
+        SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT - static_cast<short>(message[i].length()) + 2) / 2,ALERT_TOP + 2 + i });
+        cout << message[i];
+    }
     SetColor(0x70);
-    SetPosition({ ALERT_LEFT+(ALERT_RIGHT - ALERT_LEFT)/2  -2,ALERT_TOP + 4 });
+    SetPosition({ ALERT_LEFT+(ALERT_RIGHT - ALERT_LEFT)/2-1,ALERT_BOTTOM -2 });
     cout << "確定";
 
     setCursorVisable(false);
@@ -932,7 +874,7 @@ bool UI::showWin(unsigned color)
 // Post: 回傳字串
 string UI::showInput(string message)
 {
-    const short ALERT_TOP = TOP_BOUND + 9, ALERT_BOTTOM = BOTTOM_BOUND - 7, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
+    const short ALERT_TOP = TOP_BOUND + 7, ALERT_BOTTOM = BOTTOM_BOUND - 7, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
     SetColor(0x04);      // 設定黑底暗紅字
 
     for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // 印黑底
