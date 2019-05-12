@@ -3,7 +3,7 @@
 const short TOP_BOUND = 1, BOTTOM_BOUND = 24, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = 28, ROW_TWO = 66;
 const char ESC = 0x1B, UP = 0x48, DOWN = 0x50, LEFT = 0x4B, RIGHT = 0x4D, ENTER = 0x0D;
 const vector<string> menu = { "繼續遊戲", "重新開始","儲存遊戲","讀取遊戲", "設定提示", "設定音樂", "結束遊戲" };
-const vector<string> song = { "關閉音樂"," 小蜜蜂 ", " FAMIMA "};
+const vector<string> song = { "關閉音樂"," 小蜜蜂 ", " FAMIMA ", " MAYOI  "};
 
 UI::UI()
 {

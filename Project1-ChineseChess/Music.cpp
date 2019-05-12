@@ -2,7 +2,7 @@
 
 // ­µ¦W¡GÀW²v
 const DWORD C = 262, Cs = 277, Db = 277, D = 294, Ds = 311, Eb = 311, E = 330, F = 349, Fs = 370,
-Gb = 370, G = 392, Gs = 415, Ab = 415, A = 440, As = 466, Bb = 466, B = 494;
+Gb = 370, G = 392, Gs = 415, Ab = 415, A = 440, As = 466, Bb = 466, B = 494, X = 0;
 double DELAY = 60000;
 
 bool Music::play = true;
@@ -26,7 +26,11 @@ const vector<note> BEE = { {G,1},{E,1},{E,2},{F,1},{D,1},{D,2},
               {E,0.5},{C,0.5},{G / 2,0.5},{C,0.5},{D,0.5},{G,1.5},
               {D,0.5},{E,0.5},{D,0.5},{G / 2,0.5},{C,2},
               {E,0.5},{C,0.5},{G / 2,0.5},{C,0.5},{D,0.5},{G,1.5},
-              {D,0.5},{E,0.5},{D,0.5},{G / 2,0.5},{E,0.5},{C,0.5},{D,0.5},{E,0.5} };
+              {D,0.5},{E,0.5},{D,0.5},{G / 2,0.5},{E,0.5},{C,0.5},{D,0.5},{E,0.5} },
+    MAYOI = { {X,3},{E,0.5},{F,0.5},{G,2},{G,2},{C,2},{E,1},{D,1},{C,1},{B/2,1},{C,1},{D,1},{C,4},
+                      {E,0.5},{F,0.5},{G,2},{G,2},{C,2},{E,1},{D,1},{C,1},{D,1.5},{G,1.5},{E,4},
+                      {E,0.5},{F,0.5},{G,2},{G,2},{C,2},{E,1},{D,1},{C,1},{B / 2,1},{C,1},{D,1},{C,4},
+                      {E,0.5},{F,0.5},{G,2},{G,2},{C * 2,2},{G,1},{F,1},{E,1},{D,1},{C,1},{B/2,1},{C,4} };
 
 
 Music::~Music()
@@ -50,7 +54,7 @@ void Music::setMusic(unsigned choice)
     }
     if (choice != 0)
     {
-        
+
         play = true;
         switch (choice)
         {
@@ -59,6 +63,9 @@ void Music::setMusic(unsigned choice)
             break;
         case 2:
             music = new thread(bind(&player, FAMILY_MART, 108));
+            break;
+        case 3:
+            music = new thread(bind(&player, MAYOI, 180));
             break;
         }
     }
@@ -72,7 +79,15 @@ void Music::player(vector<note> song, double speed)
         {
             if (play)
             {
-                Beep(n.frequency, static_cast<DWORD>(n.duration*(DELAY / speed)));
+                if (n.frequency == 0)
+                {
+                    Sleep(static_cast<DWORD>(n.duration));
+                }
+                else
+                {
+                    Beep(n.frequency, static_cast<DWORD>(n.duration*(DELAY / speed)));
+                }
+
             }
 
         }
