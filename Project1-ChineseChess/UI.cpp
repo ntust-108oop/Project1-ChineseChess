@@ -561,6 +561,9 @@ int UI::showMenu(vector<string> list)
     }
 }
 
+//Intent: 印開始畫面
+//Per: 起始畫面的文字檔
+//Post: None
 void UI::printStartScreen(string s)
 {
 	fstream file(s);
@@ -569,9 +572,9 @@ void UI::printStartScreen(string s)
 		string str, tmp;
 		for(int i=0;i<27;i++)
 		{
+			str += '\n';
 			getline(file, tmp, '\n');
 			str += tmp;
-			str += '\n';
 		}
 		SetColor(0xe);
 		cout << str;
