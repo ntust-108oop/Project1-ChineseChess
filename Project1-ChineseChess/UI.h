@@ -1,6 +1,7 @@
 #ifndef UI_H
 #define UI_H
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <conio.h>
@@ -36,6 +37,9 @@ public:
 
     // 跳出選單
     int showMenu(vector<string>);
+
+	//印起始畫面
+	void printStartScreen(string);
 
     ChessBoard chessBoard;
 

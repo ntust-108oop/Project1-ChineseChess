@@ -11,6 +11,7 @@ int main()
 
 	UI thisGameUI;
     Music::setMusic(3);
+	thisGameUI.printStartScreen("start.txt");
 	thisGameUI.printUI();
 	thisGameUI.chessBoard.printThePlane();
 	Record::printRecord();

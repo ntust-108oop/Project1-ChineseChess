@@ -561,6 +561,26 @@ int UI::showMenu(vector<string> list)
     }
 }
 
+void UI::printStartScreen(string s)
+{
+	fstream file(s);
+	if (file.is_open())
+	{
+		string str, tmp;
+		for(int i=0;i<27;i++)
+		{
+			getline(file, tmp, '\n');
+			str += tmp;
+			str += '\n';
+		}
+		SetColor(0xe);
+		cout << str;
+	}
+	else cout << "ERROR";
+	system("pause>nul");
+	system("CLS");
+}
+
 // Intent: 跳出Y/N視窗(多行)
 // Pre: UI物件、訊息(每行訊息不超過棋盤寬度-8)、預設為是或否
 // Post: 回傳真假值
