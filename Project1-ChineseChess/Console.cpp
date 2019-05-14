@@ -1,6 +1,6 @@
 #include "Console.h"
 
-const short TOP_BOUND = 1, ROW_ONE = 28;
+const short TOP_BOUND = 1, BOTTOM_BOUND = TOP_BOUND + 23, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = LEFT_BOUND + 27, ROW_TWO = ROW_ONE + 38;
 
 // Intent: ³]©wÃC¦â
 // Pre: ÃC¦â½s¸¹¡]0x©³¦r¡F0¶Â 3ºñ 4·t¬õ 7«G¦Ç 8·t¦Ç C«G¬õ D¯»¬õ F¥Õ ex. 0x07¶Â©³«G¦Ç¦r¡^
