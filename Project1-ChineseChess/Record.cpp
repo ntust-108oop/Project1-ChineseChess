@@ -7,7 +7,7 @@
 vector<struct recordForm> Record::record;
 vector<struct recordForm> Record::returnStep;
 
-short leftStart = 5, topStart = 4;
+short leftStart = 5, topStart = 5;
 
 Record::Record()
 {

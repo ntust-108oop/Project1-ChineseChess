@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-    setConsole(110, 30, 18);
+    setConsole(110, 29, 18);
 
 	UI thisGameUI;
 	thisGameUI.printStartScreen("start.txt");
