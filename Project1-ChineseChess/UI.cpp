@@ -628,6 +628,16 @@ void UI::printStartScreen(string s)
 	if (file.is_open())
 	{
 		string tmp;
+		string hi[7] = { 
+			"HH    HH   IIIIIIII",
+			"HH    HH      II       !!",
+			"HH    HH      II       !!",
+			"HHHHHHHH      II       !!",
+			"HH    HH      II",
+			"HH    HH      II       !!",
+			"HH    HH   IIIIIIII" };
+		string author[5] = { "製作人員:","B10532005 陳亮豪","B10532007 陳昱展","B10632026 吳苡瑄","B10632032 黃千綾" };
+		string notation = "Please press any key to continue                     ";
 		//文字圖有23列文字，細部處理，調整顏色輸出
 		for (int i = 0; i < 23; i++)
 		{
@@ -670,8 +680,71 @@ void UI::printStartScreen(string s)
 		}
 		SetColor();//將顏色調回預設
 		file.close();
+		setCursorVisable(false);
 
+		//印Hi
+		Sleep(500);
+		for (int i = 0; i < 7; i++)
+		{
+			SetPosition({ 78,7+i });
+			for (char j : hi[i])
+			{
+				if (j != ' ')SetColor(0x77);
+				else SetColor();
+				cout << " ";
+			}
+		}
+		Sleep(350);
+		SetColor();//將顏色調回預設
+		for (int i = 0; i < 7; i++)
+		{
+			SetPosition({ 78,7 + i });
+			for (char j : hi[i]) cout << " ";
+		}
+		Sleep(350);
+		for (int i = 0; i < 7; i++)
+		{
+			SetPosition({ 78,7 + i });
+			for (char j : hi[i])
+			{
+				if (j != ' ')SetColor(0x77);
+				else SetColor();
+				cout << " ";
+			}
+		}
+		Sleep(70);
+		SetColor();//將顏色調回預設
 
+		//印組員名單
+		Sleep(700);
+		for (int i = 0; i < 5; i++)
+		{
+			if (i == 0 || i == 1 || i == 2) 
+				SetPosition({ 70,17 + 2 * i });
+			if (i == 3 || i == 4) 
+				SetPosition({ 90,17 + 2 * (i-2) });
+			setCursorVisable(true);
+			for (char j : author[i])
+			{
+				cout << j;
+				Sleep(70);
+			}
+			setCursorVisable(false);
+		}
+
+		//印請按任意建繼續
+		for (int i = 0; i < 18; i++)
+		{
+			SetPosition({ 87-i,24 });
+			cout << notation;
+			Sleep(40);
+		}
+		SetPosition({ 103,24 });
+		for (int i = 0; i < 6; i++)
+		{
+			Sleep(250);
+			cout << ".";
+		}
 	}
 	else cout << "ERROR";
 	std::system("pause>nul");
