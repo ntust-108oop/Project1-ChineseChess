@@ -129,7 +129,14 @@
     <ClInclude Include="Console.h" />
     <ClInclude Include="Music.h" />
     <ClInclude Include="Record.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="UI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Project1-ChineseChess.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
