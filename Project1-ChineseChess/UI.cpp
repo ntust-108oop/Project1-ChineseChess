@@ -188,9 +188,12 @@ void UI::readKeyBoard()
                                 SetPosition(chessToCursor({ 4, 3 }));
 								for (int i = 0; i < chessBoard.legalMove.size(); i++)
 								{
-									if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 8)
+									if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y] != NULL)
 									{
-										showAlert({ "紅方被將軍了!" });
+										if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 8)
+										{
+											showAlert({ "紅方被將軍了!" });
+										}
 									}
 								}
                             }
@@ -199,9 +202,12 @@ void UI::readKeyBoard()
                                 SetPosition(chessToCursor({ 4, 6 }));
 								for (int i = 0; i < chessBoard.legalMove.size(); i++)
 								{
-									if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 1)
+									if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y] != NULL)
 									{
-										showAlert({ "黑方被將軍了!" });
+										if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 1)
+										{
+											showAlert({ "黑方被將軍了!" });
+										}
 									}
 								}
                             }
