@@ -1,6 +1,6 @@
 ﻿#include "UI.h"
 
-const short TOP_BOUND = 1, BOTTOM_BOUND = 24, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = 28, ROW_TWO = 66;
+const short TOP_BOUND = 1, BOTTOM_BOUND = TOP_BOUND+23, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = LEFT_BOUND+27, ROW_TWO = ROW_ONE+38;
 const char ESC = 0x1B, UP = 0x48, DOWN = 0x50, LEFT = 0x4B, RIGHT = 0x4D, ENTER = 0x0D;
 const vector<string> menu = { "繼續遊戲", "重新開始","儲存遊戲","讀取遊戲", "設定提示", "設定音樂", "結束遊戲" };
 const vector<string> song = { "關閉音樂"," 小蜜蜂 ", " FAMIMA ", " MAYOI  "};
@@ -379,51 +379,39 @@ void UI::readKeyBoard()
 void UI::printUI()
 {
     SetColor(0x07);
-    for (short i = 0; i < BOTTOM_BOUND - 1; i++)            // 印直線
+    for (short i = TOP_BOUND; i <= BOTTOM_BOUND -1; i++)            // 印直線
     {
-        SetPosition({ LEFT_BOUND, TOP_BOUND + i });             // 最左兩條
+        SetPosition({ LEFT_BOUND, i });             // 最左兩條
         cout << "║ ║";
-        SetPosition({ ROW_ONE, TOP_BOUND + i });                // 棋盤左邊
+        SetPosition({ ROW_ONE, i });                // 棋盤左邊
         cout << "║";
-        SetPosition({ ROW_TWO, TOP_BOUND + i });                // 棋盤右邊
+        SetPosition({ ROW_TWO, i });                // 棋盤右邊
         cout << "║";
-        SetPosition({ RIGHT_BOUND - 2, TOP_BOUND + i });        // 最右兩條
+        SetPosition({ RIGHT_BOUND - 2, i });        // 最右兩條
         cout << "║ ║";
     }
 
-    SetPosition({ LEFT_BOUND, TOP_BOUND });                 // 印橫線
-    for (short i = 0; i < RIGHT_BOUND - 1; i++)                 // 最上
+    for (short i = LEFT_BOUND+1; i <= RIGHT_BOUND -1; i++)         // 印橫線        
     {
+        SetPosition({ i, TOP_BOUND });// 最上
+        cout << "═";
+        SetPosition({ i, BOTTOM_BOUND });// 最下
         cout << "═";
     }
-    SetPosition({ LEFT_BOUND, BOTTOM_BOUND });                  // 最下
-    for (short i = 0; i < RIGHT_BOUND - 1; i++)
+    for (short i = LEFT_BOUND + 2; i <= ROW_ONE - 1; i++)
     {
+        SetPosition({ i, TOP_BOUND + 1 });             // 左欄的上邊
+        cout << "═";
+        SetPosition({ i, BOTTOM_BOUND - 1 });             // 左欄的上邊
         cout << "═";
     }
-    SetPosition({ LEFT_BOUND + 2, TOP_BOUND + 1 });             // 左欄的上邊
-    for (short i = 0; i < ROW_ONE - 2; i++)
+    for (short i = ROW_TWO; i <= RIGHT_BOUND - 2; i++)
     {
+        SetPosition({ i, TOP_BOUND + 1 });             // 右欄的上邊
         cout << "═";
-    }
-    SetPosition({ LEFT_BOUND + 2, BOTTOM_BOUND - 1 });              // 左欄的下邊
-    for (short i = 0; i < ROW_ONE - 2; i++)
-    {
+        SetPosition({ i, BOTTOM_BOUND - 1 });             // 右欄的上邊
         cout << "═";
-    }
-    SetPosition({ ROW_TWO, TOP_BOUND + 1 });             // 右欄的上邊
-    for (short i = 0; i < RIGHT_BOUND - 2 - ROW_TWO; i++)
-    {
-        cout << "═";
-    }
-    SetPosition({ ROW_TWO + 1, BOTTOM_BOUND - 1 });          // 右欄的下邊
-    for (short i = 0; i < RIGHT_BOUND - 2 - ROW_TWO; i++)
-    {
-        cout << "═";
-    }
-    SetPosition({ ROW_TWO, BOTTOM_BOUND - 9 });                  // 右欄的分隔線
-    for (short i = 0; i < RIGHT_BOUND - ROW_TWO - 1; i++)
-    {
+        SetPosition({ i, BOTTOM_BOUND - 9 });           // 右欄的分隔線
         cout << "═";
     }
 
@@ -479,11 +467,11 @@ void UI::printUI()
 // Post: 回傳選擇
 int UI::showMenu(vector<string> list)
 {
-    const short MENU_TOP = 7, MENU_LEFT = 38, MENU_RIGHT = 57;
+    const short MENU_TOP = TOP_BOUND + (BOTTOM_BOUND-TOP_BOUND-static_cast<short>(list.size()*2))/2, MENU_LEFT = 38, MENU_RIGHT = 57;
     short menuBottom = static_cast<short>(MENU_TOP + list.size() * 2);
-    SetColor(0x01);      // 設定黑底藍字
+    SetColor(0x03);      // 設定黑底亮藍字
 
-    for (short i = MENU_TOP; i < menuBottom; i++)              // 印黑底
+    for (short i = MENU_TOP; i <= menuBottom; i++)              // 印黑底
     {
         SetPosition({ MENU_LEFT,i });
         for (short j = MENU_LEFT; j <= MENU_RIGHT; j++)
@@ -491,7 +479,7 @@ int UI::showMenu(vector<string> list)
             cout << " ";
         }
     }
-    for (short i = MENU_LEFT; i <= MENU_RIGHT; i++)     // 畫橫線
+    for (short i = MENU_LEFT; i <= MENU_RIGHT-1; i++)     // 畫橫線
     {
         SetPosition({ i,MENU_TOP });
         cout << "═";
@@ -629,8 +617,9 @@ bool UI::showAlert(vector<string> message, bool defaultChoice)
             maxLength = static_cast<int>(message[i].length());
         }
     }
-    const short ALERT_TOP = TOP_BOUND + 7, ALERT_BOTTOM = ALERT_TOP+5+static_cast<short>(message.size()), ALERT_LEFT = ROW_ONE+(ROW_TWO-ROW_ONE-maxLength-8)/2+1, ALERT_RIGHT = ALERT_LEFT + static_cast<short>(maxLength)+8;
-    SetColor(0x04);      // 設定黑底暗紅字
+    const short ALERT_TOP = TOP_BOUND + 7, ALERT_BOTTOM = ALERT_TOP+5+static_cast<short>(message.size()),
+                ALERT_LEFT = ROW_ONE+(ROW_TWO-ROW_ONE-maxLength-8)/2+1, ALERT_RIGHT = ALERT_LEFT + static_cast<short>(maxLength)+7;
+    SetColor(0x0C);      // 設定黑底亮紅字
 
     for (short i = ALERT_TOP; i < ALERT_BOTTOM; i++)              // 印黑底
     {
@@ -640,7 +629,7 @@ bool UI::showAlert(vector<string> message, bool defaultChoice)
             cout << " ";
         }
     }
-    for (short i = ALERT_LEFT; i <= ALERT_RIGHT; i++)     // 畫橫線
+    for (short i = ALERT_LEFT; i <= ALERT_RIGHT-1; i++)     // 畫橫線
     {
         SetPosition({ i,ALERT_TOP });
         cout << "═";
@@ -668,19 +657,19 @@ bool UI::showAlert(vector<string> message, bool defaultChoice)
     SetColor(0x07);
     for (auto i = 0; i < message.size(); i++)
     {
-        SetPosition({ ALERT_LEFT + (ALERT_RIGHT-ALERT_LEFT-static_cast<short>(message[i].length())+2)/2,ALERT_TOP + 2 +i });
+        SetPosition({ ALERT_LEFT + (ALERT_RIGHT-ALERT_LEFT-static_cast<short>(message[i].length())+2)/2+1,ALERT_TOP + 2 +i });
         cout << message[i];
     }
 
-    SetPosition({ ALERT_LEFT+(ALERT_RIGHT - ALERT_LEFT) / 2 - 6,ALERT_BOTTOM - 2 });
+    SetPosition({ ALERT_LEFT+(ALERT_RIGHT - ALERT_LEFT) / 2 - 5,ALERT_BOTTOM - 2 });
     cout << "是        否";
     if (defaultChoice == true)
     {
-        SetPosition({ ALERT_LEFT + (ALERT_RIGHT-ALERT_LEFT)/2 - 6,ALERT_BOTTOM - 2 });
+        SetPosition({ ALERT_LEFT + (ALERT_RIGHT-ALERT_LEFT)/2 - 5,ALERT_BOTTOM - 2 });
     }
     else
     {
-        SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT) / 2 +4,ALERT_BOTTOM - 2 });
+        SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT) / 2 +5,ALERT_BOTTOM - 2 });
     }
 
     char key;
@@ -695,12 +684,12 @@ bool UI::showAlert(vector<string> message, bool defaultChoice)
             if (choice == true)
             {
                 choice = false;
-                SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT) / 2 + 4,ALERT_BOTTOM - 2 });
+                SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT) / 2 + 5,ALERT_BOTTOM - 2 });
             }
             else
             {
                 choice = true;
-                SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT) / 2 - 6,ALERT_BOTTOM - 2 });
+                SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT) / 2 - 5,ALERT_BOTTOM - 2 });
             }
             break;
         case ENTER:
