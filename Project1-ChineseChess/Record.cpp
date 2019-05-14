@@ -18,6 +18,7 @@ Record::~Record()
 {
 }
 
+// 印出紀錄
 void Record::printRecord()
 {
 	int count = 0;
@@ -308,7 +309,8 @@ void Record::printRecord()
 			}
 		}
 
-		// 後面兩個字
+		// 後面兩個字，所有情況都一樣
+		// 分成紅黑兩種狀況而已
 		if (record[i].chessTypeData <= 7)
 		{
 			int move = record[i].toPos.y - record[i].fromPos.y;
@@ -421,6 +423,10 @@ void Record::printRecord()
 	
 }
 
+// 把資料存到紀錄中，每次移動都要call
+// only = 0 ，表示他是普通狀況
+// only != 0 ，表示他不是這列的唯一一個自己棋種的棋，1代表是行數較小的那個，2就是是較大的那個
+// 卒兵會額外處理，他們的ifOnly是兩位數十位數這列總共的同種數，個位數是自己的相對位置是第幾個
 void Record::saveThisStep(int chessType, struct position from, struct position to, int only, int eatenChessType)
 {
 	struct recordForm temp;
@@ -434,11 +440,13 @@ void Record::saveThisStep(int chessType, struct position from, struct position t
 	record.push_back(temp);
 }
 
+// 把紀錄清空
 void Record::clearRecord()
 {
 	record.clear();
 }
 
+// 把紀錄的板子清空，以便重印(才不會有殘留物)
 void Record::clearBoardRecord()
 {
 	int i = 0;
@@ -451,6 +459,7 @@ void Record::clearBoardRecord()
 	}
 }
 
+// 悔棋，悔棋的話就把那步放到還原陣列裡面然後把紀錄pop掉
 void Record::regretStep()
 {
 	struct recordForm temp = record[record.size() - 1];
@@ -473,6 +482,7 @@ int Record::getEaten()
 	return record[record.size() - 1].eaten;
 }
 
+// 想要還原時就從還原陣列的底層拿資料
 void Record::returnRegret()
 {
 	struct recordForm temp = returnStep[returnStep.size() - 1];
