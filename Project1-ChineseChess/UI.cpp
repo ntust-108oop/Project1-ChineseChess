@@ -92,8 +92,7 @@ void UI::readKeyBoard()
 								Record::returnStep.clear();
                                 system("cls");
                                 printUI();
-                                chessBoard.printThePlane();
-                                SetPosition(chessToCursor({ 4, 6 }));
+                                cursorPosition = chessToCursor({ 4,6 });
                             }
                             else
                             {
@@ -113,8 +112,7 @@ void UI::readKeyBoard()
 								Record::returnStep.clear();
                                 system("cls");
                                 printUI();
-                                chessBoard.printThePlane();
-                                SetPosition(chessToCursor({ 4, 6 }));
+                                cursorPosition = chessToCursor({ 4,6 });
                             }
                             else
                             {
@@ -161,16 +159,13 @@ void UI::readKeyBoard()
                                 chessPosition.y
 							);
 
-
-
                             lastChosed->setChosen(false);
                             lastChosed = NULL;
                             chessBoard.clearLegalMove();
                             chessBoard.changeTurn();
                             chessBoard.printThePlane();
                             Record::printRecord();
-                            
-							
+
 							// 檢查有沒有被將軍
 							for (int i = 0; i < 9; i++)
 							{
@@ -221,8 +216,8 @@ void UI::readKeyBoard()
                     lastChosed->setChosen(false);
                     lastChosed = NULL;
                     chessBoard.clearLegalMove();
-                    chessBoard.printThePlane();
                 }
+                chessBoard.printThePlane();
                 SetPosition(cursorPosition);
             }
             break;
@@ -294,12 +289,15 @@ void UI::readKeyBoard()
                     cueMode = false;
                     chessBoard.printThePlane();
                 }
+                printSetting();
                 SetPosition(cursorPosition);
                 break;
                 break;
             case 5:                                     // 設定音樂
                 chessBoard.printThePlane();
-                Music::setMusic(showMenu(song));
+                music = showMenu(song);
+                Music::setMusic(music);
+                printSetting();
                 chessBoard.printThePlane();
                 SetPosition(cursorPosition);
                 break;
@@ -340,7 +338,6 @@ void UI::readKeyBoard()
             }
             else
             {
-                // 不悔棋就直接印原本棋盤把alert蓋掉
                 chessBoard.printThePlane();
             }
             SetPosition(cursorPosition);
@@ -466,6 +463,8 @@ void UI::printUI()
     cout << "←  →  方向鍵控制游標";
     SetPosition({ ROW_TWO + 11,BOTTOM_BOUND - 2 });
     cout << "↓";
+
+    printSetting();
 }
 
 // Intent: 跳出選單
@@ -972,4 +971,35 @@ string UI::showInput(string message)
     string userInput;
     cin >> userInput;
     return userInput;
+}
+
+void UI::printSetting()
+{
+    SetColor(0x08);
+    SetPosition({ROW_TWO+10,TOP_BOUND+10});
+    cout << "遊戲提示：";
+    if (cueMode == 0)
+    {
+       SetColor(0x07);
+        cout << " ＯＦＦ ";
+    }
+    else
+    { 
+        SetColor(0x70);
+        cout << "  ＯＮ  ";
+    }
+
+    SetColor(0x08);
+    SetPosition({ ROW_TWO+10,TOP_BOUND + 12 });
+    cout << "背景音樂：";
+    switch (music)
+    {
+    case 0:
+        SetColor(0x07);
+        cout << " ＯＦＦ ";
+        break;
+    default:
+        SetColor(0x70);
+        cout << song[music];
+    }
 }

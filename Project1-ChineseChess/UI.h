@@ -18,10 +18,20 @@ public:
     UI();
 
     // 印出遊戲畫面
-    static void printUI();
+    void printUI();
 
     // 讀取鍵盤
     void readKeyBoard();
+
+	// 印起始畫面
+	void printStartScreen(string);
+
+    ChessBoard chessBoard;
+
+private:
+    
+    // 印出setting
+    void printSetting();
 
     // 跳出確定視窗
     void showAlert(vector<string>);
@@ -38,14 +48,9 @@ public:
     // 跳出選單
     int showMenu(vector<string>);
 
-	//印起始畫面
-	void printStartScreen(string);
-
-    ChessBoard chessBoard;
-
-private:
     Chess* lastChosed;
     bool cueMode;
+    unsigned music;
 };
 
 #endif // !UI_H
