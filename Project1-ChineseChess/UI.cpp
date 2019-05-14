@@ -591,15 +591,16 @@ int UI::showMenu(vector<string> list)
 //Post: None
 void UI::printStartScreen(string s)
 {
+	
 	fstream file(s);
 	if (file.is_open())
 	{
-		string str, tmp;
-		for(int i=0;i<27;i++)
+		string str="\n\n", tmp;
+		for(int i=0;i<23;i++)
 		{
-			str += '\n';
+			SetPosition({ 6,3+i });
 			getline(file, tmp, '\n');
-			str += tmp;
+			cout << tmp << "\n";
 		}
 		SetColor(0xe);
 		cout << str;
