@@ -78,6 +78,7 @@ void UI::readKeyBoard()
                     if (chessPosition == chessBoard.legalMove[i])
                     {
                         inLegalMove = true;
+
                         if (chessBoard.getChess(chessPosition) != NULL && chessBoard.getChess(chessPosition)->getChessType() == 1) // 吃到將
                         {
                             lastChosed = NULL;
@@ -160,20 +161,51 @@ void UI::readKeyBoard()
                                 chessPosition.y
 							);
 
+
+
                             lastChosed->setChosen(false);
                             lastChosed = NULL;
                             chessBoard.clearLegalMove();
                             chessBoard.changeTurn();
                             chessBoard.printThePlane();
                             Record::printRecord();
-                            if (chessBoard.getTurn() == 0)
+                            
+							
+							// 檢查有沒有被將軍
+							for (int i = 0; i < 9; i++)
+							{
+								for (int j = 0; j < 10; j++)
+								{
+									if (chessBoard.wholePosition[i][j] != NULL)
+									{
+										chessBoard.manageLegalMove(i, j);
+									}
+								}
+							}
+							
+							if (chessBoard.getTurn() == 0)
                             {
                                 SetPosition(chessToCursor({ 4, 3 }));
+								for (int i = 0; i < chessBoard.legalMove.size(); i++)
+								{
+									if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 8)
+									{
+										showAlert({ "紅方被將軍了!" });
+									}
+								}
                             }
                             else
                             {
                                 SetPosition(chessToCursor({ 4, 6 }));
+								for (int i = 0; i < chessBoard.legalMove.size(); i++)
+								{
+									if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 1)
+									{
+										showAlert({ "黑方被將軍了!" });
+									}
+								}
                             }
+							chessBoard.clearLegalMove();						
                         }
                         break;
                     }
