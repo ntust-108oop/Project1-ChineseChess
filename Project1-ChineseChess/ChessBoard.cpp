@@ -55,7 +55,9 @@ ChessBoard::ChessBoard(string fileTxt)
     readTheBoard(fileTxt);
 }
 
-// 印出棋盤框架
+// Intent: 印出棋盤框架
+// Pre: NONE
+// Post: NONE
 void ChessBoard::printEmptyPlane()
 { 
 	// 設定白底黑字
@@ -146,7 +148,9 @@ void ChessBoard::printEmptyPlane()
     SetColor(0x07);
 }
 
-// 印出棋盤中內容
+// Intent: 印出棋盤中內容
+// Pre: NONE
+// Post: NONE
 void ChessBoard::printThePlane()
 {
     printEmptyPlane();
@@ -219,7 +223,9 @@ void ChessBoard::printThePlane()
     printTurn();
 }
 
-// 印出選了棋以後的變化(包含legalmove，所以拿出來分開處理了)
+// Intent: 印出選了棋以後的變化(包含legalmove，所以拿出來分開處理了)
+// Pre: NONE
+// Post: NONE
 void ChessBoard::printChosenPlane()
 {
 	// 把leagalmove的底色改變
@@ -294,7 +300,9 @@ void ChessBoard::printChosenPlane()
 
 }
 
-// 印出現在下棋方的提示
+// Intent: 印出現在下棋方的提示
+// Pre: NONE
+// Post: NONE
 void ChessBoard::printTurn()
 {
     SetColor(0x03);
@@ -315,7 +323,9 @@ void ChessBoard::printTurn()
 
 }
 
-// 移動棋，參數為移動前位置和移動後
+// Intent: 移動棋的函數
+// Pre: 參數為移動前位置和移動後位置
+// Post: NONE
 void ChessBoard::moveTheChess(int fromX, int fromY, int toX, int toY)
 {
     if (wholePosition[toX][toY] != NULL)	// 若目標上有棋，就把原本的棋刪掉
@@ -333,7 +343,9 @@ void ChessBoard::moveTheChess(int fromX, int fromY, int toX, int toY)
     }
 }
 
-// 換人下棋
+// Intent: 換人下棋
+// Pre: NONE
+// Post: NONE
 void ChessBoard::changeTurn()
 {
     if (turns == 0)
@@ -346,6 +358,9 @@ void ChessBoard::changeTurn()
     }
 }
 
+// Intent: 讀盤
+// Pre: 文件名，string
+// Post: NONE
 bool ChessBoard::readTheBoard(string fileTxt)
 {
     //開檔讀取並新建所需的棋子
@@ -382,6 +397,9 @@ bool ChessBoard::readTheBoard(string fileTxt)
 	else return false;
 }
 
+// Intent: 寫盤
+// Pre: 文件名，string
+// Post: NONE
 bool ChessBoard::saveTheBoard(string fileTxt)
 {
     fstream file(fileTxt, ios::out);
@@ -405,6 +423,9 @@ bool ChessBoard::saveTheBoard(string fileTxt)
 	else return false;
 }
 
+// Intent: 寫盤
+// Pre: NONE
+// Post: NONE
 bool ChessBoard::saveTheBoard()
 {
     fstream file;
@@ -1618,19 +1639,25 @@ void ChessBoard::manageLegalMove(int x, int y)
     }
 }
 
-// 傳入位置得到該位置上的棋種
+// Intent: 傳入位置得到該位置上的棋種
+// Pre: 位置的結構
+// Post: 回傳該位子上，棋子對應的地址
 Chess* ChessBoard::getChess(position chessPosition)
 {
     return wholePosition[chessPosition.x][chessPosition.y];
 }
 
-// 得到當前下棋方是誰
+// Intent:得到當前下棋方是誰
+// Pre: NONE
+// Post: int 0 or 1
 int ChessBoard::getTurn()
 {
     return turns;
 }
 
-// 把legalMove vector清掉(重要)，只要有用到manageLegalMove就一定要呼叫
+// Intent: 把legalMove vector清掉(重要)，只要有用到manageLegalMove就一定要呼叫
+// Pre: NONE
+// Post: NONE
 void ChessBoard::clearLegalMove()
 {
     legalMove.clear();

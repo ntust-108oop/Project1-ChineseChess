@@ -46,8 +46,12 @@ public:
     bool saveTheBoard(string fileTxt);
 	bool saveTheBoard();
 
-	vector <position> legalMove;	//存放能走的路，UI能直接使用到它
-	void manageLegalMove(int x, int y);		// UI在選擇棋子以後呼叫的
+	//存放能走的路，UI能直接使用到它
+	vector <position> legalMove;
+
+	// UI在選擇棋子以後呼叫的
+	void manageLegalMove(int x, int y);
+
 	void clearLegalMove();
 
     
