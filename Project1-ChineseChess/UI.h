@@ -48,6 +48,9 @@ private:
     // 跳出選單
     int showMenu(vector<string>);
 
+	//計算起始畫面圓圈內部的位置
+	pair<int, int> compIn(string);
+
     Chess* lastChosed;
     bool cueMode;
     unsigned music;

@@ -90,7 +90,7 @@ void UI::readKeyBoard()
                                 chessBoard.clearLegalMove();
                                 Record::clearRecord();
 								Record::returnStep.clear();
-                                system("cls");
+                                std::system("cls");
                                 printUI();
                                 cursorPosition = chessToCursor({ 4,6 });
                             }
@@ -110,7 +110,7 @@ void UI::readKeyBoard()
                                 chessBoard.clearLegalMove();
                                 Record::clearRecord();
 								Record::returnStep.clear();
-                                system("cls");
+                                std::system("cls");
                                 printUI();
                                 cursorPosition = chessToCursor({ 4,6 });
                             }
@@ -235,7 +235,7 @@ void UI::readKeyBoard()
                     chessBoard.readTheBoard("Initial.txt");
                     chessBoard.clearLegalMove();
                     Record::clearRecord();
-                    system("cls");
+                    std::system("cls");
                     printUI();
                     chessBoard.printThePlane();
                     SetPosition(chessToCursor({ 4, 6 }));
@@ -586,28 +586,96 @@ int UI::showMenu(vector<string> list)
     }
 }
 
+// Intent: 計算printStartScreen所需的東西(起始圖大小49x25)
+// Pre: 丟一個字串
+// Post: 回傳pair<int,int>的起始與結束值
+pair<int, int> UI::compIn(string s)
+{
+	pair<int, int> tmp;
+	int spaceLength = 0, change = 0;
+	bool listen = false;
+	if (s[0] != ' ')change = 1;
+	for (int i = 0; i < 49; i++)
+	{
+		if (s[i] == ' ') {
+			if (change == 2)
+			{
+				tmp.first = i;
+				tmp.second = 48 - i;
+				break;
+			}
+			spaceLength++;
+		}
+		else
+		{
+			if (spaceLength != 0)
+			{
+				change++;
+				spaceLength = 0;
+			}
+		}
+		
+	}
+	return tmp;
+}
+
 //Intent: 印開始畫面
 //Per: 起始畫面的文字檔
 //Post: None
 void UI::printStartScreen(string s)
 {
-	
 	fstream file(s);
 	if (file.is_open())
 	{
-		string str="\n\n", tmp;
-		for(int i=0;i<23;i++)
+		string tmp;
+		//文字圖有23列文字，細部處理，調整顏色輸出
+		for (int i = 0; i < 23; i++)
 		{
-			SetPosition({ 6,3+i });
+			SetPosition({ 6,3 + i });
 			getline(file, tmp, '\n');
-			cout << tmp << "\n";
+			//分開圈圈與'象'字，以便調整顏色輸出
+			if (i >= 5 && i <= 17)
+			{
+				pair<int, int> t = compIn(tmp);
+				for (int j = 0; j < tmp.length(); j++)
+				{
+					if (j >= t.first && j <= t.second && tmp[j] != ' ')
+					{
+						SetColor(0x7);
+						cout << tmp[j];
+					}
+					else if (tmp[j] != ' ')
+					{
+						SetColor(0xc);
+						cout << tmp[j];
+					}
+					else
+					{
+						SetColor();
+						cout << ' ';
+					}
+				}
+			}
+			else
+			{
+				for (char j : tmp)
+				{
+					if (j != ' ')
+						SetColor(0xc);
+					else
+						SetColor();
+					cout << j;
+				}
+			}
 		}
-		SetColor(0xe);
-		cout << str;
+		SetColor();//將顏色調回預設
+		file.close();
+
+
 	}
 	else cout << "ERROR";
-	system("pause>nul");
-	system("CLS");
+	std::system("pause>nul");
+	std::system("CLS");
 }
 
 // Intent: 跳出Y/N視窗(多行)
