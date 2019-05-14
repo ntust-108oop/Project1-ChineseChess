@@ -754,6 +754,7 @@ void UI::printStartScreen(string s)
 	else cout << "ERROR";
 	std::system("pause>nul");
 	std::system("CLS");
+	setCursorVisable(true);
 }
 
 // Intent: 跳出Y/N視窗(多行)
