@@ -126,7 +126,7 @@ void UI::readKeyBoard()
 							{
 								eatenType = chessBoard.wholePosition[chessPosition.x][chessPosition.y]->getChessType();
 							}
-							for (int i = 0; i < 10; i++)
+							for (int i = 0; i < 10; i++)	// 前後特殊狀況檢查，ifOnly != 0時表示這列裡他不是唯一的一個這種棋種
 							{
 								if (chessBoard.wholePosition[lastChosed->getCurrentPosition().x][i] != NULL)
 								{
@@ -139,6 +139,7 @@ void UI::readKeyBoard()
 								}
 							}
 
+							// 兵卒要特別處理
 							if (lastChosed->getChessType() == 7 || lastChosed->getChessType() == 14)
 							{
 								if (total == 1)
@@ -147,6 +148,7 @@ void UI::readKeyBoard()
 								}
 								else
 								{
+									// 他們的ifOnly是兩位數十位數這列總共的同種數，個位數是自己的相對位置是第幾個
 									ifOnly = total * 10 + soldierPos + 1;
 								}
 							}
@@ -166,7 +168,7 @@ void UI::readKeyBoard()
                             chessBoard.printThePlane();
                             Record::printRecord();
 
-							// 檢查有沒有被將軍
+							// 檢查有沒有被將軍(整個棋盤掃過所有棋的legalMove)
 							for (int i = 0; i < 9; i++)
 							{
 								for (int j = 0; j < 10; j++)
@@ -178,6 +180,7 @@ void UI::readKeyBoard()
 								}
 							}
 							
+							// 若是下棋方為黑方
 							if (chessBoard.getTurn() == 0)
                             {
                                 SetPosition(chessToCursor({ 4, 3 }));
@@ -192,7 +195,7 @@ void UI::readKeyBoard()
 									}
 								}
                             }
-                            else
+                            else	// 下棋方為紅方
                             {
                                 SetPosition(chessToCursor({ 4, 6 }));
 								for (int i = 0; i < chessBoard.legalMove.size(); i++)
@@ -206,7 +209,7 @@ void UI::readKeyBoard()
 									}
 								}
                             }
-							chessBoard.clearLegalMove();						
+							chessBoard.clearLegalMove();	// 因為在掃過所有棋時用了legalMove所以要清空						
                         }
                         break;
                     }
@@ -318,6 +321,7 @@ void UI::readKeyBoard()
         case 'R':                                       // 悔棋
             if (showAlert({ "確定悔棋？" }, false) == true)
             {
+				// 要確認悔棋的紀錄是否為空，若為空就沒得悔了
 				if (Record::record.size() != 0)
 				{
 					chessBoard.moveTheChess(Record::getToPos().x, Record::getToPos().y, Record::getFromPos().x, Record::getFromPos().y);
@@ -346,6 +350,7 @@ void UI::readKeyBoard()
         case 'U':                                       // 還原
             if (showAlert({ "確定還原？" }, false) == true)
             {
+				// 要確認還原的紀錄是否為空，若為空就沒得悔了
 				if (Record::returnStep.size() != 0)
 				{
 					chessBoard.moveTheChess(Record::returnStep[Record::returnStep.size() - 1].fromPos.x,

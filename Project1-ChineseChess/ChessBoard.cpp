@@ -55,11 +55,13 @@ ChessBoard::ChessBoard(string fileTxt)
     readTheBoard(fileTxt);
 }
 
+// 印出棋盤框架
 void ChessBoard::printEmptyPlane()
-{
-    SetColor(0xF0);                                               // 設定白底黑字
+{ 
+	// 設定白底黑字
+    SetColor(0xF0);                                              
 
-    for (short i = BOARD_TOP; i < BOARD_BOTTOM; i++)              // 印白底
+    for (short i = BOARD_TOP; i < BOARD_BOTTOM; i++)	// 印白底
     {
         SetPosition({ BOARD_LEFT,i });
         for (unsigned j = BOARD_LEFT; j <= BOARD_RIGHT; j++)
@@ -67,7 +69,7 @@ void ChessBoard::printEmptyPlane()
             cout << " ";
         }
     }
-    for (short i = BOARD_TOP + 1; i <= BOARD_BOTTOM; i += 2)            // 印橫線
+    for (short i = BOARD_TOP + 1; i <= BOARD_BOTTOM; i += 2)	// 印橫線
     {
         SetPosition({ BOARD_LEFT + 1,i });
         for (short j = BOARD_LEFT + 1; j <= BOARD_RIGHT - 1; j++)
@@ -75,7 +77,7 @@ void ChessBoard::printEmptyPlane()
             cout << "─";
         }
     }
-    for (short i = BOARD_TOP; i <= BOARD_BOTTOM; i++)                // 印直線
+    for (short i = BOARD_TOP; i <= BOARD_BOTTOM; i++)	// 印直線
     {
         SetPosition({ BOARD_LEFT,i });
         cout << "║";
@@ -144,6 +146,7 @@ void ChessBoard::printEmptyPlane()
     SetColor(0x07);
 }
 
+// 印出棋盤中內容
 void ChessBoard::printThePlane()
 {
     printEmptyPlane();
@@ -163,6 +166,7 @@ void ChessBoard::printThePlane()
                     SetColor(0x7C);                         // 紅棋：灰底紅字
                 }
                 SetPosition({ static_cast<short>(BOARD_LEFT + i * 4), static_cast<short>(BOARD_TOP + 1 + 2 * j) });
+				// 依照不同棋種印出名稱
                 switch (type)
                 {
                 case 1:
@@ -215,12 +219,16 @@ void ChessBoard::printThePlane()
     printTurn();
 }
 
+// 印出選了棋以後的變化(包含legalmove，所以拿出來分開處理了)
 void ChessBoard::printChosenPlane()
 {
+	// 把leagalmove的底色改變
     for (short k = 0; k < legalMove.size(); k++)
     {
         short i = legalMove[k].x, j = legalMove[k].y;
         SetPosition({ BOARD_LEFT + i * 4,BOARD_TOP + 1 + j * 2 });
+		
+		// 其中可以吃的棋和可以走的步數底色是不同的
         if (wholePosition[i][j] == NULL)
         {
             SetColor(0x70);
@@ -286,6 +294,7 @@ void ChessBoard::printChosenPlane()
 
 }
 
+// 印出現在下棋方的提示
 void ChessBoard::printTurn()
 {
     SetColor(0x03);
@@ -306,16 +315,17 @@ void ChessBoard::printTurn()
 
 }
 
+// 移動棋，參數為移動前位置和移動後
 void ChessBoard::moveTheChess(int fromX, int fromY, int toX, int toY)
 {
-    if (wholePosition[toX][toY] != NULL)
+    if (wholePosition[toX][toY] != NULL)	// 若目標上有棋，就把原本的棋刪掉
     {
         delete wholePosition[toX][toY];
         wholePosition[toX][toY] = wholePosition[fromX][fromY];
 		wholePosition[toX][toY]->setCurrentPosition(toX, toY);
         wholePosition[fromX][fromY] = NULL;
     }
-    else
+    else	// 若目標上沒有棋則單純移動
     {
         wholePosition[toX][toY] = wholePosition[fromX][fromY];
 		wholePosition[toX][toY]->setCurrentPosition(toX, toY);
@@ -323,6 +333,7 @@ void ChessBoard::moveTheChess(int fromX, int fromY, int toX, int toY)
     }
 }
 
+// 換人下棋
 void ChessBoard::changeTurn()
 {
     if (turns == 0)
@@ -419,6 +430,9 @@ bool ChessBoard::saveTheBoard()
 	else return false;
 }
 
+// 傳入位置參數，把對於這個棋來說可以走的步(含可以吃的棋)存在vector legalMove裡
+// 在每次選擇棋後一定要call這個function
+// 在確認是否將軍時也會使用到
 void ChessBoard::manageLegalMove(int x, int y)
 {
     position temp = wholePosition[x][y]->getCurrentPosition();
@@ -1604,17 +1618,19 @@ void ChessBoard::manageLegalMove(int x, int y)
     }
 }
 
-
+// 傳入位置得到該位置上的棋種
 Chess* ChessBoard::getChess(position chessPosition)
 {
     return wholePosition[chessPosition.x][chessPosition.y];
 }
 
+// 得到當前下棋方是誰
 int ChessBoard::getTurn()
 {
     return turns;
 }
 
+// 把legalMove vector清掉(重要)，只要有用到manageLegalMove就一定要呼叫
 void ChessBoard::clearLegalMove()
 {
     legalMove.clear();
