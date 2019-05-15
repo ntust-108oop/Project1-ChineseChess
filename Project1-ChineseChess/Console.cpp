@@ -14,6 +14,12 @@ void setConsole(int width, int height, int fontSize)
         c.X = 1;
         c.Y = 1;
         SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), c);
+        _SMALL_RECT sr;
+        sr.Top = 0;
+        sr.Left = 0;
+        sr.Right = 1;
+        sr.Bottom = 1;
+        SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), true, &sr);
     }
     _COORD c;
     c.X = width;
