@@ -911,6 +911,13 @@ bool UI::showAlert(vector<string> message, bool defaultChoice)
             }
             break;
         case ENTER:
+            if (maxLength > ROW_TWO - ROW_ONE - 8)
+            {
+                SetColor(0x07);
+                system("cls");
+                printUI();
+                Record::printRecord();
+            }
             chessBoard.printThePlane();
             return choice;
         }
@@ -969,6 +976,13 @@ string UI::showInput(string message)
 
     string userInput;
     cin >> userInput;
+    if (userInput.length() > 8)
+    {
+        SetColor(0x07);
+        system("cls");
+        printUI();
+        Record::printRecord();
+    }
     chessBoard.printThePlane();
     return userInput;
 }
