@@ -129,9 +129,9 @@ void UI::printStartScreen(string s)
         }
 
         //印請按任意建繼續
-        for (int i = 0; i < 23; i++)
+        for (int i = 0; i < 14; i++)
         {
-            SetPosition({ 87 - i,24 });
+            SetPosition({ 78 - i,24 });
             cout << notation;
             Sleep(40);
         }
