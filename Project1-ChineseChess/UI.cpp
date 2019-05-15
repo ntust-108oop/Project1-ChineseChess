@@ -1,9 +1,9 @@
 ﻿#include "UI.h"
 
-const short TOP_BOUND = 2, BOTTOM_BOUND = TOP_BOUND+23, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = LEFT_BOUND+27, ROW_TWO = ROW_ONE+38;
+const short TOP_BOUND = 2, BOTTOM_BOUND = TOP_BOUND + 23, LEFT_BOUND = 1, RIGHT_BOUND = 106, ROW_ONE = LEFT_BOUND + 27, ROW_TWO = ROW_ONE + 38;
 const char ESC = 0x1B, UP = 0x48, DOWN = 0x50, LEFT = 0x4B, RIGHT = 0x4D, ENTER = 0x0D;
 const vector<string> menu = { "繼續遊戲", "重新開始","儲存遊戲","讀取遊戲", "設定提示", "設定音樂", "結束遊戲" };
-const vector<string> song = { "關閉音樂"," 小蜜蜂 ", " FAMIMA ", " MAYOI  "};
+const vector<string> song = { "關閉音樂"," 小蜜蜂 ", " FAMIMA ", " MAYOI  " };
 
 // Intent: 初始化
 // Pre: UI物件
@@ -250,7 +250,7 @@ void UI::readKeyBoard()
     while (1)
     {
         position cursorPosition = getCursorPosition();  // 取得當前游標位置
-        
+
         switch (key = _getch())
         {
         case UP:                                        // 上
@@ -317,7 +317,7 @@ void UI::readKeyBoard()
                                 chessBoard.readTheBoard("Initial.txt");
                                 chessBoard.clearLegalMove();
                                 Record::clearRecord();
-								Record::returnStep.clear();
+                                Record::returnStep.clear();
                                 std::system("cls");
                                 printUI();
                                 cursorPosition = chessToCursor({ 4,6 });
@@ -337,7 +337,7 @@ void UI::readKeyBoard()
                                 chessBoard.readTheBoard("Initial.txt");
                                 chessBoard.clearLegalMove();
                                 Record::clearRecord();
-								Record::returnStep.clear();
+                                Record::returnStep.clear();
                                 std::system("cls");
                                 printUI();
                                 cursorPosition = chessToCursor({ 4,6 });
@@ -349,45 +349,45 @@ void UI::readKeyBoard()
                         }
                         else
                         {
-							int eatenType = 0, ifOnly = 0, total = 0, soldierPos = 0;
-							if (chessBoard.wholePosition[chessPosition.x][chessPosition.y] != NULL)
-							{
-								eatenType = chessBoard.wholePosition[chessPosition.x][chessPosition.y]->getChessType();
-							}
-							for (int i = 0; i < 10; i++)	// 前後特殊狀況檢查，ifOnly != 0時表示這列裡他不是唯一的一個這種棋種
-							{
-								if (chessBoard.wholePosition[lastChosed->getCurrentPosition().x][i] != NULL)
-								{
-									if (lastChosed->getChessType() == chessBoard.wholePosition[lastChosed->getCurrentPosition().x][i]->getChessType())
-									{
-										total++;
-										if (i < lastChosed->getCurrentPosition().y) { ifOnly = 2; soldierPos++; }
-										else if (i > lastChosed->getCurrentPosition().y) { ifOnly = 1; }
-									}
-								}
-							}
+                            int eatenType = 0, ifOnly = 0, total = 0, soldierPos = 0;
+                            if (chessBoard.wholePosition[chessPosition.x][chessPosition.y] != NULL)
+                            {
+                                eatenType = chessBoard.wholePosition[chessPosition.x][chessPosition.y]->getChessType();
+                            }
+                            for (int i = 0; i < 10; i++)	// 前後特殊狀況檢查，ifOnly != 0時表示這列裡他不是唯一的一個這種棋種
+                            {
+                                if (chessBoard.wholePosition[lastChosed->getCurrentPosition().x][i] != NULL)
+                                {
+                                    if (lastChosed->getChessType() == chessBoard.wholePosition[lastChosed->getCurrentPosition().x][i]->getChessType())
+                                    {
+                                        total++;
+                                        if (i < lastChosed->getCurrentPosition().y) { ifOnly = 2; soldierPos++; }
+                                        else if (i > lastChosed->getCurrentPosition().y) { ifOnly = 1; }
+                                    }
+                                }
+                            }
 
-							// 兵卒要特別處理
-							if (lastChosed->getChessType() == 7 || lastChosed->getChessType() == 14)
-							{
-								if (total == 1)
-								{
-									ifOnly = 0;
-								}
-								else
-								{
-									// 他們的ifOnly是兩位數十位數這列總共的同種數，個位數是自己的相對位置是第幾個
-									ifOnly = total * 10 + soldierPos + 1;
-								}
-							}
-							
-                            Record::saveThisStep(lastChosed->getChessType(), lastChosed->getCurrentPosition(),chessPosition, ifOnly, eatenType);
-							Record::returnStep.clear();
+                            // 兵卒要特別處理
+                            if (lastChosed->getChessType() == 7 || lastChosed->getChessType() == 14)
+                            {
+                                if (total == 1)
+                                {
+                                    ifOnly = 0;
+                                }
+                                else
+                                {
+                                    // 他們的ifOnly是兩位數十位數這列總共的同種數，個位數是自己的相對位置是第幾個
+                                    ifOnly = total * 10 + soldierPos + 1;
+                                }
+                            }
+
+                            Record::saveThisStep(lastChosed->getChessType(), lastChosed->getCurrentPosition(), chessPosition, ifOnly, eatenType);
+                            Record::returnStep.clear();
                             chessBoard.moveTheChess(lastChosed->getCurrentPosition().x,
-                                lastChosed->getCurrentPosition().y,
-                                chessPosition.x,
-                                chessPosition.y
-							);
+                                                    lastChosed->getCurrentPosition().y,
+                                                    chessPosition.x,
+                                                    chessPosition.y
+                            );
 
                             lastChosed->setChosen(false);
                             lastChosed = NULL;
@@ -396,48 +396,48 @@ void UI::readKeyBoard()
                             chessBoard.printThePlane();
                             Record::printRecord();
 
-							// 檢查有沒有被將軍(整個棋盤掃過所有棋的legalMove)
-							for (int i = 0; i < 9; i++)
-							{
-								for (int j = 0; j < 10; j++)
-								{
-									if (chessBoard.wholePosition[i][j] != NULL)
-									{
-										chessBoard.manageLegalMove(i, j);
-									}
-								}
-							}
-							
-							// 若是下棋方為黑方
-							if (chessBoard.getTurn() == 0)
+                            // 檢查有沒有被將軍(整個棋盤掃過所有棋的legalMove)
+                            for (int i = 0; i < 9; i++)
+                            {
+                                for (int j = 0; j < 10; j++)
+                                {
+                                    if (chessBoard.wholePosition[i][j] != NULL)
+                                    {
+                                        chessBoard.manageLegalMove(i, j);
+                                    }
+                                }
+                            }
+
+                            // 若是下棋方為黑方
+                            if (chessBoard.getTurn() == 0)
                             {
                                 SetPosition(chessToCursor({ 4, 3 }));
-								for (int i = 0; i < chessBoard.legalMove.size(); i++)
-								{
-									if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y] != NULL)
-									{
-										if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 8)
-										{
-											showAlert({ "紅方被將軍了!" });
-										}
-									}
-								}
+                                for (int i = 0; i < chessBoard.legalMove.size(); i++)
+                                {
+                                    if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y] != NULL)
+                                    {
+                                        if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 8)
+                                        {
+                                            showAlert({ "紅方被將軍了!" });
+                                        }
+                                    }
+                                }
                             }
                             else	// 下棋方為紅方
                             {
                                 SetPosition(chessToCursor({ 4, 6 }));
-								for (int i = 0; i < chessBoard.legalMove.size(); i++)
-								{
-									if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y] != NULL)
-									{
-										if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 1)
-										{
-											showAlert({ "黑方被將軍了!" });
-										}
-									}
-								}
+                                for (int i = 0; i < chessBoard.legalMove.size(); i++)
+                                {
+                                    if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y] != NULL)
+                                    {
+                                        if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 1)
+                                        {
+                                            showAlert({ "黑方被將軍了!" });
+                                        }
+                                    }
+                                }
                             }
-							chessBoard.clearLegalMove();	// 因為在掃過所有棋時用了legalMove所以要清空						
+                            chessBoard.clearLegalMove();	// 因為在掃過所有棋時用了legalMove所以要清空						
                         }
                         break;
                     }
@@ -485,7 +485,7 @@ void UI::readKeyBoard()
                 }
                 SetPosition(cursorPosition);
                 break;
-            case 3:                            
+            case 3:
                 fileName = showInput("輸入檔名");       // 讀取遊戲
                 if (showAlert({ "確定讀取？", fileName.insert(0, "檔名：") }, false) == true)
                 {
@@ -493,7 +493,7 @@ void UI::readKeyBoard()
                     chessBoard.printThePlane();
                     if (chessBoard.readTheBoard(fileName.insert(0, "save/")) == true)
                     {
-                        
+
                         chessBoard.clearLegalMove();
                         Record::clearRecord();
                         std::system("cls");
@@ -543,22 +543,22 @@ void UI::readKeyBoard()
         case 'R':                                       // 悔棋
             if (showAlert({ "確定悔棋？" }, false) == true)
             {
-				// 要確認悔棋的紀錄是否為空，若為空就沒得悔了
-				if (Record::record.size() != 0)
-				{
-					chessBoard.moveTheChess(Record::getToPos().x, Record::getToPos().y, Record::getFromPos().x, Record::getFromPos().y);
-					if (Record::getEaten() != 0)
-					{
-						chessBoard.wholePosition[Record::getToPos().x][Record::getToPos().y] = new Chess(Record::getEaten(), Record::getToPos().x, Record::getToPos().y);
-					}
-					Record::regretStep();
-					chessBoard.changeTurn();
-				}
-				else
-				{
+                // 要確認悔棋的紀錄是否為空，若為空就沒得悔了
+                if (Record::record.size() != 0)
+                {
+                    chessBoard.moveTheChess(Record::getToPos().x, Record::getToPos().y, Record::getFromPos().x, Record::getFromPos().y);
+                    if (Record::getEaten() != 0)
+                    {
+                        chessBoard.wholePosition[Record::getToPos().x][Record::getToPos().y] = new Chess(Record::getEaten(), Record::getToPos().x, Record::getToPos().y);
+                    }
+                    Record::regretStep();
+                    chessBoard.changeTurn();
+                }
+                else
+                {
                     showAlert({ "已經沒有更早的步數了" });
-				}
-				Record::printRecord();
+                }
+                Record::printRecord();
                 chessBoard.printThePlane();
             }
             SetPosition(cursorPosition);
@@ -567,23 +567,23 @@ void UI::readKeyBoard()
         case 'U':                                       // 還原
             if (showAlert({ "確定還原？" }, false) == true)
             {
-				// 要確認還原的紀錄是否為空，若為空就沒得悔了
-				if (Record::returnStep.size() != 0)
-				{
-					chessBoard.moveTheChess(Record::returnStep[Record::returnStep.size() - 1].fromPos.x,
-						Record::returnStep[Record::returnStep.size() - 1].fromPos.y,
-						Record::returnStep[Record::returnStep.size() - 1].toPos.x,
-						Record::returnStep[Record::returnStep.size() - 1].toPos.y
-					);
-					Record::returnRegret();
-					chessBoard.changeTurn();
+                // 要確認還原的紀錄是否為空，若為空就沒得悔了
+                if (Record::returnStep.size() != 0)
+                {
+                    chessBoard.moveTheChess(Record::returnStep[Record::returnStep.size() - 1].fromPos.x,
+                                            Record::returnStep[Record::returnStep.size() - 1].fromPos.y,
+                                            Record::returnStep[Record::returnStep.size() - 1].toPos.x,
+                                            Record::returnStep[Record::returnStep.size() - 1].toPos.y
+                    );
+                    Record::returnRegret();
+                    chessBoard.changeTurn();
                     chessBoard.printThePlane();
-				}
-				else
-				{
+                }
+                else
+                {
                     showAlert({ "已經到最新的步數了" });
-				}
-				Record::printRecord();
+                }
+                Record::printRecord();
             }
             SetPosition(cursorPosition);
             break;
@@ -769,7 +769,7 @@ void UI::showAlert(vector<string> message)
             cout << " ";
         }
     }
-    for (short i = ALERT_LEFT; i <= ALERT_RIGHT-1; i++)     // 畫橫線
+    for (short i = ALERT_LEFT; i <= ALERT_RIGHT - 1; i++)     // 畫橫線
     {
         SetPosition({ i,ALERT_TOP });
         cout << "═";
@@ -832,8 +832,8 @@ bool UI::showAlert(vector<string> message, bool defaultChoice)
             maxLength = static_cast<int>(message[i].length());
         }
     }
-    const short ALERT_TOP = TOP_BOUND + 7, ALERT_BOTTOM = ALERT_TOP+5+static_cast<short>(message.size()),
-                ALERT_LEFT = ROW_ONE+(ROW_TWO-ROW_ONE-maxLength-8)/2+1, ALERT_RIGHT = ALERT_LEFT + static_cast<short>(maxLength)+7;
+    const short ALERT_TOP = TOP_BOUND + 7, ALERT_BOTTOM = ALERT_TOP + 5 + static_cast<short>(message.size()),
+        ALERT_LEFT = ROW_ONE + (ROW_TWO - ROW_ONE - maxLength - 8) / 2 + 1, ALERT_RIGHT = ALERT_LEFT + static_cast<short>(maxLength) + 7;
     SetColor(0x0C);      // 設定黑底亮紅字
 
     for (short i = ALERT_TOP; i <= ALERT_BOTTOM; i++)              // 印黑底
@@ -844,7 +844,7 @@ bool UI::showAlert(vector<string> message, bool defaultChoice)
             cout << " ";
         }
     }
-    for (short i = ALERT_LEFT; i <= ALERT_RIGHT-1; i++)     // 畫橫線
+    for (short i = ALERT_LEFT; i <= ALERT_RIGHT - 1; i++)     // 畫橫線
     {
         SetPosition({ i,ALERT_TOP });
         cout << "═";
@@ -872,19 +872,19 @@ bool UI::showAlert(vector<string> message, bool defaultChoice)
     SetColor(0x07);
     for (auto i = 0; i < message.size(); i++)
     {
-        SetPosition({ ALERT_LEFT + (ALERT_RIGHT-ALERT_LEFT-static_cast<short>(message[i].length())+2)/2,ALERT_TOP + 2 +i });
+        SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT - static_cast<short>(message[i].length()) + 2) / 2,ALERT_TOP + 2 + i });
         cout << message[i];
     }
 
-    SetPosition({ ALERT_LEFT+(ALERT_RIGHT - ALERT_LEFT) / 2 - 5,ALERT_BOTTOM - 2 });
+    SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT) / 2 - 5,ALERT_BOTTOM - 2 });
     cout << "是        否";
     if (defaultChoice == true)
     {
-        SetPosition({ ALERT_LEFT + (ALERT_RIGHT-ALERT_LEFT)/2 - 5,ALERT_BOTTOM - 2 });
+        SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT) / 2 - 5,ALERT_BOTTOM - 2 });
     }
     else
     {
-        SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT) / 2 +5,ALERT_BOTTOM - 2 });
+        SetPosition({ ALERT_LEFT + (ALERT_RIGHT - ALERT_LEFT) / 2 + 5,ALERT_BOTTOM - 2 });
     }
 
     char key;
@@ -919,7 +919,7 @@ bool UI::showAlert(vector<string> message, bool defaultChoice)
 // Post: 回傳字串
 string UI::showInput(string message)
 {
-    const short ALERT_TOP = TOP_BOUND +9, ALERT_BOTTOM = BOTTOM_BOUND - 8, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
+    const short ALERT_TOP = TOP_BOUND + 9, ALERT_BOTTOM = BOTTOM_BOUND - 8, ALERT_LEFT = ROW_ONE + 8, ALERT_RIGHT = ROW_TWO - 7;
     SetColor(0x02);
 
     for (short i = ALERT_TOP; i <= ALERT_BOTTOM; i++)              // 印黑底
@@ -930,7 +930,7 @@ string UI::showInput(string message)
             cout << " ";
         }
     }
-    for (short i = ALERT_LEFT; i <= ALERT_RIGHT-1; i++)     // 畫橫線
+    for (short i = ALERT_LEFT; i <= ALERT_RIGHT - 1; i++)     // 畫橫線
     {
         SetPosition({ i,ALERT_TOP });
         cout << "═";
@@ -1141,7 +1141,6 @@ pair<int, int> UI::compIn(string s)
                 spaceLength = 0;
             }
         }
-
     }
     return tmp;
 }

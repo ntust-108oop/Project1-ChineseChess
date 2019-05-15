@@ -8,11 +8,10 @@ int main()
     setConsole();
 
 	UI thisGameUI;
-	thisGameUI.printStartScreen("Test.txt");
+	thisGameUI.printStartScreen("Start.txt");
 	thisGameUI.printUI();
 	thisGameUI.chessBoard.printThePlane();
 	Record::printRecord();
 
     thisGameUI.readKeyBoard();
-
 }
