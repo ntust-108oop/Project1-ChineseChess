@@ -82,7 +82,7 @@ void UI::printStartScreen(string s)
         Sleep(500);
         for (int i = 0; i < 7; i++)
         {
-            SetPosition({ 78,7 + i });
+            SetPosition({ 71,7 + i });
             for (char j : hi[i])
             {
                 if (j != ' ')SetColor(0x77);
@@ -94,13 +94,13 @@ void UI::printStartScreen(string s)
         SetColor();//將顏色調回預設
         for (int i = 0; i < 7; i++)
         {
-            SetPosition({ 78,7 + i });
+            SetPosition({ 71,7 + i });
             for (char j : hi[i]) cout << " ";
         }
         Sleep(350);
         for (int i = 0; i < 7; i++)
         {
-            SetPosition({ 78,7 + i });
+            SetPosition({ 71,7 + i });
             for (char j : hi[i])
             {
                 if (j != ' ')SetColor(0x77);
@@ -116,9 +116,9 @@ void UI::printStartScreen(string s)
         for (int i = 0; i < 5; i++)
         {
             if (i == 0 || i == 1 || i == 2)
-                SetPosition({ 70,17 + 2 * i });
+                SetPosition({ 65,17 + 2 * i });
             if (i == 3 || i == 4)
-                SetPosition({ 90,17 + 2 * (i - 2) });
+                SetPosition({ 85,17 + 2 * (i - 2) });
             setCursorVisable(true);
             for (char j : author[i])
             {
@@ -129,13 +129,13 @@ void UI::printStartScreen(string s)
         }
 
         //印請按任意建繼續
-        for (int i = 0; i < 18; i++)
+        for (int i = 0; i < 14; i++)
         {
-            SetPosition({ 87 - i,24 });
+            SetPosition({ 78 - i,24 });
             cout << notation;
             Sleep(40);
         }
-        SetPosition({ 103,24 });
+        SetPosition({ 98,24 });
         for (int i = 0; i < 6; i++)
         {
             Sleep(250);
