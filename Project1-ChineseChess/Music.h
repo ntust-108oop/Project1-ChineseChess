@@ -17,13 +17,16 @@ class Music
 {
 public:
     ~Music();
-    // 選擇曲目
+
+    // 設定曲目
     static void setMusic(unsigned);
-    static void player(vector<note>, double);
 
 private:
     static bool play;
     static thread* music;
+
+    // 播放音樂
+    static void player(vector<note>, double);
 };
 
 #endif // !MUSIC_H

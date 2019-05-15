@@ -8,21 +8,25 @@ struct position
     int x, y;
     bool operator==(position other)
     {
-        if (x == other.x&&y == other.y)return true;
+        if (x == other.x && y == other.y) return true;
         else return false;
     }
 };
 
-// 設定顏色
-void SetColor(int = 0x07);
-// 設定游標位置
-void SetPosition(position);
+// 設定視窗及字體大小
+void setConsole(int = 110, int = 29, int = 18);
+
 // 取得游標位置
 position getCursorPosition();
+
+// 設定游標位置
+void SetPosition(position);
+
 // 取得游標是否顯示
 void setCursorVisable(bool);
-// 設定視窗及字體大小
-void setConsole(int = 110, int=29, int = 18);
+
+// 設定輸出顏色
+void SetColor(int = 0x07);
 
 // 轉換座標
 position cursorToChess(position);
