@@ -396,48 +396,51 @@ void UI::readKeyBoard()
                             chessBoard.printThePlane();
                             Record::printRecord();
 
-                            // 檢查有沒有被將軍(整個棋盤掃過所有棋的legalMove)
-                            for (int i = 0; i < 9; i++)
+                            if (cueMode == true)
                             {
-                                for (int j = 0; j < 10; j++)
+                                // 檢查有沒有被將軍(整個棋盤掃過所有棋的legalMove)
+                                for (int i = 0; i < 9; i++)
                                 {
-                                    if (chessBoard.wholePosition[i][j] != NULL)
+                                    for (int j = 0; j < 10; j++)
                                     {
-                                        chessBoard.manageLegalMove(i, j);
+                                        if (chessBoard.wholePosition[i][j] != NULL)
+                                        {
+                                            chessBoard.manageLegalMove(i, j);
+                                        }
                                     }
                                 }
-                            }
 
-                            // 若是下棋方為黑方
-                            if (chessBoard.getTurn() == 0)
-                            {
-                                SetPosition(chessToCursor({ 4, 3 }));
-                                for (int i = 0; i < chessBoard.legalMove.size(); i++)
+                                // 若是下棋方為黑方
+                                if (chessBoard.getTurn() == 0)
                                 {
-                                    if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y] != NULL)
+                                    SetPosition(chessToCursor({ 4, 3 }));
+                                    for (int i = 0; i < chessBoard.legalMove.size(); i++)
                                     {
-                                        if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 8)
+                                        if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y] != NULL)
                                         {
-                                            showAlert({ "紅方被將軍了!" });
+                                            if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 8)
+                                            {
+                                                showAlert({ "紅方被將軍了!" });
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            else	// 下棋方為紅方
-                            {
-                                SetPosition(chessToCursor({ 4, 6 }));
-                                for (int i = 0; i < chessBoard.legalMove.size(); i++)
+                                else	// 下棋方為紅方
                                 {
-                                    if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y] != NULL)
+                                    SetPosition(chessToCursor({ 4, 6 }));
+                                    for (int i = 0; i < chessBoard.legalMove.size(); i++)
                                     {
-                                        if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 1)
+                                        if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y] != NULL)
                                         {
-                                            showAlert({ "黑方被將軍了!" });
+                                            if (chessBoard.wholePosition[chessBoard.legalMove[i].x][chessBoard.legalMove[i].y]->getChessType() == 1)
+                                            {
+                                                showAlert({ "黑方被將軍了!" });
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            chessBoard.clearLegalMove();	// 因為在掃過所有棋時用了legalMove所以要清空						
+                                chessBoard.clearLegalMove();	// 因為在掃過所有棋時用了legalMove所以要清空
+                            }				
                         }
                         break;
                     }
@@ -759,7 +762,7 @@ void UI::showAlert(vector<string> message)
         }
     }
     const short ALERT_TOP = TOP_BOUND + 7, ALERT_BOTTOM = ALERT_TOP + 5 + static_cast<short>(message.size()), ALERT_LEFT = ROW_ONE + (ROW_TWO - ROW_ONE - maxLength - 8) / 2 + 1, ALERT_RIGHT = ALERT_LEFT + static_cast<short>(maxLength) + 8 - 1;
-    SetColor(0x07);
+    SetColor(0x0C);
 
     for (short i = ALERT_TOP; i <= ALERT_BOTTOM; i++)              // 印黑底
     {
