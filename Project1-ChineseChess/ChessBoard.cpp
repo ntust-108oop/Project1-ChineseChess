@@ -59,11 +59,11 @@ ChessBoard::ChessBoard(string fileTxt)
 // Pre: NONE
 // Post: NONE
 void ChessBoard::printEmptyPlane()
-{ 
-	// 設定白底黑字
-    SetColor(0xF0);                                              
+{
+    // 設定白底黑字
+    SetColor(0xF0);
 
-    for (short i = BOARD_TOP; i < BOARD_BOTTOM; i++)	// 印白底
+    for (short i = BOARD_TOP; i <= BOARD_BOTTOM; i++)	// 印白底
     {
         SetPosition({ BOARD_LEFT,i });
         for (unsigned j = BOARD_LEFT; j <= BOARD_RIGHT; j++)
@@ -119,9 +119,9 @@ void ChessBoard::printEmptyPlane()
     SetPosition({ BOARD_LEFT + 14,BOARD_TOP + 18 });
     cout << "╱";
 
-    for (short i = BOARD_LEFT + 4; i < BOARD_RIGHT - 1; i += 4)
+    for (short i = BOARD_LEFT + 4; i <= BOARD_RIGHT - 5; i += 4)
     {
-        for (short j = TOP_BOUND + 5; j < BOTTOM_BOUND - 2; j += 2)
+        for (short j = BOARD_TOP + 3; j < BOARD_BOTTOM - 1; j += 2)
         {
             SetPosition({ i,j });
             cout << "┼";
@@ -134,6 +134,14 @@ void ChessBoard::printEmptyPlane()
         cout << "┴";
         SetPosition({ i,BOARD_BOTTOM - 1 });
         cout << "┴";
+
+        for (short j = BOARD_TOP + 3; j < BOARD_BOTTOM - 1; j += 2)
+        {
+            SetPosition({ BOARD_LEFT,j });
+            cout << "╟";
+            SetPosition({ BOARD_RIGHT - 1,j });
+            cout << "╢";
+        }
     }
 
     SetPosition({ BOARD_LEFT + 2,BOARD_TOP + 10 });
@@ -170,7 +178,7 @@ void ChessBoard::printThePlane()
                     SetColor(0x7C);                         // 紅棋：灰底紅字
                 }
                 SetPosition({ static_cast<short>(BOARD_LEFT + i * 4), static_cast<short>(BOARD_TOP + 1 + 2 * j) });
-				// 依照不同棋種印出名稱
+                // 依照不同棋種印出名稱
                 switch (type)
                 {
                 case 1:
@@ -228,13 +236,13 @@ void ChessBoard::printThePlane()
 // Post: NONE
 void ChessBoard::printChosenPlane()
 {
-	// 把leagalmove的底色改變
+    // 把leagalmove的底色改變
     for (short k = 0; k < legalMove.size(); k++)
     {
         short i = legalMove[k].x, j = legalMove[k].y;
         SetPosition({ BOARD_LEFT + i * 4,BOARD_TOP + 1 + j * 2 });
-		
-		// 其中可以吃的棋和可以走的步數底色是不同的
+
+        // 其中可以吃的棋和可以走的步數底色是不同的
         if (wholePosition[i][j] == NULL)
         {
             SetColor(0x70);
@@ -332,13 +340,13 @@ void ChessBoard::moveTheChess(int fromX, int fromY, int toX, int toY)
     {
         delete wholePosition[toX][toY];
         wholePosition[toX][toY] = wholePosition[fromX][fromY];
-		wholePosition[toX][toY]->setCurrentPosition(toX, toY);
+        wholePosition[toX][toY]->setCurrentPosition(toX, toY);
         wholePosition[fromX][fromY] = NULL;
     }
     else	// 若目標上沒有棋則單純移動
     {
         wholePosition[toX][toY] = wholePosition[fromX][fromY];
-		wholePosition[toX][toY]->setCurrentPosition(toX, toY);
+        wholePosition[toX][toY]->setCurrentPosition(toX, toY);
         wholePosition[fromX][fromY] = NULL;
     }
 }
@@ -390,11 +398,11 @@ bool ChessBoard::readTheBoard(string fileTxt)
         }
         file >> turns;
 
-		file.close();
-		file.clear();
-		return true;
+        file.close();
+        file.clear();
+        return true;
     }
-	else return false;
+    else return false;
 }
 
 // Intent: 寫盤
@@ -409,18 +417,18 @@ bool ChessBoard::saveTheBoard(string fileTxt)
         {
             for (int j = 0; j < 9; j++)
             {
-                wholePosition[j][i] == NULL ?  file << '0':file << wholePosition[j][i]->getChessType();
+                wholePosition[j][i] == NULL ? file << '0' : file << wholePosition[j][i]->getChessType();
                 file << ' ';
             }
             file << '\n';
         }
         file << turns;
 
-		file.close();
-		file.clear();
-		return true;
+        file.close();
+        file.clear();
+        return true;
     }
-	else return false;
+    else return false;
 }
 
 // Intent: 寫盤
@@ -443,12 +451,12 @@ bool ChessBoard::saveTheBoard()
             file << '\n';
         }
         file >> turns;
-		
-		file.close();
-		file.clear();
-		return true;
-	}
-	else return false;
+
+        file.close();
+        file.clear();
+        return true;
+    }
+    else return false;
 }
 
 // 傳入位置參數，把對於這個棋來說可以走的步(含可以吃的棋)存在vector legalMove裡
@@ -463,65 +471,65 @@ void ChessBoard::manageLegalMove(int x, int y)
         if (temp.x > 3) //向左
         {
             temp.x--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x < 5) //向右
         {
             temp.x++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.y < 2) //向下
         {
             temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.y > 0) //向上
         {
             temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         // 王不見王
@@ -549,68 +557,68 @@ void ChessBoard::manageLegalMove(int x, int y)
         {
             temp.x--;
             temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x < 5 && temp.y > 0) //向右上
         {
             temp.x++;
             temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x > 3 && temp.y < 2) //向左下
         {
             temp.x--;
             temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x < 5 && temp.y < 2) //向右下
         {
             temp.x++;
             temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
         }
         break;
 
@@ -619,68 +627,68 @@ void ChessBoard::manageLegalMove(int x, int y)
         {
             temp.x -= 2;
             temp.y -= 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x + 2 <= 8 && temp.y - 2 >= 0 && (wholePosition[x + 1][y - 1] == NULL)) //向右上
         {
             temp.x += 2;
             temp.y -= 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x - 2 >= 0 && temp.y + 2 <= 4 && (wholePosition[x - 1][y + 1] == NULL)) //向左下
         {
             temp.x -= 2;
             temp.y += 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x + 2 <= 8 && temp.y + 2 <= 4 && (wholePosition[x + 1][y + 1] == NULL)) //向右下
         {
             temp.x += 2;
             temp.y += 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
         }
         break;
 
@@ -689,69 +697,69 @@ void ChessBoard::manageLegalMove(int x, int y)
         while (temp.x > 0) //向左
         {
             temp.x--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-				break;
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+                break;
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
         }
         temp = wholePosition[x][y]->getCurrentPosition();
         while (temp.x < 8) //向右
         {
             temp.x++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-				break;
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+                break;
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
         }
         temp = wholePosition[x][y]->getCurrentPosition();
         while (temp.y > 0) //向上
         {
             temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-				break;
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+                break;
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
         }
         temp = wholePosition[x][y]->getCurrentPosition();
         while (temp.y < 9) //向下
         {
             temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-				break;
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+                break;
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
         }
         break;
 
@@ -760,136 +768,136 @@ void ChessBoard::manageLegalMove(int x, int y)
         {
             temp.x = temp.x - 2;
             temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x - 1 >= 0 && temp.y - 2 >= 0 && wholePosition[temp.x][temp.y - 1] == NULL) //向 11 點鐘方向
         {
             temp.x--;
             temp.y = temp.y - 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x + 1 <= 8 && temp.y - 2 >= 0 && wholePosition[temp.x][temp.y - 1] == NULL) //向 1 點鐘方向
         {
             temp.x++;
             temp.y = temp.y - 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x + 2 <= 8 && temp.y - 1 >= 0 && wholePosition[temp.x + 1][temp.y] == NULL) //向 2 點鐘方向
         {
             temp.x = temp.x + 2;
             temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x + 2 <= 8 && temp.y + 1 <= 9 && wholePosition[temp.x + 1][temp.y] == NULL) //向 4 點鐘方向
         {
             temp.x = temp.x + 2;
             temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x + 1 <= 8 && temp.y + 2 <= 9 && wholePosition[temp.x][temp.y + 1] == NULL) //向 5 點鐘方向
         {
             temp.x++;
             temp.y = temp.y + 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x - 1 >= 0 && temp.y + 2 <= 9 && wholePosition[temp.x][temp.y + 1] == NULL) //向 7 點鐘方向
         {
             temp.x--;
             temp.y = temp.y + 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x - 2 >= 0 && temp.y + 1 <= 9 && wholePosition[temp.x - 1][temp.y] == NULL) //向 8 點鐘方向
         {
             temp.x = temp.x - 2;
             temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
         }
         break;
 
@@ -901,17 +909,17 @@ void ChessBoard::manageLegalMove(int x, int y)
             {
                 break;
             }
-			legalMove.push_back(temp);
+            legalMove.push_back(temp);
         }
         while (temp.x > 0)  // 取得可以吃的那一個
         {
             temp.x--;
             if (wholePosition[temp.x][temp.y] != NULL)
             {
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
                 break;
             }
         }
@@ -924,17 +932,17 @@ void ChessBoard::manageLegalMove(int x, int y)
             {
                 break;
             }
-			legalMove.push_back(temp);
+            legalMove.push_back(temp);
         }
         while (temp.x < 8)
         {
             temp.x++;
             if (wholePosition[temp.x][temp.y] != NULL)
             {
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
                 break;
             }
         }
@@ -954,10 +962,10 @@ void ChessBoard::manageLegalMove(int x, int y)
             temp.y--;
             if (wholePosition[temp.x][temp.y] != NULL)
             {
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
                 break;
             }
         }
@@ -977,10 +985,10 @@ void ChessBoard::manageLegalMove(int x, int y)
             temp.y++;
             if (wholePosition[temp.x][temp.y] != NULL)
             {
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
                 break;
             }
         }
@@ -990,66 +998,66 @@ void ChessBoard::manageLegalMove(int x, int y)
         if (temp.y < 5) //在己方範圍，只能向下
         {
             temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
         }
         else //在敵方範圍
         {
             if (temp.x > 0) //向左
             {
                 temp.x--;
-				if (wholePosition[temp.x][temp.y] != NULL)
-				{
-					if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-					{
-						legalMove.push_back(temp);
-					}
-				}
-				else
-				{
-					legalMove.push_back(temp);
-				}
+                if (wholePosition[temp.x][temp.y] != NULL)
+                {
+                    if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                    {
+                        legalMove.push_back(temp);
+                    }
+                }
+                else
+                {
+                    legalMove.push_back(temp);
+                }
                 temp = wholePosition[x][y]->getCurrentPosition();
             }
             if (temp.x < 8) //向右
             {
                 temp.x++;
-				if (wholePosition[temp.x][temp.y] != NULL)
-				{
-					if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-					{
-						legalMove.push_back(temp);
-					}
-				}
-				else
-				{
-					legalMove.push_back(temp);
-				}
+                if (wholePosition[temp.x][temp.y] != NULL)
+                {
+                    if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                    {
+                        legalMove.push_back(temp);
+                    }
+                }
+                else
+                {
+                    legalMove.push_back(temp);
+                }
                 temp = wholePosition[x][y]->getCurrentPosition();
             }
             if (temp.y < 9) //向下
             {
                 temp.y++;
-				if (wholePosition[temp.x][temp.y] != NULL)
-				{
-					if (wholePosition[temp.x][temp.y]->getChessType() > 7)
-					{
-						legalMove.push_back(temp);
-					}
-				}
-				else
-				{
-					legalMove.push_back(temp);
-				}
+                if (wholePosition[temp.x][temp.y] != NULL)
+                {
+                    if (wholePosition[temp.x][temp.y]->getChessType() > 7)
+                    {
+                        legalMove.push_back(temp);
+                    }
+                }
+                else
+                {
+                    legalMove.push_back(temp);
+                }
             }
         }
         break;
@@ -1058,65 +1066,65 @@ void ChessBoard::manageLegalMove(int x, int y)
         if (temp.x > 3) //向左
         {
             temp.x--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x < 5) //向右
         {
             temp.x++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.y > 7) //向上
         {
             temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.y < 9) //向下
         {
             temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         // 王不見王
@@ -1144,68 +1152,68 @@ void ChessBoard::manageLegalMove(int x, int y)
         {
             temp.x--;
             temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x < 5 && temp.y > 7) //向右上
         {
             temp.x++;
             temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x > 3 && temp.y < 9) //向左下
         {
             temp.x--;
             temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x < 5 && temp.y < 9) //向右下
         {
             temp.x++;
             temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
         }
         break;
 
@@ -1214,371 +1222,371 @@ void ChessBoard::manageLegalMove(int x, int y)
         {
             temp.x = temp.x - 2;
             temp.y = temp.y - 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x + 2 <= 8 && temp.y - 2 >= 5 && (wholePosition[x + 1][y - 1] == NULL)) //向右上
         {
             temp.x = temp.x + 2;
             temp.y = temp.y - 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x - 2 >= 0 && temp.y + 2 <= 9 && (wholePosition[x - 1][y + 1] == NULL)) //向左下
         {
             temp.x = temp.x - 2;
             temp.y = temp.y + 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
             temp = wholePosition[x][y]->getCurrentPosition();
         }
         if (temp.x + 2 <= 8 && temp.y + 2 <= 9 && (wholePosition[x + 1][y + 1] == NULL)) //向右下
         {
             temp.x = temp.x + 2;
             temp.y = temp.y + 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
         }
         break;
 
-	case 11: //紅車
-		while (temp.x > 0) //向左
-		{
-			temp.x--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-				break;
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
-		}
-		temp = wholePosition[x][y]->getCurrentPosition();
-		while (temp.x < 8) //向右
-		{
-			temp.x++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-				break;
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
-		}
-		temp = wholePosition[x][y]->getCurrentPosition();
-		while (temp.y > 0) //向上
-		{
-			temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-				break;
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
-		}
-		temp = wholePosition[x][y]->getCurrentPosition();
-		while (temp.y < 9) //向下
-		{
-			temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-				break;
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
-		}
-		break;
+    case 11: //紅車
+        while (temp.x > 0) //向左
+        {
+            temp.x--;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+                break;
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
+        }
+        temp = wholePosition[x][y]->getCurrentPosition();
+        while (temp.x < 8) //向右
+        {
+            temp.x++;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+                break;
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
+        }
+        temp = wholePosition[x][y]->getCurrentPosition();
+        while (temp.y > 0) //向上
+        {
+            temp.y--;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+                break;
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
+        }
+        temp = wholePosition[x][y]->getCurrentPosition();
+        while (temp.y < 9) //向下
+        {
+            temp.y++;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+                break;
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
+        }
+        break;
 
-	case 12: //紅傌
-		if (temp.x - 2 >= 0 && temp.y - 1 >= 0 && wholePosition[temp.x - 1][temp.y] == NULL) //向 10 點鐘方向
-		{
-			temp.x = temp.x - 2;
-			temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
-			temp = wholePosition[x][y]->getCurrentPosition();
-		}
-		if (temp.x - 1 >= 0 && temp.y - 2 >= 0 && wholePosition[temp.x][temp.y - 1] == NULL) //向 11 點鐘方向
-		{
-			temp.x--;
-			temp.y = temp.y - 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
-			temp = wholePosition[x][y]->getCurrentPosition();
-		}
-		if (temp.x + 1 <= 8 && temp.y - 2 >= 0 && wholePosition[temp.x][temp.y - 1] == NULL) //向 1 點鐘方向
-		{
-			temp.x++;
-			temp.y = temp.y - 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
-			temp = wholePosition[x][y]->getCurrentPosition();
-		}
-		if (temp.x + 2 <= 8 && temp.y - 1 >= 0 && wholePosition[temp.x + 1][temp.y] == NULL) //向 2 點鐘方向
-		{
-			temp.x = temp.x + 2;
-			temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
-			temp = wholePosition[x][y]->getCurrentPosition();
-		}
-		if (temp.x + 2 <= 8 && temp.y + 1 <= 9 && wholePosition[temp.x + 1][temp.y] == NULL) //向 4 點鐘方向
-		{
-			temp.x = temp.x + 2;
-			temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
-			temp = wholePosition[x][y]->getCurrentPosition();
-		}
-		if (temp.x + 1 <= 8 && temp.y + 2 <= 9 && wholePosition[temp.x][temp.y + 1] == NULL) //向 5 點鐘方向
-		{
-			temp.x++;
-			temp.y = temp.y + 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
-			temp = wholePosition[x][y]->getCurrentPosition();
-		}
-		if (temp.x - 1 >= 0 && temp.y + 2 <= 9 && wholePosition[temp.x][temp.y + 1] == NULL) //向 7 點鐘方向
-		{
-			temp.x--;
-			temp.y = temp.y + 2;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
-			temp = wholePosition[x][y]->getCurrentPosition();
-		}
-		if (temp.x - 2 >= 0 && temp.y + 1 <= 9 && wholePosition[temp.x - 1][temp.y] == NULL) //向 8 點鐘方向
-		{
-			temp.x = temp.x - 2;
-			temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-			}
-			else
-			{
-				legalMove.push_back(temp);
-			}
-		}
-		break;
+    case 12: //紅傌
+        if (temp.x - 2 >= 0 && temp.y - 1 >= 0 && wholePosition[temp.x - 1][temp.y] == NULL) //向 10 點鐘方向
+        {
+            temp.x = temp.x - 2;
+            temp.y--;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
+            temp = wholePosition[x][y]->getCurrentPosition();
+        }
+        if (temp.x - 1 >= 0 && temp.y - 2 >= 0 && wholePosition[temp.x][temp.y - 1] == NULL) //向 11 點鐘方向
+        {
+            temp.x--;
+            temp.y = temp.y - 2;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
+            temp = wholePosition[x][y]->getCurrentPosition();
+        }
+        if (temp.x + 1 <= 8 && temp.y - 2 >= 0 && wholePosition[temp.x][temp.y - 1] == NULL) //向 1 點鐘方向
+        {
+            temp.x++;
+            temp.y = temp.y - 2;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
+            temp = wholePosition[x][y]->getCurrentPosition();
+        }
+        if (temp.x + 2 <= 8 && temp.y - 1 >= 0 && wholePosition[temp.x + 1][temp.y] == NULL) //向 2 點鐘方向
+        {
+            temp.x = temp.x + 2;
+            temp.y--;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
+            temp = wholePosition[x][y]->getCurrentPosition();
+        }
+        if (temp.x + 2 <= 8 && temp.y + 1 <= 9 && wholePosition[temp.x + 1][temp.y] == NULL) //向 4 點鐘方向
+        {
+            temp.x = temp.x + 2;
+            temp.y++;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
+            temp = wholePosition[x][y]->getCurrentPosition();
+        }
+        if (temp.x + 1 <= 8 && temp.y + 2 <= 9 && wholePosition[temp.x][temp.y + 1] == NULL) //向 5 點鐘方向
+        {
+            temp.x++;
+            temp.y = temp.y + 2;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
+            temp = wholePosition[x][y]->getCurrentPosition();
+        }
+        if (temp.x - 1 >= 0 && temp.y + 2 <= 9 && wholePosition[temp.x][temp.y + 1] == NULL) //向 7 點鐘方向
+        {
+            temp.x--;
+            temp.y = temp.y + 2;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
+            temp = wholePosition[x][y]->getCurrentPosition();
+        }
+        if (temp.x - 2 >= 0 && temp.y + 1 <= 9 && wholePosition[temp.x - 1][temp.y] == NULL) //向 8 點鐘方向
+        {
+            temp.x = temp.x - 2;
+            temp.y++;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+            }
+            else
+            {
+                legalMove.push_back(temp);
+            }
+        }
+        break;
 
-	case 13: //紅炮
-		while (temp.x > 0) //向左
-		{
-			temp.x--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				break;
-			}
-			legalMove.push_back(temp);
-		}
-		while (temp.x > 0)  // 取得可以吃的那一個
-		{
-			temp.x--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-				break;
-			}
-		}
-		temp = wholePosition[x][y]->getCurrentPosition();
+    case 13: //紅炮
+        while (temp.x > 0) //向左
+        {
+            temp.x--;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                break;
+            }
+            legalMove.push_back(temp);
+        }
+        while (temp.x > 0)  // 取得可以吃的那一個
+        {
+            temp.x--;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+                break;
+            }
+        }
+        temp = wholePosition[x][y]->getCurrentPosition();
 
-		while (temp.x < 8) //向右
-		{
-			temp.x++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				break;
-			}
-			legalMove.push_back(temp);
-		}
-		while (temp.x < 8)
-		{
-			temp.x++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-				break;
-			}
-		}
-		temp = wholePosition[x][y]->getCurrentPosition();
+        while (temp.x < 8) //向右
+        {
+            temp.x++;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                break;
+            }
+            legalMove.push_back(temp);
+        }
+        while (temp.x < 8)
+        {
+            temp.x++;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+                break;
+            }
+        }
+        temp = wholePosition[x][y]->getCurrentPosition();
 
-		while (temp.y > 0) //向上
-		{
-			temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				break;
-			}
-			legalMove.push_back(temp);
-		}
-		while (temp.y > 0)
-		{
-			temp.y--;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-				break;
-			}
-		}
-		temp = wholePosition[x][y]->getCurrentPosition();
+        while (temp.y > 0) //向上
+        {
+            temp.y--;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                break;
+            }
+            legalMove.push_back(temp);
+        }
+        while (temp.y > 0)
+        {
+            temp.y--;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+                break;
+            }
+        }
+        temp = wholePosition[x][y]->getCurrentPosition();
 
-		while (temp.y < 9) //向下
-		{
-			temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				break;
-			}
-			legalMove.push_back(temp);
-		}
-		while (temp.y < 9)
-		{
-			temp.y++;
-			if (wholePosition[temp.x][temp.y] != NULL)
-			{
-				if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-				{
-					legalMove.push_back(temp);
-				}
-				break;
-			}
-		}
-		break;
+        while (temp.y < 9) //向下
+        {
+            temp.y++;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                break;
+            }
+            legalMove.push_back(temp);
+        }
+        while (temp.y < 9)
+        {
+            temp.y++;
+            if (wholePosition[temp.x][temp.y] != NULL)
+            {
+                if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                {
+                    legalMove.push_back(temp);
+                }
+                break;
+            }
+        }
+        break;
     case 14: //紅兵
         if (temp.y > 4) //在己方範圍，只能向上
         {
@@ -1590,49 +1598,49 @@ void ChessBoard::manageLegalMove(int x, int y)
             if (temp.x > 0) //向左
             {
                 temp.x--;
-				if (wholePosition[temp.x][temp.y] != NULL)
-				{
-					if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-					{
-						legalMove.push_back(temp);
-					}
-				}
-				else
-				{
-					legalMove.push_back(temp);
-				}
+                if (wholePosition[temp.x][temp.y] != NULL)
+                {
+                    if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                    {
+                        legalMove.push_back(temp);
+                    }
+                }
+                else
+                {
+                    legalMove.push_back(temp);
+                }
                 temp = wholePosition[x][y]->getCurrentPosition();
             }
             if (temp.x < 8) //向右
             {
                 temp.x++;
-				if (wholePosition[temp.x][temp.y] != NULL)
-				{
-					if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-					{
-						legalMove.push_back(temp);
-					}
-				}
-				else
-				{
-					legalMove.push_back(temp);
-				}
+                if (wholePosition[temp.x][temp.y] != NULL)
+                {
+                    if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                    {
+                        legalMove.push_back(temp);
+                    }
+                }
+                else
+                {
+                    legalMove.push_back(temp);
+                }
                 temp = wholePosition[x][y]->getCurrentPosition();
             }
             if (temp.y > 0) //向上
             {
                 temp.y--;
-				if (wholePosition[temp.x][temp.y] != NULL)
-				{
-					if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
-					{
-						legalMove.push_back(temp);
-					}
-				}
-				else
-				{
-					legalMove.push_back(temp);
-				}
+                if (wholePosition[temp.x][temp.y] != NULL)
+                {
+                    if (wholePosition[temp.x][temp.y]->getChessType() <= 7)
+                    {
+                        legalMove.push_back(temp);
+                    }
+                }
+                else
+                {
+                    legalMove.push_back(temp);
+                }
             }
         }
         break;

@@ -599,7 +599,7 @@ void UI::readKeyBoard()
 // Post: 印出結果
 void UI::printSetting()
 {
-    SetColor(0x08);
+    SetColor(0x07);
     SetPosition({ ROW_TWO + 10,TOP_BOUND + 10 });
     cout << "遊戲提示：";
     if (cueMode == 0)
@@ -613,7 +613,7 @@ void UI::printSetting()
         cout << "  ＯＮ  ";
     }
 
-    SetColor(0x08);
+    SetColor(0x07);
     SetPosition({ ROW_TWO + 10,TOP_BOUND + 12 });
     cout << "背景音樂：";
     switch (music)
