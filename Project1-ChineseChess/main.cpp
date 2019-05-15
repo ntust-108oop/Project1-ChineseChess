@@ -5,8 +5,10 @@ using namespace std;
 
 int main()
 {
+    setConsole();
+
 	UI thisGameUI;
-	thisGameUI.printStartScreen("Test.txt");
+	// thisGameUI.printStartScreen("Test.txt");
 	thisGameUI.printUI();
 	thisGameUI.chessBoard.printThePlane();
 	Record::printRecord();

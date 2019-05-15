@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iostream>
 #include <windows.h>
+#include <iomanip>
 #include "ChessBoard.h"
 #include "Record.h"
 #include "Music.h"
@@ -18,14 +19,14 @@ class UI
 public:
     UI();
 
+	// 印起始畫面
+	void printStartScreen(string);
+
     // 印出遊戲畫面
     void printUI();
 
     // 讀取鍵盤
     void readKeyBoard();
-
-	// 印起始畫面
-	void printStartScreen(string);
 
     ChessBoard chessBoard;
 
